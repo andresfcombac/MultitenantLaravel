@@ -6,6 +6,16 @@
 
 <h2>Usuarios</h2>
 
+<div class="mb-3">
+
+    <a
+        href="/usuarios/create"
+        class="btn btn-primary"
+    >
+        Agregar Usuario
+    </a>
+
+</div>
 <table class="table table-bordered table-striped">
 
     <thead>

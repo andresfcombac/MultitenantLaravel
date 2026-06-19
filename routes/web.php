@@ -29,4 +29,14 @@ Route::get(
     [UsuarioController::class, 'index']
 )->middleware('auth.session');
 
+Route::get(
+    '/usuarios/create',
+    [UsuarioController::class, 'create']
+)->middleware('auth.session');
+
+Route::post(
+    '/usuarios/store',
+    [UsuarioController::class, 'store']
+)->middleware('auth.session');
+
 Route::get('/logout', [LoginController::class, 'logout']);
