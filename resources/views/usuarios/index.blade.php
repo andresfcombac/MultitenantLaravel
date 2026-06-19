@@ -25,6 +25,7 @@
             <th>Correo</th>
             <th>Rol</th>
             <th>Empresa</th>
+            <th>Acciones</th>
         </tr>
     </thead>
 
@@ -54,6 +55,16 @@
             <td>
                 {{ $usuario->empresa?->nombre_empresa }}
             </td>
+            <td>
+
+    <a
+        href="/usuarios/{{ $usuario->id_usuario }}/edit"
+        class="btn btn-warning btn-sm"
+    >
+        Editar
+    </a>
+
+</td>
 
         </tr>
 

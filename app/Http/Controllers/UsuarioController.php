@@ -59,4 +59,53 @@ public function store(Request $request)
     return redirect('/usuarios')
         ->with('success', 'Usuario creado correctamente');
 }
+public function edit($id)
+{
+    $usuario = Usuario::findOrFail($id);
+
+    $roles = Role::all();
+    $empresas = Empresa::all();
+
+    return view(
+        'usuarios.edit',
+        compact(
+            'usuario',
+            'roles',
+            'empresas'
+        )
+    );
+}
+
+public function update(
+    Request $request,
+    $id
+)
+{
+    $usuario = Usuario::findOrFail($id);
+
+    $request->validate([
+        'nombre_usu' => 'required|max:50',
+        'apellidos_usu' => 'required|max:50',
+        'correo_usu' => 'required|email',
+        'rol_usu' => 'required',
+        'empresa_usu' => 'required'
+    ]);
+
+    $usuario->update([
+        'nombre_usu' => $request->nombre_usu,
+        'apellidos_usu' => $request->apellidos_usu,
+        'correo_usu' => $request->correo_usu,
+        'telefono_usu' => $request->telefono_usu,
+        'cargo' => $request->cargo,
+        'rol_usu' => $request->rol_usu,
+        'empresa_usu' => $request->empresa_usu,
+        'fecha_up' => now()
+    ]);
+
+    return redirect('/usuarios')
+        ->with(
+            'success',
+            'Usuario actualizado correctamente'
+        );
+}
 }

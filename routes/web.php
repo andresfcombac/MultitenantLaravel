@@ -39,4 +39,14 @@ Route::post(
     [UsuarioController::class, 'store']
 )->middleware('auth.session');
 
+Route::get(
+    '/usuarios/{id}/edit',
+    [UsuarioController::class, 'edit']
+)->middleware('auth.session');
+
+Route::post(
+    '/usuarios/{id}/update',
+    [UsuarioController::class, 'update']
+)->middleware('auth.session');
+
 Route::get('/logout', [LoginController::class, 'logout']);
