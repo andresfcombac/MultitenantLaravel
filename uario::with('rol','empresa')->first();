@@ -1,0 +1,17 @@
+[90m= [39m[34;4mApp\Models\Usuario[39;24m {#7378
+    [34mid_usuario[39m: [35m1[39m,
+    [34mtipo_doc_usu[39m: [36mnull[39m,
+    [34mnum_doc_usu[39m: [36mnull[39m,
+    [34mnombre_usu[39m: [32m"[39m[32mAdmin[39m[32m"[39m,
+    [34mapellidos_usu[39m: [32m"[39m[32mSistema[39m[32m"[39m,
+    [34mtelefono_usu[39m: [36mnull[39m,
+    [34mcorreo_usu[39m: [32m"[39m[32madmin@multitenant.dev[39m[32m"[39m,
+    [34mpwd[39m: [32m"[39m\$[32m2y[39m\$[32m12[39m\$[32mA6D3/EPw3PAIgDypGXi8k.6JESK5FTn3PqGw1wAS0T0LKGJSsxr1a[39m[32m"[39m,
+    [34mrol_usu[39m: [35m3[39m,
+    [34mcargo[39m: [32m"[39m[32mAdministrador[39m[32m"[39m,
+    [34mempresa_usu[39m: [35m2[39m,
+    [34multimo_ingreso[39m: [36mnull[39m,
+    [34mfecha_crea[39m: [32m"[39m[32m2026-06-06 20:59:13[39m[32m"[39m,
+    [34mfecha_up[39m: [36mnull[39m,
+    [34mfecha_del[39m: [36mnull[39m,
+  }
