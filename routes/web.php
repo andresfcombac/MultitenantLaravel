@@ -81,4 +81,9 @@ Route::post(
     [RoleController::class, 'destroy']
 )->middleware('auth.session');
 
+Route::post(
+    '/usuarios/{id}/delete',
+    [UsuarioController::class, 'destroy']
+)->middleware('auth.session');
+
 Route::get('/logout', [LoginController::class, 'logout']);

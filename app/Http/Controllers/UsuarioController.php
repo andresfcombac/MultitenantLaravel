@@ -108,4 +108,17 @@ public function update(
             'Usuario actualizado correctamente'
         );
 }
+
+public function destroy($id)
+{
+    $usuario = Usuario::findOrFail($id);
+
+    $usuario->delete();
+
+    return redirect('/usuarios')
+        ->with(
+            'success',
+            'Usuario eliminado correctamente'
+        );
+}
 }

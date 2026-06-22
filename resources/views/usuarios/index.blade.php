@@ -55,7 +55,8 @@
             <td>
                 {{ $usuario->empresa?->nombre_empresa }}
             </td>
-            <td>
+
+<td>
 
     <a
         href="/usuarios/{{ $usuario->id_usuario }}/edit"
@@ -63,6 +64,27 @@
     >
         Editar
     </a>
+
+
+    <form
+        action="/usuarios/{{ $usuario->id_usuario }}/delete"
+        method="POST"
+        style="display:inline;"
+    >
+
+        @csrf
+
+        <button
+            type="submit"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('¿Eliminar usuario?')"
+        >
+            Eliminar
+        </button>
+
+    </form>
+
+</td>
 
 </td>
 
