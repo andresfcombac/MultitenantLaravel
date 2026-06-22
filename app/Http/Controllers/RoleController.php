@@ -70,4 +70,25 @@ public function update(
             'Rol actualizado correctamente'
         );
 }
+public function destroy($id)
+{
+    $rol = Role::findOrFail($id);
+
+    if ($rol->usuarios()->count() > 0) {
+
+        return redirect('/roles')
+            ->with(
+                'error',
+                'No se puede eliminar porque tiene usuarios asociados'
+            );
+    }
+
+    $rol->delete();
+
+    return redirect('/roles')
+        ->with(
+            'success',
+            'Rol eliminado correctamente'
+        );
+}
 }

@@ -53,8 +53,26 @@
     >
         Editar
     </a>
+    <form
+    action="/roles/{{ $rol->id_rol }}/delete"
+    method="POST"
+    style="display:inline;"
+>
+
+    @csrf
+
+    <button
+        type="submit"
+        class="btn btn-danger btn-sm"
+        onclick="return confirm('¿Eliminar rol?')"
+    >
+        Eliminar
+    </button>
+
+</form>
 
 </td>
+
 
         </tr>
 
