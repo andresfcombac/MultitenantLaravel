@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -48,5 +49,21 @@ Route::post(
     '/usuarios/{id}/update',
     [UsuarioController::class, 'update']
 )->middleware('auth.session');
+
+Route::get(
+    '/roles',
+    [RoleController::class, 'index']
+)->middleware('auth.session');
+
+Route::get(
+    '/roles/create',
+    [RoleController::class, 'create']
+)->middleware('auth.session');
+
+Route::post(
+    '/roles/store',
+    [RoleController::class, 'store']
+)->middleware('auth.session');
+
 
 Route::get('/logout', [LoginController::class, 'logout']);
