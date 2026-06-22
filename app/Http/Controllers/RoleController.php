@@ -38,4 +38,36 @@ class RoleController extends Controller
                 'Rol creado correctamente'
             );
     }
+
+public function edit($id)
+{
+    $rol = Role::findOrFail($id);
+
+    return view(
+        'roles.edit',
+        compact('rol')
+    );
+}
+
+public function update(
+    Request $request,
+    $id
+)
+{
+    $rol = Role::findOrFail($id);
+
+    $request->validate([
+        'nombre_rol' => 'required|max:50'
+    ]);
+
+    $rol->update([
+        'nombre_rol' => $request->nombre_rol
+    ]);
+
+    return redirect('/roles')
+        ->with(
+            'success',
+            'Rol actualizado correctamente'
+        );
+}
 }

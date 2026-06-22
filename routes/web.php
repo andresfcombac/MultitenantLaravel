@@ -66,4 +66,14 @@ Route::post(
 )->middleware('auth.session');
 
 
+Route::get(
+    '/roles/{id}/edit',
+    [RoleController::class, 'edit']
+)->middleware('auth.session');
+
+Route::post(
+    '/roles/{id}/update',
+    [RoleController::class, 'update']
+)->middleware('auth.session');
+
 Route::get('/logout', [LoginController::class, 'logout']);

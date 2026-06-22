@@ -24,6 +24,7 @@
             <th>ID</th>
             <th>Nombre Rol</th>
             <th>Cantidad Usuarios</th>
+            <th>Acciones</th>
         </tr>
     </thead>
 
@@ -44,6 +45,16 @@
             <td>
                 {{ $rol->usuarios_count }}
             </td>
+            <td>
+
+    <a
+        href="/roles/{{ $rol->id_rol }}/edit"
+        class="btn btn-warning btn-sm"
+    >
+        Editar
+    </a>
+
+</td>
 
         </tr>
 
