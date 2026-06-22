@@ -26,6 +26,31 @@ Route::get(
 )->middleware('auth.session');
 
 Route::get(
+    '/empresas/create',
+    [EmpresaController::class, 'create']
+)->middleware('auth.session');
+
+Route::post(
+    '/empresas/store',
+    [EmpresaController::class, 'store']
+)->middleware('auth.session');
+
+Route::get(
+    '/empresas/{id}/edit',
+    [EmpresaController::class, 'edit']
+)->middleware('auth.session');
+
+Route::post(
+    '/empresas/{id}/delete',
+    [EmpresaController::class, 'destroy']
+)->middleware('auth.session');
+
+Route::post(
+    '/empresas/{id}/update',
+    [EmpresaController::class, 'update']
+)->middleware('auth.session');
+
+Route::get(
     '/usuarios',
     [UsuarioController::class, 'index']
 )->middleware('auth.session');
@@ -48,6 +73,11 @@ Route::get(
 Route::post(
     '/usuarios/{id}/update',
     [UsuarioController::class, 'update']
+)->middleware('auth.session');
+
+Route::post(
+    '/usuarios/{id}/delete',
+    [UsuarioController::class, 'destroy']
 )->middleware('auth.session');
 
 Route::get(
@@ -81,9 +111,6 @@ Route::post(
     [RoleController::class, 'destroy']
 )->middleware('auth.session');
 
-Route::post(
-    '/usuarios/{id}/delete',
-    [UsuarioController::class, 'destroy']
-)->middleware('auth.session');
+
 
 Route::get('/logout', [LoginController::class, 'logout']);
