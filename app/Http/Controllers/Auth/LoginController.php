@@ -38,12 +38,30 @@ class LoginController extends Controller
             );
         }
 
-        session([
-            'usuario_id' => $usuario->id_usuario,
-            'nombre' => $usuario->nombre_usu,
-            'rol' => $usuario->rol_usu,
-            'empresa' => $usuario->empresa_usu
-        ]);
+        if(
+    $usuario->rol_usu != 5 
+    && !$usuario->empresa_usu
+){
+
+    return back()->with(
+        'error',
+        'Usuario sin empresa asignada'
+    );
+
+}
+
+
+session([
+
+    'usuario_id' => $usuario->id_usuario,
+
+    'nombre' => $usuario->nombre_usu,
+
+    'rol' => $usuario->rol_usu,
+
+    'empresa' => $usuario->empresa_usu
+
+]);
 
         return redirect('/dashboard');
     }

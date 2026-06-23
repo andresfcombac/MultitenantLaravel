@@ -8,13 +8,48 @@ class DashboardController extends Controller
 {
     public function index()
     {
+
         if (!session()->has('usuario_id')) {
+
             return redirect('/login');
+
         }
 
-        $usuario = Usuario::with('rol', 'empresa')
-            ->find(session('usuario_id'));
 
-        return view('dashboard', compact('usuario'));
+        if(session('rol') == 5){
+
+            $usuario = Usuario::with(
+                'rol',
+                'empresa'
+            )
+            ->findOrFail(
+                session('usuario_id')
+            );
+
+
+        }else{
+
+
+            $usuario = Usuario::with(
+                'rol',
+                'empresa'
+            )
+            ->where(
+                'empresa_usu',
+                app('tenant_id')
+            )
+            ->findOrFail(
+                session('usuario_id')
+            );
+
+
+        }
+
+
+        return view(
+            'dashboard',
+            compact('usuario')
+        );
+
     }
 }

@@ -25,7 +25,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_rol' => 'required|max:50'
+            'nombre_rol' => 'required|max:50|unique:roles,nombre_rol'
         ]);
 
         Role::create([
@@ -74,6 +74,18 @@ public function destroy($id)
 {
     $rol = Role::findOrFail($id);
 
+
+    if(in_array($rol->id_rol,[1,2,3,5])){
+
+        return redirect('/roles')
+            ->with(
+                'error',
+                'Los roles del sistema no pueden eliminarse'
+            );
+
+    }
+
+
     if ($rol->usuarios()->count() > 0) {
 
         return redirect('/roles')
@@ -83,12 +95,15 @@ public function destroy($id)
             );
     }
 
+
     $rol->delete();
+
 
     return redirect('/roles')
         ->with(
             'success',
             'Rol eliminado correctamente'
         );
+
 }
 }

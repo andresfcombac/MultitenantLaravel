@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class TenantMiddleware
 {
@@ -14,15 +15,20 @@ class TenantMiddleware
     )
     {
 
-        // SuperAdmin sin empresa
-        if(session('rol') == 5){
+        $rol = Role::find(
+            session('rol')
+        );
+
+
+        if(
+            $rol &&
+            $rol->nombre_rol == 'SuperAdmin'
+        ){
 
             return $next($request);
 
         }
 
-
-        // Usuarios normales necesitan empresa
 
         if (!session()->has('empresa')) {
 
@@ -38,5 +44,7 @@ class TenantMiddleware
 
 
         return $next($request);
+
     }
+
 }

@@ -4,11 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class EmpresaController extends Controller
 {
+    private function validarSuperAdmin()
+{
+    if(session('rol') != 5){
+
+        abort(
+            403,
+            'Acceso no autorizado'
+        );
+
+    }
+}
     public function index()
     {
+        $this->validarSuperAdmin();
         $empresas = Empresa::all();
 
         return view(
@@ -20,12 +33,14 @@ class EmpresaController extends Controller
 
     public function create()
     {
+        $this->validarSuperAdmin();
         return view('empresas.create');
     }
 
 
     public function store(Request $request)
     {
+        $this->validarSuperAdmin();
         $request->validate([
             'nombre_empresa' => 'required|max:100',
             'url' => 'nullable|max:100'
@@ -47,6 +62,7 @@ class EmpresaController extends Controller
     }
 public function edit($id)
 {
+    $this->validarSuperAdmin();
     $empresa = Empresa::findOrFail($id);
 
     return view(
@@ -58,6 +74,7 @@ public function edit($id)
 
 public function update(Request $request, $id)
 {
+    $this->validarSuperAdmin();
     $request->validate([
         'nombre_empresa' => 'required|max:100',
         'url' => 'nullable|max:100'
@@ -83,6 +100,7 @@ public function update(Request $request, $id)
 
 public function destroy($id)
 {
+        $this->validarSuperAdmin();
     $empresa = Empresa::withCount('usuarios')
         ->findOrFail($id);
 
