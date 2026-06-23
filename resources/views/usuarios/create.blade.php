@@ -78,25 +78,46 @@
             </div>
 
             <div class="mb-3">
-                <label>Empresa</label>
 
-                <select
-                    name="empresa_usu"
-                    class="form-control"
-                    required
-                >
+    <div class="mb-3">
 
-                    @foreach($empresas as $empresa)
 
-                        <option value="{{ $empresa->id_empresa }}">
-                            {{ $empresa->nombre_empresa }}
-                        </option>
+<label>Empresa</label>
 
-                    @endforeach
+@if(session('rol') == 5)
 
-                </select>
+    <select
+        name="empresa_usu"
+        class="form-control"
+        required
+    >
 
-            </div>
+        @foreach(\App\Models\Empresa::all() as $empresa)
+
+            <option value="{{ $empresa->id_empresa }}">
+                {{ $empresa->nombre_empresa }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+@else
+
+    <input
+        type="text"
+        class="form-control"
+        value="{{ $empresa->nombre_empresa }}"
+        readonly
+    >
+
+@endif
+
+
+</div>
+
+
+</div>
 
             <button
                 type="submit"

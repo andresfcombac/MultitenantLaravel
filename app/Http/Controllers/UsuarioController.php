@@ -11,114 +11,213 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    public function index()
-    {
-        $usuarios = Usuario::with(
-            'rol',
-            'empresa'
-        )->get();
+ public function index()
+{
+    $consulta = Usuario::with(
+        'rol',
+        'empresa'
+    );
 
-        return view(
-            'usuarios.index',
-            compact('usuarios')
+
+    if(session('rol') != 5){
+
+        $consulta->where(
+            'empresa_usu',
+            app('tenant_id')
         );
+
     }
+
+
+    $usuarios = $consulta->get();
+
+
+    return view(
+        'usuarios.index',
+        compact('usuarios')
+    );
+}
 
 public function create()
 {
-    $roles = Role::all();
-    $empresas = Empresa::all();
+$roles = Role::all();
 
-    return view(
-        'usuarios.create',
-        compact('roles', 'empresas')
+
+$empresa = null;
+
+if(session('rol') != 5){
+
+    $empresa = Empresa::find(
+        app('tenant_id')
     );
+
+}
+
+return view(
+    'usuarios.create',
+    compact(
+        'roles',
+        'empresa'
+    )
+);
+
+
 }
 
 public function store(Request $request)
 {
+
     $request->validate([
         'nombre_usu' => 'required|max:50',
         'apellidos_usu' => 'required|max:50',
         'correo_usu' => 'required|email',
         'password' => 'required|min:6',
-        'rol_usu' => 'required',
-        'empresa_usu' => 'required'
+        'rol_usu' => 'required'
     ]);
+
 
     Usuario::create([
+
         'nombre_usu' => $request->nombre_usu,
+
         'apellidos_usu' => $request->apellidos_usu,
+
         'correo_usu' => $request->correo_usu,
-        'pwd' => Hash::make($request->password),
+
+        'pwd' => Hash::make(
+            $request->password
+        ),
+
         'rol_usu' => $request->rol_usu,
-        'empresa_usu' => $request->empresa_usu,
+
+
+        'empresa_usu' => session('rol') == 5
+            ? $request->empresa_usu
+            : app('tenant_id'),
+
+
         'fecha_crea' => now()
+
     ]);
 
-    return redirect('/usuarios')
-        ->with('success', 'Usuario creado correctamente');
-}
-public function edit($id)
-{
-    $usuario = Usuario::findOrFail($id);
-
-    $roles = Role::all();
-    $empresas = Empresa::all();
-
-    return view(
-        'usuarios.edit',
-        compact(
-            'usuario',
-            'roles',
-            'empresas'
-        )
-    );
-}
-
-public function update(
-    Request $request,
-    $id
-)
-{
-    $usuario = Usuario::findOrFail($id);
-
-    $request->validate([
-        'nombre_usu' => 'required|max:50',
-        'apellidos_usu' => 'required|max:50',
-        'correo_usu' => 'required|email',
-        'rol_usu' => 'required',
-        'empresa_usu' => 'required'
-    ]);
-
-    $usuario->update([
-        'nombre_usu' => $request->nombre_usu,
-        'apellidos_usu' => $request->apellidos_usu,
-        'correo_usu' => $request->correo_usu,
-        'telefono_usu' => $request->telefono_usu,
-        'cargo' => $request->cargo,
-        'rol_usu' => $request->rol_usu,
-        'empresa_usu' => $request->empresa_usu,
-        'fecha_up' => now()
-    ]);
 
     return redirect('/usuarios')
         ->with(
             'success',
-            'Usuario actualizado correctamente'
+            'Usuario creado correctamente'
         );
+
+}
+
+public function edit($id)
+{
+
+
+if(session('rol') == 5){
+
+    $usuario = Usuario::findOrFail($id);
+
+}else{
+
+    $usuario = Usuario::where(
+        'empresa_usu',
+        app('tenant_id')
+    )
+    ->findOrFail($id);
+
+}
+
+$roles = Role::all();
+
+$empresas = Empresa::all();
+
+return view(
+    'usuarios.edit',
+    compact(
+        'usuario',
+        'roles',
+        'empresas'
+    )
+);
+
+
+}
+
+public function update(
+Request $request,
+$id
+)
+{
+
+
+if(session('rol') == 5){
+
+    $usuario = Usuario::findOrFail($id);
+
+}else{
+
+    $usuario = Usuario::where(
+        'empresa_usu',
+        app('tenant_id')
+    )
+    ->findOrFail($id);
+
+}
+
+$request->validate([
+    'nombre_usu' => 'required|max:50',
+    'apellidos_usu' => 'required|max:50',
+    'correo_usu' => 'required|email',
+    'rol_usu' => 'required'
+]);
+
+$usuario->update([
+    'nombre_usu' => $request->nombre_usu,
+    'apellidos_usu' => $request->apellidos_usu,
+    'correo_usu' => $request->correo_usu,
+    'telefono_usu' => $request->telefono_usu,
+    'cargo' => $request->cargo,
+    'rol_usu' => $request->rol_usu,
+    'empresa_usu' => session('rol') == 5
+        ? $request->empresa_usu
+        : app('tenant_id'),
+    'fecha_up' => now()
+]);
+
+return redirect('/usuarios')
+    ->with(
+        'success',
+        'Usuario actualizado correctamente'
+    );
+
 }
 
 public function destroy($id)
 {
+
+
+if(session('rol') == 5){
+
     $usuario = Usuario::findOrFail($id);
 
-    $usuario->delete();
+}else{
 
-    return redirect('/usuarios')
-        ->with(
-            'success',
-            'Usuario eliminado correctamente'
-        );
+    $usuario = Usuario::where(
+        'empresa_usu',
+        app('tenant_id')
+    )
+    ->findOrFail($id);
+
 }
+
+$usuario->delete();
+
+return redirect('/usuarios')
+    ->with(
+        'success',
+        'Usuario eliminado correctamente'
+    );
+
+}
+
 }

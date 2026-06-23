@@ -58,6 +58,12 @@
 
 <td>
 
+@if(
+    session('rol') == 5
+    ||
+    $usuario->empresa_usu == app('tenant_id')
+)
+
     <a
         href="/usuarios/{{ $usuario->id_usuario }}/edit"
         class="btn btn-warning btn-sm"
@@ -83,6 +89,8 @@
         </button>
 
     </form>
+
+@endif
 
 </td>
 

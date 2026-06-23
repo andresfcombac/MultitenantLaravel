@@ -18,99 +18,143 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get(
     '/dashboard',
     [DashboardController::class, 'index']
-)->middleware('auth.session');
+)->middleware('auth.session','tenant');
 
 Route::get(
     '/empresas',
     [EmpresaController::class, 'index']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::get(
     '/empresas/create',
     [EmpresaController::class, 'create']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::post(
     '/empresas/store',
     [EmpresaController::class, 'store']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::get(
     '/empresas/{id}/edit',
     [EmpresaController::class, 'edit']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::post(
     '/empresas/{id}/delete',
     [EmpresaController::class, 'destroy']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::post(
     '/empresas/{id}/update',
     [EmpresaController::class, 'update']
-)->middleware('auth.session');
+)->middleware(['auth.session','superadmin']);
 
 Route::get(
     '/usuarios',
     [UsuarioController::class, 'index']
-)->middleware('auth.session');
+)->middleware([
+    'auth.session',
+    'tenant'
+]);
 
 Route::get(
-    '/usuarios/create',
-    [UsuarioController::class, 'create']
-)->middleware('auth.session');
+'/usuarios/create',
+[UsuarioController::class,'create']
+)
+->middleware([
+'auth.session',
+'tenant',
+'role:SuperAdmin,Administrador'
+]);
 
 Route::post(
-    '/usuarios/store',
-    [UsuarioController::class, 'store']
-)->middleware('auth.session');
+'/usuarios/store',
+[UsuarioController::class,'store']
+)
+->middleware([
+'auth.session',
+'tenant',
+'role:SuperAdmin,Administrador'
+]);
 
 Route::get(
-    '/usuarios/{id}/edit',
-    [UsuarioController::class, 'edit']
-)->middleware('auth.session');
+'/usuarios/{id}/edit',
+[UsuarioController::class,'edit']
+)
+->middleware([
+'auth.session',
+'tenant',
+'role:SuperAdmin,Administrador'
+]);
 
 Route::post(
-    '/usuarios/{id}/update',
-    [UsuarioController::class, 'update']
-)->middleware('auth.session');
+'/usuarios/{id}/update',
+[UsuarioController::class,'update']
+)
+->middleware([
+'auth.session',
+'tenant',
+'role:SuperAdmin,Administrador'
+]);
 
 Route::post(
-    '/usuarios/{id}/delete',
-    [UsuarioController::class, 'destroy']
-)->middleware('auth.session');
+'/usuarios/{id}/delete',
+[UsuarioController::class,'destroy']
+)
+->middleware([
+'auth.session',
+'tenant',
+'role:SuperAdmin,Administrador'
+]);
 
 Route::get(
     '/roles',
     [RoleController::class, 'index']
-)->middleware('auth.session');
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 Route::get(
     '/roles/create',
     [RoleController::class, 'create']
-)->middleware('auth.session');
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 Route::post(
     '/roles/store',
     [RoleController::class, 'store']
-)->middleware('auth.session');
-
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 Route::get(
     '/roles/{id}/edit',
     [RoleController::class, 'edit']
-)->middleware('auth.session');
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 Route::post(
     '/roles/{id}/update',
     [RoleController::class, 'update']
-)->middleware('auth.session');
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 Route::post(
     '/roles/{id}/delete',
     [RoleController::class, 'destroy']
-)->middleware('auth.session');
-
+)->middleware([
+    'auth.session',
+    'superadmin'
+]);
 
 
 Route::get('/logout', [LoginController::class, 'logout']);

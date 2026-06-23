@@ -21,13 +21,18 @@
                 Dashboard
             </a>
 
-            <a href="/empresas" class="btn btn-outline-light btn-sm me-2">
-                Empresas
-            </a>
-           
-             <a href="/usuarios" class="btn btn-outline-light btn-sm me-2">
-                 Usuarios
-            </a> 
+            @if(session('rol') == 5)
+
+    <a href="/empresas" class="btn btn-outline-light btn-sm me-2">
+        Empresas
+    </a>
+
+@endif
+
+
+<a href="/usuarios" class="btn btn-outline-light btn-sm me-2">
+    Usuarios
+</a>
 
         </div>
 

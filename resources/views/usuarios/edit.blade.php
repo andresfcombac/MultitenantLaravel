@@ -87,25 +87,45 @@
     </div>
 
     <div class="mb-3">
-        <label>Empresa</label>
+        <div class="mb-3">
 
-        <select
-            name="empresa_usu"
-            class="form-control"
-        >
 
-            @foreach($empresas as $empresa)
+<label>Empresa</label>
 
-                <option
-                    value="{{ $empresa->id_empresa }}"
-                    {{ $usuario->empresa_usu == $empresa->id_empresa ? 'selected' : '' }}
-                >
-                    {{ $empresa->nombre_empresa }}
-                </option>
+@if(session('rol') == 5)
 
-            @endforeach
+    <select
+        name="empresa_usu"
+        class="form-control"
+    >
 
-        </select>
+        @foreach($empresas as $empresa)
+
+            <option
+                value="{{ $empresa->id_empresa }}"
+                {{ $usuario->empresa_usu == $empresa->id_empresa ? 'selected' : '' }}
+            >
+                {{ $empresa->nombre_empresa }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+@else
+
+    <input
+        type="text"
+        class="form-control"
+        value="{{ $usuario->empresa?->nombre_empresa }}"
+        readonly
+    >
+
+@endif
+
+
+</div>
+
 
     </div>
 
