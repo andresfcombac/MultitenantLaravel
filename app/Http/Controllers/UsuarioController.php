@@ -40,7 +40,18 @@ class UsuarioController extends Controller
 
 public function create()
 {
-$roles = Role::all();
+if(session('rol') == 5){
+
+    $roles = Role::all();
+
+}else{
+
+    $roles = Role::whereIn(
+        'id_rol',
+        [1,2]
+    )->get();
+
+}
 
 
 $empresa = null;
@@ -112,34 +123,51 @@ public function store(Request $request)
 public function edit($id)
 {
 
+    if(session('rol') == 5){
 
-if(session('rol') == 5){
+        $usuario = Usuario::findOrFail($id);
 
-    $usuario = Usuario::findOrFail($id);
+        $empresas = Empresa::all();
 
-}else{
+    }else{
 
-    $usuario = Usuario::where(
-        'empresa_usu',
-        app('tenant_id')
-    )
-    ->findOrFail($id);
+        $usuario = Usuario::where(
+            'empresa_usu',
+            app('tenant_id')
+        )
+        ->findOrFail($id);
 
-}
 
-$roles = Role::all();
+        $empresas = Empresa::where(
+            'id_empresa',
+            app('tenant_id')
+        )->get();
 
-$empresas = Empresa::all();
+    }
 
-return view(
-    'usuarios.edit',
-    compact(
-        'usuario',
-        'roles',
-        'empresas'
-    )
-);
 
+    if(session('rol') == 5){
+
+        $roles = Role::all();
+
+    }else{
+
+        $roles = Role::whereIn(
+            'id_rol',
+            [1,2]
+        )->get();
+
+    }
+
+
+    return view(
+        'usuarios.edit',
+        compact(
+            'usuario',
+            'roles',
+            'empresas'
+        )
+    );
 
 }
 
@@ -168,7 +196,18 @@ $request->validate([
     'nombre_usu' => 'required|max:50',
     'apellidos_usu' => 'required|max:50',
     'correo_usu' => 'required|email',
-    'rol_usu' => 'required'
+    'rol_usu' => [
+    'required',
+    function ($attribute, $value, $fail) {
+
+        if(session('rol') != 5 && $value == 5){
+
+            $fail('No tiene permisos para asignar SuperAdmin');
+
+        }
+
+    }
+],
 ]);
 
 $usuario->update([
