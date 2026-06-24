@@ -35,12 +35,14 @@ Empresas
 
 @endif
 
-
 <a href="/usuarios"
 class="btn btn-outline-light btn-sm me-2">
 Usuarios
 </a>
 
+<a href="/actividades" class="btn btn-outline-light btn-sm me-2">
+    Actividades
+</a>
 
 </div>
 
