@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ActividadController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -156,5 +157,62 @@ Route::post(
     'superadmin'
 ]);
 
+Route::get(
+    '/actividades',
+    [ActividadController::class, 'index']
+)->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+
+Route::get(
+    '/actividades/create',
+    [ActividadController::class, 'create']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/actividades/store',
+    [ActividadController::class, 'store']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::get(
+    '/actividades/{id}/edit',
+    [ActividadController::class, 'edit']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/actividades/{id}/update',
+    [ActividadController::class, 'update']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/actividades/{id}/delete',
+    [ActividadController::class, 'destroy']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
 
 Route::get('/logout', [LoginController::class, 'logout']);
