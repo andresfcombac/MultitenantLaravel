@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="d-flex justify-content-between mb-3">
 
 <h3>
@@ -11,7 +12,7 @@ Formularios
 </h3>
 
 
-<a href="/formularios/create" 
+<a href="/formularios/create"
 class="btn btn-primary">
 
 Crear formulario
@@ -23,9 +24,12 @@ Crear formulario
 
 
 
+
 <table class="table table-bordered">
 
+
 <thead>
+
 
 <tr>
 
@@ -37,19 +41,25 @@ Crear formulario
 
 <th>Acciones</th>
 
+
 </tr>
 
+
 </thead>
+
 
 
 
 <tbody>
 
 
+
 @foreach($formularios as $formulario)
 
 
+
 <tr>
+
 
 
 <td>
@@ -60,11 +70,13 @@ Crear formulario
 
 
 
+
 <td>
 
 {{ $formulario->actividad->nombre_actividad ?? 'Sin actividad' }}
 
 </td>
+
 
 
 
@@ -99,23 +111,68 @@ Inactivo
 
 
 
+
 <td>
 
 
-{{-- Editar --}}
 
-<a href="/formularios/{{ $formulario->id_formulario }}/edit"
 
-class="btn btn-warning btn-sm">
+{{-- VER FORMULARIO --}}
 
-Editar
+
+<a href="/formularios/{{ $formulario->id_formulario }}"
+
+class="btn btn-secondary btn-sm">
+
+
+Ver
+
 
 </a>
 
 
 
 
-{{-- Activar / Desactivar --}}
+
+{{-- VER RESPUESTAS --}}
+
+
+<a href="/formularios/{{ $formulario->id_formulario }}/respuestas"
+
+class="btn btn-info btn-sm">
+
+
+Respuestas
+
+
+</a>
+
+
+
+
+
+
+{{-- EDITAR --}}
+
+
+<a href="/formularios/{{ $formulario->id_formulario }}/edit"
+
+class="btn btn-warning btn-sm">
+
+
+Editar
+
+
+</a>
+
+
+
+
+
+
+
+{{-- ACTIVAR / DESACTIVAR --}}
+
 
 
 @if($formulario->estado == 1)
@@ -132,9 +189,11 @@ style="display:inline">
 @csrf
 
 
+
 <button type="submit"
 
 class="btn btn-danger btn-sm"
+
 
 onclick="return confirm('¿Desea desactivar este formulario?')">
 
@@ -149,7 +208,11 @@ Desactivar
 
 
 
+
+
 @else
+
+
 
 
 
@@ -163,9 +226,11 @@ style="display:inline">
 @csrf
 
 
+
 <button type="submit"
 
 class="btn btn-success btn-sm"
+
 
 onclick="return confirm('¿Desea activar este formulario?')">
 
@@ -180,23 +245,9 @@ Activar
 
 
 
+
+
 @endif
-
-
-
-
-{{-- Visualizar --}}
-
-
-<a href="/formularios/{{ $formulario->id_formulario }}"
-
-class="btn btn-info btn-sm">
-
-
-Ver
-
-
-</a>
 
 
 
@@ -205,7 +256,9 @@ Ver
 
 
 
+
 </tr>
+
 
 
 
@@ -213,10 +266,14 @@ Ver
 
 
 
+
 </tbody>
 
 
+
 </table>
+
+
 
 
 @endsection

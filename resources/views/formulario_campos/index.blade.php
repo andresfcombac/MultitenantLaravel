@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="d-flex justify-content-between mb-3">
 
 <h3>
@@ -22,7 +23,9 @@ Crear campo
 </div>
 
 
+
 <table class="table table-bordered">
+
 
 <thead>
 
@@ -38,6 +41,7 @@ Crear campo
 </tr>
 
 </thead>
+
 
 
 <tbody>
@@ -56,11 +60,13 @@ Crear campo
 </td>
 
 
+
 <td>
 
 {{ $campo->etiqueta }}
 
 </td>
+
 
 
 <td>
@@ -70,11 +76,13 @@ Crear campo
 </td>
 
 
+
 <td>
 
 {{ $campo->obligatorio ? 'Si':'No' }}
 
 </td>
+
 
 
 <td>
@@ -84,7 +92,9 @@ Crear campo
 </td>
 
 
+
 <td>
+
 
 
 <a href="/formularios/{{ $campo->id_formulario }}"
@@ -93,6 +103,8 @@ class="btn btn-info btn-sm">
 Ver formulario
 
 </a>
+
+
 
 
 <a href="/formulario-campos/{{ $campo->id_campo }}/edit"
@@ -104,19 +116,24 @@ Editar
 
 
 
+
 <form method="POST"
 action="/formulario-campos/{{ $campo->id_campo }}/delete"
 style="display:inline">
 
 @csrf
 
-<button class="btn btn-danger btn-sm">
+
+<button class="btn btn-danger btn-sm"
+onclick="return confirm('¿Eliminar campo?')">
 
 Eliminar
 
 </button>
 
+
 </form>
+
 
 
 </td>
@@ -125,13 +142,16 @@ Eliminar
 </tr>
 
 
+
 @endforeach
+
 
 
 </tbody>
 
 
 </table>
+
 
 
 @endsection

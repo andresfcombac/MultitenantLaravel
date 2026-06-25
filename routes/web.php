@@ -9,6 +9,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\FormularioCampoController;
+use App\Http\Controllers\FormularioPublicoController;
+use App\Http\Controllers\FormularioRespuestaController;
+
 
 Route::get('/', function () {
     return redirect('/login');
@@ -217,6 +220,9 @@ Route::post(
     'role:SuperAdmin,Administrador'
 ]);
 
+/* FORMULARIOS*/
+
+
 Route::get(
     '/formularios',
     [FormularioController::class,'index']
@@ -249,6 +255,19 @@ Route::post(
 ]);
 
 
+// Visualizar formulario
+// IMPORTANTE: va antes de edit/update/delete
+
+Route::get(
+    '/formularios/{id}',
+    [FormularioController::class,'show']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+
 Route::get(
     '/formularios/{id}/edit',
     [FormularioController::class,'edit']
@@ -271,6 +290,9 @@ Route::post(
 ]);
 
 
+// Activar / Desactivar formulario
+// No elimina
+
 Route::post(
     '/formularios/{id}/estado',
     [FormularioController::class,'estado']
@@ -280,6 +302,9 @@ Route::post(
     'tenant',
     'role:SuperAdmin,Administrador'
 ]);
+
+/* CAMPOS DEL FORMULARIO*/
+
 
 Route::get(
     '/formulario-campos',
@@ -312,14 +337,58 @@ Route::post(
     'tenant',
     'role:SuperAdmin,Administrador'
 ]);
+
+
 Route::get(
-    '/formularios/{id}',
-    [FormularioController::class,'show']
+    '/formulario-campos/{id}/edit',
+    [FormularioCampoController::class,'edit']
 )
 ->middleware([
     'auth.session',
-    'tenant'
+    'tenant',
+    'role:SuperAdmin,Administrador'
 ]);
 
+
+Route::post(
+    '/formulario-campos/{id}/update',
+    [FormularioCampoController::class,'update']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/formulario-campos/{id}/delete',
+    [FormularioCampoController::class,'destroy']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+Route::get(
+    '/formulario/{id}',
+    [FormularioPublicoController::class,'show']
+);
+
+
+Route::post(
+    '/formulario/{id}/respuesta',
+    [FormularioPublicoController::class,'store']
+);
+Route::get(
+    '/formularios/{id}/respuestas',
+    [FormularioRespuestaController::class,'index']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
 
 Route::get('/logout', [LoginController::class, 'logout']);
