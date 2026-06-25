@@ -40,6 +40,9 @@ class="btn btn-outline-light btn-sm me-2">
 Usuarios
 </a>
 
+<a href="/formularios" class="btn btn-outline-light btn-sm me-2">
+    Formularios
+</a>
 <a href="/actividades" class="btn btn-outline-light btn-sm me-2">
     Actividades
 </a>

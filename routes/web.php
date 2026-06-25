@@ -7,6 +7,8 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\FormularioController;
+use App\Http\Controllers\FormularioCampoController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -214,5 +216,110 @@ Route::post(
     'tenant',
     'role:SuperAdmin,Administrador'
 ]);
+
+Route::get(
+    '/formularios',
+    [FormularioController::class,'index']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+
+Route::get(
+    '/formularios/create',
+    [FormularioController::class,'create']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/formularios/store',
+    [FormularioController::class,'store']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::get(
+    '/formularios/{id}/edit',
+    [FormularioController::class,'edit']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/formularios/{id}/update',
+    [FormularioController::class,'update']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/formularios/{id}/estado',
+    [FormularioController::class,'estado']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+Route::get(
+    '/formulario-campos',
+    [FormularioCampoController::class,'index']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::get(
+    '/formulario-campos/create',
+    [FormularioCampoController::class,'create']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+
+
+Route::post(
+    '/formulario-campos/store',
+    [FormularioCampoController::class,'store']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
+Route::get(
+    '/formularios/{id}',
+    [FormularioController::class,'show']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
 
 Route::get('/logout', [LoginController::class, 'logout']);
