@@ -25,7 +25,27 @@ class FormularioCampoController extends Controller
 
     }
 
+public function camposFormulario($id)
+{
 
+    $formulario = Formulario::findOrFail($id);
+
+    $campos = FormularioCampo::where(
+        'id_formulario',
+        $id
+    )
+    ->orderBy('orden')
+    ->get();
+
+    return view(
+        'formulario_campos.index',
+        compact(
+            'formulario',
+            'campos'
+        )
+    );
+
+}
 
     public function create()
     {
@@ -81,25 +101,38 @@ class FormularioCampoController extends Controller
         }
 
 
+// Convertir opciones a JSON cuando aplique
 
-        FormularioCampo::create([
+$opciones = [];
 
-            'id_formulario' => $request->id_formulario,
+if (!empty($request->opciones)) {
 
-            'etiqueta' => $request->etiqueta,
+    $opciones = array_filter(
+        array_map(
+            'trim',
+            explode("\n", $request->opciones)
+        )
+    );
 
-            'tipo_campo' => $request->tipo_campo,
-
-            'opciones' => $request->opciones,
-
-            'obligatorio' => $request->obligatorio ?? 0,
-
-            'orden' => $request->orden ?? 0
-
-        ]);
+}
 
 
+FormularioCampo::create([
 
+    'id_formulario' => $request->id_formulario,
+
+    'etiqueta' => $request->etiqueta,
+
+    'tipo_campo' => $request->tipo_campo,
+
+    'opciones' => json_encode($opciones),
+
+    'obligatorio' => $request->obligatorio ?? 0,
+
+    'orden' => $request->orden ?? 0
+
+]);
+        
         return redirect('/formulario-campos')
             ->with(
                 'success',
@@ -174,9 +207,6 @@ class FormularioCampoController extends Controller
 
     }
 
-
-
-
     public function destroy($id)
     {
 
@@ -194,6 +224,5 @@ class FormularioCampoController extends Controller
             );
 
     }
-
 
 }

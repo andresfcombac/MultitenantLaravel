@@ -69,30 +69,40 @@ Tipo de campo
 <select name="tipo_campo"
 class="form-control">
 
-
 <option value="texto"
 @if($campo->tipo_campo=='texto') selected @endif>
 Texto
 </option>
-
 
 <option value="numero"
 @if($campo->tipo_campo=='numero') selected @endif>
 Número
 </option>
 
-
 <option value="fecha"
 @if($campo->tipo_campo=='fecha') selected @endif>
 Fecha
 </option>
-
 
 <option value="email"
 @if($campo->tipo_campo=='email') selected @endif>
 Email
 </option>
 
+<option value="select"
+@if($campo->tipo_campo=='select') selected @endif>
+Select
+</option>
+
+<option value="radio"
+@if($campo->tipo_campo=='radio') selected @endif>
+Radio
+</option>
+
+<option value="checkbox"
+@if($campo->tipo_campo=='checkbox') selected @endif>
+Checkbox
+</option>
 
 </select>
 

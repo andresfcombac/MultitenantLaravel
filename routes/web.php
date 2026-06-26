@@ -326,6 +326,15 @@ Route::get(
     'tenant'
 ]);
 
+Route::get(
+    '/formularios/{id}/campos',
+    [FormularioCampoController::class,'camposFormulario']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador'
+]);
 /* CAMPOS DEL FORMULARIO*/
 
 

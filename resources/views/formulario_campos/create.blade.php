@@ -135,16 +135,26 @@ Checkbox
 
 <div class="mb-3">
 
-<label class="form-label">
+<label>
 Opciones
 </label>
 
-
 <textarea
 name="opciones"
-class="form-control">
-</textarea>
+class="form-control"
+rows="5"
+placeholder="Escriba una opción por línea&#10;Bogotá&#10;Medellín&#10;Cali"></textarea>
 
+<small class="text-muted">
+
+Solo aplica para campos tipo:
+<strong>Select</strong>,
+<strong>Radio</strong> y
+<strong>Checkbox</strong>.
+
+Escriba una opción por cada línea.
+
+</small>
 
 </div>
 

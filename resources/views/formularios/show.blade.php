@@ -1,51 +1,146 @@
 @extends('layouts.app')
 
+@section('title', $formulario->nombre_formulario)
+
 @section('content')
 
-<h3>
-{{ $formulario->nombre_formulario }}
-</h3>
-
+<h3>{{ $formulario->nombre_formulario }}</h3>
 
 <p>
-Actividad:
+<strong>Actividad:</strong>
 {{ $formulario->actividad->nombre_actividad }}
 </p>
 
+<hr>
 
-<p>
-Estado:
+<form>
 
-@if($formulario->estado)
+@foreach($formulario->campos->sortBy('orden') as $campo)
 
-Activo
+<div class="mb-3">
 
-@else
+<label class="form-label">
 
-Inactivo
+{{ $campo->etiqueta }}
+
+@if($campo->obligatorio)
+
+<span class="text-danger">*</span>
 
 @endif
 
-</p>
+</label>
 
+@if($campo->tipo_campo == 'texto')
 
+<input
+type="text"
+class="form-control"
+placeholder="{{ $campo->etiqueta }}">
 
-<h4>
-Campos
-</h4>
+@elseif($campo->tipo_campo == 'numero')
 
+<input
+type="number"
+class="form-control">
 
-@foreach($formulario->campos as $campo)
+@elseif($campo->tipo_campo == 'fecha')
 
-<p>
-{{ $campo->orden }}
--
-{{ $campo->etiqueta }}
--
-{{ $campo->tipo_campo }}
-</p>
+<input
+type="date"
+class="form-control">
+
+@elseif($campo->tipo_campo == 'email')
+
+<input
+type="email"
+class="form-control">
+
+@elseif($campo->tipo_campo == 'select')
+
+<select class="form-control">
+
+<option value="">
+Seleccione...
+</option>
+
+@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+
+<option value="{{ $opcion }}">
+
+{{ $opcion }}
+
+</option>
 
 @endforeach
 
+</select>
+
+@elseif($campo->tipo_campo == 'radio')
+
+@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+
+<div class="form-check">
+
+<input
+type="radio"
+name="campo{{ $campo->id_campo }}"
+class="form-check-input"
+value="{{ $opcion }}">
+
+<label class="form-check-label">
+
+{{ $opcion }}
+
+</label>
+
+</div>
+
+@endforeach
+
+@elseif($campo->tipo_campo == 'checkbox')
+
+@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+
+<div class="form-check">
+
+<input
+type="checkbox"
+class="form-check-input"
+value="{{ $opcion }}">
+
+<label class="form-check-label">
+
+{{ $opcion }}
+
+</label>
+
+</div>
+
+@endforeach
+
+@endif
+
+</div>
+
+@endforeach
+
+<button
+class="btn btn-primary"
+disabled>
+
+Enviar (Vista previa)
+
+</button>
+
+<a
+href="/formularios"
+class="btn btn-secondary">
+
+Volver
+
+</a>
+
+</form>
 
 @endsection

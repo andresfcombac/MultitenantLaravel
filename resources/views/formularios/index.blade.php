@@ -23,8 +23,6 @@ Crear formulario
 </div>
 
 
-
-
 <table class="table table-bordered">
 
 
@@ -127,16 +125,17 @@ class="btn btn-secondary btn-sm">
 
 Ver
 
-
 </a>
-
-
-
 
 
 {{-- VER RESPUESTAS --}}
 
+<a href="/formularios/{{ $formulario->id_formulario }}/campos"
+class="btn btn-secondary btn-sm">
 
+Campos
+
+</a>
 <a href="/formularios/{{ $formulario->id_formulario }}/respuestas"
 
 class="btn btn-info btn-sm">
@@ -146,10 +145,6 @@ Respuestas
 
 
 </a>
-
-
-
-
 
 
 {{-- EDITAR --}}
@@ -166,17 +161,10 @@ Editar
 </a>
 
 
-
-
-
-
-
 {{-- ACTIVAR / DESACTIVAR --}}
 
 
-
 @if($formulario->estado == 1)
-
 
 
 <form action="/formularios/{{ $formulario->id_formulario }}/estado"
@@ -185,9 +173,7 @@ method="POST"
 
 style="display:inline">
 
-
 @csrf
-
 
 
 <button type="submit"
@@ -196,7 +182,6 @@ class="btn btn-danger btn-sm"
 
 
 onclick="return confirm('¿Desea desactivar este formulario?')">
-
 
 Desactivar
 
@@ -208,12 +193,7 @@ Desactivar
 
 
 
-
-
 @else
-
-
-
 
 
 <form action="/formularios/{{ $formulario->id_formulario }}/estado"
@@ -224,7 +204,6 @@ style="display:inline">
 
 
 @csrf
-
 
 
 <button type="submit"
@@ -243,37 +222,21 @@ Activar
 
 </form>
 
-
-
-
-
 @endif
-
-
 
 
 </td>
 
 
-
-
 </tr>
-
-
 
 
 @endforeach
 
 
-
-
 </tbody>
 
-
-
 </table>
-
-
 
 
 @endsection
