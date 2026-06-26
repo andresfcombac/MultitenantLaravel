@@ -303,6 +303,29 @@ Route::post(
     'role:SuperAdmin,Administrador'
 ]);
 
+// Ver respuestas del formulario
+
+Route::get(
+    '/formularios/{id}/respuestas',
+    [FormularioController::class,'respuestas']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+
+// Exportar respuestas a CSV
+
+Route::get(
+    '/formularios/{id}/exportar',
+    [FormularioController::class,'exportar']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
 /* CAMPOS DEL FORMULARIO*/
 
 

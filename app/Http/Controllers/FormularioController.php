@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formulario;
+use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FormularioController extends Controller
 {
@@ -314,4 +316,74 @@ public function edit($id)
 
     }
 
+    public function respuestas($id)
+{
+
+}
+
+
+public function exportar($id)
+{
+    $formulario = Formulario::findOrFail($id);
+
+    $respuestas = FormularioRespuesta::where(
+        'id_formulario',
+        $id
+    )->get();
+
+    $response = new StreamedResponse(function () use ($respuestas) {
+
+        $handle = fopen('php://output', 'w');
+
+        fputcsv($handle, [
+            'ID',
+            'Nombres',
+            'Apellidos',
+            'Correo',
+            'Telefono',
+            'Tipo Documento',
+            'Numero Documento',
+            'Fecha',
+            'Datos'
+        ]);
+
+        foreach ($respuestas as $respuesta) {
+
+            fputcsv($handle, [
+
+                $respuesta->id_respuesta,
+                $respuesta->nombres,
+                $respuesta->apellidos,
+                $respuesta->correo,
+                $respuesta->telefono,
+                $respuesta->tipo_documento,
+                $respuesta->numero_documento,
+                $respuesta->fecha_respuesta,
+                json_encode(
+                    $respuesta->datos,
+                    JSON_UNESCAPED_UNICODE
+                )
+
+            ]);
+
+        }
+
+        fclose($handle);
+
+    });
+
+    $nombre = 'respuestas_formulario_'.$formulario->id_formulario.'.csv';
+
+    $response->headers->set(
+        'Content-Type',
+        'text/csv'
+    );
+
+    $response->headers->set(
+        'Content-Disposition',
+        'attachment; filename="'.$nombre.'"'
+    );
+
+    return $response;
+}
 }
