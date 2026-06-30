@@ -6,140 +6,146 @@
 
 <h3>{{ $formulario->nombre_formulario }}</h3>
 
-<p>
-<strong>Actividad:</strong>
-{{ $formulario->actividad->nombre_actividad }}
-</p>
+<p>{{ $formulario->descripcion }}</p>
 
-<hr>
+<form method="POST" action="/formularios/{{ $formulario->id_formulario }}/responder">
 
-<form>
+    @csrf
 
-@foreach($formulario->campos->sortBy('orden') as $campo)
+    @foreach($formulario->campos->sortBy('orden') as $campo)
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label class="form-label">
+            <label class="form-label">
+                {{ $campo->etiqueta }}
 
-{{ $campo->etiqueta }}
+                @if($campo->obligatorio)
+                    <span class="text-danger">*</span>
+                @endif
+            </label>
 
-@if($campo->obligatorio)
+            @php
+                $opciones = json_decode($campo->opciones, true) ?? [];
+            @endphp
 
-<span class="text-danger">*</span>
 
-@endif
+            {{-- TEXTO --}}
+            @if($campo->tipo_campo == 'texto')
 
-</label>
+                <input
+                    type="text"
+                    name="{{ $campo->etiqueta }}"
+                    class="form-control"
+                    {{ $campo->obligatorio ? 'required' : '' }}
+                >
 
-@if($campo->tipo_campo == 'texto')
+            {{-- NUMERO --}}
+            @elseif($campo->tipo_campo == 'numero')
 
-<input
-type="text"
-class="form-control"
-placeholder="{{ $campo->etiqueta }}">
+                <input
+                    type="number"
+                    name="{{ $campo->etiqueta }}"
+                    class="form-control"
+                    {{ $campo->obligatorio ? 'required' : '' }}
+                >
 
-@elseif($campo->tipo_campo == 'numero')
+            {{-- FECHA --}}
+            @elseif($campo->tipo_campo == 'fecha')
 
-<input
-type="number"
-class="form-control">
+                <input
+                    type="date"
+                    name="{{ $campo->etiqueta }}"
+                    class="form-control"
+                    {{ $campo->obligatorio ? 'required' : '' }}
+                >
 
-@elseif($campo->tipo_campo == 'fecha')
+            {{-- EMAIL --}}
+            @elseif($campo->tipo_campo == 'email')
 
-<input
-type="date"
-class="form-control">
+                <input
+                    type="email"
+                    name="{{ $campo->etiqueta }}"
+                    class="form-control"
+                    {{ $campo->obligatorio ? 'required' : '' }}
+                >
 
-@elseif($campo->tipo_campo == 'email')
+            {{-- SELECT --}}
+            @elseif($campo->tipo_campo == 'select')
 
-<input
-type="email"
-class="form-control">
+                <select
+                    name="{{ $campo->etiqueta }}"
+                    class="form-control"
+                    {{ $campo->obligatorio ? 'required' : '' }}
+                >
 
-@elseif($campo->tipo_campo == 'select')
+                    <option value="">Seleccione...</option>
 
-<select class="form-control">
+                    @foreach($opciones as $opcion)
 
-<option value="">
-Seleccione...
-</option>
+                        <option value="{{ $opcion }}">
+                            {{ $opcion }}
+                        </option>
 
-@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+                    @endforeach
 
-<option value="{{ $opcion }}">
+                </select>
 
-{{ $opcion }}
+            {{-- RADIO --}}
+            @elseif($campo->tipo_campo == 'radio')
 
-</option>
+                @foreach($opciones as $opcion)
 
-@endforeach
+                    <div class="form-check">
 
-</select>
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="{{ $campo->etiqueta }}"
+                            value="{{ $opcion }}"
+                        >
 
-@elseif($campo->tipo_campo == 'radio')
+                        <label class="form-check-label">
+                            {{ $opcion }}
+                        </label>
 
-@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+                    </div>
 
-<div class="form-check">
+                @endforeach
 
-<input
-type="radio"
-name="campo{{ $campo->id_campo }}"
-class="form-check-input"
-value="{{ $opcion }}">
+            {{-- CHECKBOX --}}
+            @elseif($campo->tipo_campo == 'checkbox')
 
-<label class="form-check-label">
+                @foreach($opciones as $opcion)
 
-{{ $opcion }}
+                    <div class="form-check">
 
-</label>
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="{{ $campo->etiqueta }}[]"
+                            value="{{ $opcion }}"
+                        >
 
-</div>
+                        <label class="form-check-label">
+                            {{ $opcion }}
+                        </label>
 
-@endforeach
+                    </div>
 
-@elseif($campo->tipo_campo == 'checkbox')
+                @endforeach
 
-@foreach(json_decode($campo->opciones,true) ?? [] as $opcion)
+            @endif
 
-<div class="form-check">
+        </div>
 
-<input
-type="checkbox"
-class="form-check-input"
-value="{{ $opcion }}">
+    @endforeach
 
-<label class="form-check-label">
 
-{{ $opcion }}
+    <button class="btn btn-success">
 
-</label>
+        Enviar formulario
 
-</div>
-
-@endforeach
-
-@endif
-
-</div>
-
-@endforeach
-
-<button
-class="btn btn-primary"
-disabled>
-
-Enviar (Vista previa)
-
-</button>
-
-<a
-href="/formularios"
-class="btn btn-secondary">
-
-Volver
-
-</a>
+    </button>
 
 </form>
 

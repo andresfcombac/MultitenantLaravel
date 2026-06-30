@@ -190,99 +190,110 @@ Información del formulario
 
 @foreach($formulario->campos as $campo)
 
-
-
 <div class="mb-3">
 
-
-<label>
-
-{{ $campo->etiqueta }}
-
-</label>
-
-
+<label>{{ $campo->etiqueta }}</label>
 
 @if($campo->tipo_campo == 'texto')
 
-
-<input type="text"
-
-name="{{ $campo->etiqueta }}"
-
-class="form-control"
-
-@if($campo->obligatorio)
-required
-@endif
-
+<input
+    type="text"
+    name="{{ $campo->etiqueta }}"
+    class="form-control"
+    @if($campo->obligatorio) required @endif
 >
-
-
 
 @elseif($campo->tipo_campo == 'numero')
 
-
-<input type="number"
-
-name="{{ $campo->etiqueta }}"
-
-class="form-control"
-
-@if($campo->obligatorio)
-required
-@endif
-
+<input
+    type="number"
+    name="{{ $campo->etiqueta }}"
+    class="form-control"
+    @if($campo->obligatorio) required @endif
 >
-
-
-
 
 @elseif($campo->tipo_campo == 'fecha')
 
-
-<input type="date"
-
-name="{{ $campo->etiqueta }}"
-
-class="form-control"
-
-@if($campo->obligatorio)
-required
-@endif
-
+<input
+    type="date"
+    name="{{ $campo->etiqueta }}"
+    class="form-control"
+    @if($campo->obligatorio) required @endif
 >
-
-
 
 @elseif($campo->tipo_campo == 'email')
 
-
-<input type="email"
-
-name="{{ $campo->etiqueta }}"
-
-class="form-control"
-
-@if($campo->obligatorio)
-required
-@endif
-
+<input
+    type="email"
+    name="{{ $campo->etiqueta }}"
+    class="form-control"
+    @if($campo->obligatorio) required @endif
 >
 
+@elseif($campo->tipo_campo == 'select')
 
+<select
+    name="{{ $campo->etiqueta }}"
+    class="form-control"
+    @if($campo->obligatorio) required @endif
+>
 
-@endif
+<option value="">Seleccione</option>
 
+@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
 
-
-</div>
-
+<option value="{{ $opcion }}">
+    {{ $opcion }}
+</option>
 
 @endforeach
 
+</select>
 
+@elseif($campo->tipo_campo == 'radio')
 
+@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
+
+<div class="form-check">
+
+<input
+    class="form-check-input"
+    type="radio"
+    name="{{ $campo->etiqueta }}"
+    value="{{ $opcion }}"
+    @if($campo->obligatorio) required @endif
+>
+
+<label class="form-check-label">
+{{ $opcion }}
+</label>
+
+</div>
+
+@endforeach
+
+@elseif($campo->tipo_campo == 'checkbox')
+
+@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
+
+<div class="form-check">
+
+<input
+    class="form-check-input"
+    type="checkbox"
+    name="{{ $campo->etiqueta }}[]"
+    value="{{ $opcion }}"
+>
+
+<label class="form-check-label">
+{{ $opcion }}
+</label>
+
+</div>
+
+@endforeach
+
+@endif
 
 <button class="btn btn-success">
 
@@ -290,14 +301,9 @@ Enviar formulario
 
 </button>
 
-
-
 </form>
-
-
 
 </div>
 
-
-
 @endsection
+

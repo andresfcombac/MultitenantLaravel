@@ -303,6 +303,15 @@ Route::post(
     'role:SuperAdmin,Administrador'
 ]);
 
+Route::post(
+    '/formularios/{id}/responder',
+    [FormularioController::class,'responder']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
 // Ver respuestas del formulario
 
 Route::get(

@@ -321,6 +321,49 @@ public function edit($id)
 
 }
 
+public function responder(Request $request, $id)
+{
+    $formulario = \App\Models\Formulario::with('campos')
+        ->findOrFail($id);
+
+    $datos = [];
+
+    foreach ($formulario->campos as $campo) {
+
+        $valor = $request->input($campo->etiqueta);
+
+        // Si es checkbox múltiple
+        if (is_array($valor)) {
+            $valor = implode(', ', $valor);
+        }
+
+        $datos[$campo->etiqueta] = $valor;
+    }
+
+    \App\Models\FormularioRespuesta::create([
+
+        'id_formulario' => $id,
+
+        'datos' => $datos,
+
+        'nombres' => session('nombre') ?? 'Usuario',
+
+        'apellidos' => session('apellido') ?? '',
+
+        'correo' => session('correo') ?? 'correo@empresa.com',
+
+        'telefono' => session('telefono') ?? '',
+
+        'tipo_documento' => session('tipo_documento') ?? 'CC',
+
+        'numero_documento' => session('numero_documento') ?? '0'
+
+    ]);
+
+    return redirect()
+        ->back()
+        ->with('success', 'Formulario enviado correctamente.');
+}
 
 public function exportar($id)
 {
@@ -385,5 +428,8 @@ public function exportar($id)
     );
 
     return $response;
+
 }
+
+
 }
