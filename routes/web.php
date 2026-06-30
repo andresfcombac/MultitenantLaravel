@@ -11,6 +11,7 @@ use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\FormularioCampoController;
 use App\Http\Controllers\FormularioPublicoController;
 use App\Http\Controllers\FormularioRespuestaController;
+use App\Http\Controllers\AsistenciaController;
 
 
 Route::get('/', function () {
@@ -432,4 +433,20 @@ Route::get(
     'role:SuperAdmin,Administrador'
 ]);
 
+Route::get(
+    '/asistencias',
+    [AsistenciaController::class,'index']
+)
+->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+Route::post(
+    '/asistencias/{id}/confirmar',
+    [AsistenciaController::class, 'confirmar']
+)->middleware([
+    'auth.session',
+    'tenant'
+]);
 Route::get('/logout', [LoginController::class, 'logout']);

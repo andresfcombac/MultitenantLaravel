@@ -44,4 +44,12 @@ class FormularioRespuesta extends Model
         );
     }
 
+    public function asistencia()
+{
+    return $this->hasOne(
+        Asistencia::class,
+        'id_respuesta',
+        'id_respuesta'
+    );
+}
 }
