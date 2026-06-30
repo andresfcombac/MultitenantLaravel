@@ -1,63 +1,77 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Login Multitenant</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ asset('css/login.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
+
 <body>
 
-<div class="container mt-5">
+<div class="login-container">
 
-    <div class="row justify-content-center">
+    <div class="login-left">
 
-        <div class="col-md-4">
+    <div class="left-content">
 
-            <div class="card">
+        <div class="logo-circle">
 
-                <div class="card-header">
-                    Iniciar Sesión
-                </div>
+    <img
+        src="{{ asset('images/logo.png') }}"
+        alt="Logo"
+        class="logo-image">
 
-                <div class="card-body">
+</div>
 
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+        <h1>Multitenant</h1>
 
-                    <form method="POST" action="/login">
+        <p class="system-description">
 
-                        @csrf
+            Gestión de actividades, formularios y asistencia
+            para múltiples empresas desde una sola plataforma.
 
-                        <div class="mb-3">
-                            <label>Correo</label>
-                            <input
-                                type="email"
-                                name="correo_usu"
-                                class="form-control"
-                                required>
-                        </div>
+        </p>
 
-                        <div class="mb-3">
-                            <label>Contraseña</label>
-                            <input
-                                type="password"
-                                name="password"
-                                class="form-control"
-                                required>
-                        </div>
+        <div class="company-list">
 
-                        <button class="btn btn-primary w-100">
-                            Ingresar
-                        </button>
+            <span class="company-badge">
 
-                    </form>
+                Servitel
 
-                </div>
+            </span>
 
-            </div>
+            <span class="company-badge">
+
+                Servientrega
+
+            </span>
+
+            <span class="company-badge">
+
+                Empresa Demo
+
+            </span>
+
+        </div>
+
+        <div class="version-info">
+
+            Versión 1.5
 
         </div>
 
@@ -65,5 +79,137 @@
 
 </div>
 
+    <div class="login-right">
+
+    <div class="login-card">
+
+        <h2>
+
+            Bienvenido
+
+        </h2>
+
+        <p class="login-subtitle">
+
+            Inicia sesión para continuar.
+
+        </p>
+
+        @if(session('error'))
+
+            <div class="alert alert-danger">
+
+                {{ session('error') }}
+
+            </div>
+
+        @endif
+
+        <form
+            method="POST"
+            action="/login">
+
+            @csrf
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Correo electrónico
+
+                </label>
+
+                <input
+                    type="email"
+                    name="correo_usu"
+                    class="form-control"
+                    required
+                    autocomplete="username">
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    Contraseña
+
+                </label>
+
+                <div class="input-group">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        required
+                        autocomplete="current-password">
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="togglePassword">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-warning w-100">
+
+                Ingresar
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+document
+.getElementById('togglePassword')
+.addEventListener('click',function(){
+
+    const password =
+        document.getElementById('password');
+
+    const icon =
+        this.querySelector('i');
+
+    if(password.type === 'password'){
+
+        password.type='text';
+
+        icon.classList.remove('fa-eye');
+
+        icon.classList.add('fa-eye-slash');
+
+    }else{
+
+        password.type='password';
+
+        icon.classList.remove('fa-eye-slash');
+
+        icon.classList.add('fa-eye');
+
+    }
+
+});
+
+</script>
+
 </body>
+
 </html>
