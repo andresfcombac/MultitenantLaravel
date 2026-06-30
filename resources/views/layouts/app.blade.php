@@ -46,6 +46,15 @@ Usuarios
 <a href="/actividades" class="btn btn-outline-light btn-sm me-2">
     Actividades
 </a>
+<a href="/asistencias"
+class="btn btn-outline-light btn-sm me-2">
+    Asistencias
+</a>
+
+<a href="/historico"
+class="btn btn-outline-light btn-sm me-2">
+    Histórico
+</a>
 
 </div>
 

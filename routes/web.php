@@ -12,6 +12,7 @@ use App\Http\Controllers\FormularioCampoController;
 use App\Http\Controllers\FormularioPublicoController;
 use App\Http\Controllers\FormularioRespuestaController;
 use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\HistoricoController;
 
 
 Route::get('/', function () {
@@ -446,6 +447,15 @@ Route::post(
     '/asistencias/{id}/confirmar',
     [AsistenciaController::class, 'confirmar']
 )->middleware([
+    'auth.session',
+    'tenant'
+]);
+
+Route::get(
+    '/historico',
+    [HistoricoController::class,'index']
+)
+->middleware([
     'auth.session',
     'tenant'
 ]);
