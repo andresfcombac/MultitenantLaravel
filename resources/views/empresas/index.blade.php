@@ -1,90 +1,162 @@
 @extends('layouts.app')
 
-@section('title', 'Empresas')
+@section('title','Empresas')
 
 @section('content')
 
-<div class="card">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div class="card-header">
-        Empresas
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-building me-2"></i>
+
+            Empresas
+
+        </h2>
+
+        <small class="text-muted">
+
+            Administración de empresas registradas
+
+        </small>
+
     </div>
-     
-     <a
-href="/empresas/create"
-class="btn btn-primary mb-3"
->
-Agregar Empresa
-</a>
+
+    <a
+        href="/empresas/create"
+        class="btn btn-primary">
+
+        <i class="fa-solid fa-plus me-2"></i>
+
+        Nueva Empresa
+
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm border-0">
+
     <div class="card-body">
 
-        <table class="table table-striped">
+        <div class="table-responsive">
 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Empresa</th>
-                    <th>URL</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
+            <table
+                id="tablaEmpresas"
+                class="table table-hover align-middle">
 
-            <tbody>
+                <thead class="table-light">
 
-                @foreach($empresas as $empresa)
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Empresa</th>
+
+                        <th>URL</th>
+
+                        <th width="150">
+
+                            Acciones
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach($empresas as $empresa)
 
                     <tr>
 
                         <td>
+
                             {{ $empresa->id_empresa }}
+
                         </td>
 
                         <td>
-                            {{ $empresa->nombre_empresa }}
+
+                            <strong>
+
+                                {{ $empresa->nombre_empresa }}
+
+                            </strong>
+
                         </td>
 
                         <td>
-                            {{ $empresa->url }}
+
+                            @if($empresa->url)
+
+                                <span class="badge bg-info">
+
+                                    {{ $empresa->url }}
+
+                                </span>
+
+                            @else
+
+                                <span class="text-muted">
+
+                                    Sin URL
+
+                                </span>
+
+                            @endif
+
                         </td>
-                       <td>
 
-    <a
-        href="/empresas/{{ $empresa->id_empresa }}/edit"
-        class="btn btn-warning btn-sm"
-    >
-        Editar
-    </a>
+                        <td>
 
+                            <div class="d-flex gap-2">
 
-    <form
-        action="/empresas/{{ $empresa->id_empresa }}/delete"
-        method="POST"
-        style="display:inline;"
-    >
+                                <a
+                                    href="/empresas/{{ $empresa->id_empresa }}/edit"
+                                    class="btn btn-warning btn-sm">
 
-        @csrf
+                                    <i class="fa-solid fa-pen"></i>
 
-        <button
-            type="submit"
-            class="btn btn-danger btn-sm"
-            onclick="return confirm('¿Eliminar empresa?')"
-        >
-            Eliminar
-        </button>
+                                </a>
 
-    </form>
+                                <form
+                                    action="/empresas/{{ $empresa->id_empresa }}/delete"
+                                    method="POST">
 
-</td>
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Eliminar empresa?')">
+
+                                        <i class="fa-solid fa-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
                     </tr>
 
-                @endforeach
+                    @endforeach
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+
+        </div>
 
     </div>
 
 </div>
 
 @endsection
+

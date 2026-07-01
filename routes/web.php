@@ -459,4 +459,16 @@ Route::get(
     'auth.session',
     'tenant'
 ]);
+
+Route::get(
+    '/configuracion',
+    function () {
+
+        return view('configuracion.index');
+
+    }
+)->middleware([
+    'auth.session',
+    'tenant'
+]);
 Route::get('/logout', [LoginController::class, 'logout']);

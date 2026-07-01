@@ -5,10 +5,31 @@
 @section('content')
 
 
-<h3>
-Editar formulario
-</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-file-pen me-2"></i>
+
+            Editar Formulario
+
+        </h2>
+
+        <small class="text-muted">
+
+            Actualización de la información del formulario
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form method="POST" action="/formularios/{{ $formulario->id_formulario }}/update">
 
@@ -88,26 +109,35 @@ selected
 </div>
 
 
+<div class="d-flex gap-2">
 
+    <button
+        type="submit"
+        class="btn btn-success">
 
-<button class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
-Actualizar
+        Actualizar
 
-</button>
+    </button>
 
+    <a
+        href="/formularios"
+        class="btn btn-secondary">
 
+        <i class="fa-solid fa-arrow-left me-2"></i>
 
-<a href="/formularios"
-class="btn btn-secondary">
+        Volver
 
-Cancelar
+    </a>
 
-</a>
-
-
+</div>
 
 </form>
+
+    </div>
+
+</div>
 
 
 @endsection

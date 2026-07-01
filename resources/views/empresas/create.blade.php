@@ -4,8 +4,31 @@
 
 @section('content')
 
-<h2>Crear Empresa</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-building-circle-check me-2"></i>
+
+            Crear Empresa
+
+        </h2>
+
+        <small class="text-muted">
+
+            Registro de una nueva empresa
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form method="POST" action="/empresas/store">
 
@@ -57,13 +80,34 @@ class="form-control"
 </div>
 
 
-<button class="btn btn-success">
+<div class="d-flex gap-2">
 
-Guardar
+    <button
+        type="submit"
+        class="btn btn-success">
 
-</button>
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
+        Guardar
+
+    </button>
+
+    <a
+        href="/empresas"
+        class="btn btn-secondary">
+
+        <i class="fa-solid fa-arrow-left me-2"></i>
+
+        Volver
+
+    </a>
+
+</div>
 
 </form>
+
+    </div>
+
+</div>
 
 @endsection

@@ -5,10 +5,31 @@
 @section('content')
 
 
-<h3>
-Editar actividad
-</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-calendar-check me-2"></i>
+
+            Editar Actividad
+
+        </h2>
+
+        <small class="text-muted">
+
+            Actualización de la información de la actividad
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form method="POST" action="/actividades/{{ $actividad->id_actividad }}/update">
 
@@ -137,23 +158,34 @@ selected
 
 @endif
 
+<div class="d-flex gap-2">
 
+    <button
+        type="submit"
+        class="btn btn-success">
 
-<button class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
-Actualizar
+        Actualizar
 
-</button>
+    </button>
 
+    <a
+        href="/actividades"
+        class="btn btn-secondary">
 
-<a href="/actividades" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-2"></i>
 
-Cancelar
+        Volver
 
-</a>
+    </a>
 
+</div>
 
 </form>
 
+    </div>
+
+</div>
 
 @endsection

@@ -4,102 +4,164 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<h3>
-Actividades
-</h3>
+```
+<div>
 
-<a href="/actividades/create" class="btn btn-primary">
-Crear actividad
-</a>
+    <h2 class="fw-bold mb-0">
+
+        <i class="fa-solid fa-calendar-days me-2"></i>
+
+        Actividades
+
+    </h2>
+
+    <small class="text-muted">
+
+        Administración de actividades registradas
+
+    </small>
 
 </div>
 
+<a
+    href="/actividades/create"
+    class="btn btn-primary">
 
-<table class="table table-bordered">
+    <i class="fa-solid fa-plus me-2"></i>
 
-<thead>
-
-<tr>
-<th>Nombre</th>
-<th>Fecha</th>
-<th>Hora inicio</th>
-<th>Hora fin</th>
-<th>Empresa</th>
-<th>Acciones</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-@foreach($actividades as $actividad)
-
-<tr>
-
-<td>
-{{ $actividad->nombre_actividad }}
-</td>
-
-
-<td>
-{{ $actividad->fecha }}
-</td>
-
-
-<td>
-{{ $actividad->hora_inicio }}
-</td>
-
-
-<td>
-{{ $actividad->hora_fin }}
-</td>
-
-
-<td>
-{{ $actividad->empresa->nombre_empresa ?? 'Sin empresa' }}
-</td>
-
-
-<td>
-
-<a href="/actividades/{{ $actividad->id_actividad }}/edit"
-class="btn btn-warning btn-sm">
-
-Editar
+    Nueva Actividad
 
 </a>
+```
 
+</div>
 
-<form method="POST"
-action="/actividades/{{ $actividad->id_actividad }}/delete"
-style="display:inline">
+<div class="card shadow-sm border-0">
 
-@csrf
+```
+<div class="card-body">
 
-<button class="btn btn-danger btn-sm">
+    <div class="table-responsive">
 
-Eliminar
+        <table
+            id="tablaActividades"
+            class="table table-hover align-middle">
 
-</button>
+            <thead class="table-light">
 
-</form>
+                <tr>
 
-</td>
+                    <th>Nombre</th>
 
-</tr>
+                    <th>Fecha</th>
 
-@endforeach
+                    <th>Inicio</th>
 
+                    <th>Fin</th>
 
-</tbody>
+                    <th>Empresa</th>
 
+                    <th width="160">
 
-</table>
+                        Acciones
 
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach($actividades as $actividad)
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            {{ $actividad->nombre_actividad }}
+
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        {{ \Carbon\Carbon::parse($actividad->fecha)->format('d/m/Y') }}
+
+                    </td>
+
+                    <td>
+
+                        {{ $actividad->hora_inicio }}
+
+                    </td>
+
+                    <td>
+
+                        {{ $actividad->hora_fin }}
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+
+                            {{ $actividad->empresa->nombre_empresa ?? 'Sin empresa' }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <div class="d-flex gap-2">
+
+                            <a
+                                href="/actividades/{{ $actividad->id_actividad }}/edit"
+                                class="btn btn-warning btn-sm">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="/actividades/{{ $actividad->id_actividad }}/delete">
+
+                                @csrf
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Eliminar actividad?')">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                @endforeach
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+```
+
+</div>
 
 @endsection

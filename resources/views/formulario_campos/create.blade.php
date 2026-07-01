@@ -5,12 +5,27 @@
 @section('content')
 
 
-<h3>
-Crear campo de formulario
-</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
 
-<form method="POST" action="/formulario-campos/store">
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-list-check me-2"></i>
+
+            Crear campo
+
+        </h2>
+
+        <small class="text-muted">
+
+            Agregue un nuevo campo al formulario.
+
+        </small>
+
+    </div>
+
+</div>
 
 @csrf
 
@@ -198,24 +213,31 @@ Campo obligatorio
 
 </div>
 
+<div class="mt-4">
 
+    <button class="btn btn-success">
 
-<button class="btn btn-success">
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
-Guardar
+        Guardar
 
-</button>
+    </button>
 
+    <a href="/formulario-campos"
+       class="btn btn-secondary">
 
-<a href="/formulario-campos"
-class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-2"></i>
 
-Cancelar
+        Cancelar
 
-</a>
+    </a>
 
+</div>
 
 </form>
 
+    </div>
+
+</div>
 
 @endsection

@@ -4,7 +4,31 @@
 
 @section('content')
 
-<h2>Editar Usuario</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-user-pen me-2"></i>
+
+            Editar Usuario
+
+        </h2>
+
+        <small class="text-muted">
+
+            Actualización de la información del usuario
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form
     method="POST"
@@ -87,8 +111,7 @@
     </div>
 
     <div class="mb-3">
-        <div class="mb-3">
-
+        
 
 <label>Empresa</label>
 
@@ -129,20 +152,33 @@
 
     </div>
 
+   <div class="d-flex gap-2">
+
     <button
         type="submit"
-        class="btn btn-success"
-    >
+        class="btn btn-success">
+
+        <i class="fa-solid fa-floppy-disk me-2"></i>
+
         Actualizar
+
     </button>
 
     <a
         href="/usuarios"
-        class="btn btn-secondary"
-    >
+        class="btn btn-secondary">
+
+        <i class="fa-solid fa-arrow-left me-2"></i>
+
         Volver
+
     </a>
+
+</div>
 
 </form>
 
+    </div>
+
+</div>
 @endsection

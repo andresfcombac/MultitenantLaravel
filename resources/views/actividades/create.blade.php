@@ -4,14 +4,33 @@
 
 @section('content')
 
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<h3>
-Crear actividad
-</h3>
+    <div>
 
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-calendar-plus me-2"></i>
+
+            Crear Actividad
+
+        </h2>
+
+        <small class="text-muted">
+
+            Registro de una nueva actividad
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form method="POST" action="/actividades/store">
-
 @csrf
 
 
@@ -124,16 +143,34 @@ class="form-control">
 
 @endif
 
+<div class="d-flex gap-2">
 
+    <button
+        type="submit"
+        class="btn btn-success">
 
-<button class="btn btn-success">
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
-Guardar
+        Guardar
 
-</button>
+    </button>
 
+    <a
+        href="/actividades"
+        class="btn btn-secondary">
+
+        <i class="fa-solid fa-arrow-left me-2"></i>
+
+        Volver
+
+    </a>
+
+</div>
 
 </form>
 
+    </div>
+
+</div>
 
 @endsection

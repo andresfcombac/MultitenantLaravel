@@ -63,7 +63,7 @@
 
             <span class="company-badge">
 
-                Empresa Demo
+                Global
 
             </span>
 

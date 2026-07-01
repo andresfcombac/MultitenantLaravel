@@ -4,13 +4,27 @@
 
 @section('content')
 
-<h3>
-Editar campo
-</h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
 
-<form method="POST"
-action="/formulario-campos/{{ $campo->id_campo }}/update">
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-pen-to-square me-2"></i>
+
+            Editar campo
+
+        </h2>
+
+        <small class="text-muted">
+
+            Modifique la configuración del campo seleccionado.
+
+        </small>
+
+    </div>
+
+</div>
 
 @csrf
 
@@ -109,8 +123,6 @@ Checkbox
 </div>
 
 
-
-
 <div class="mb-3">
 
 <label>
@@ -118,8 +130,10 @@ Opciones
 </label>
 
 
-<textarea name="opciones"
-class="form-control">{{ $campo->opciones }}</textarea>
+<textarea
+    name="opciones"
+    class="form-control"
+    rows="5">@if($campo->opciones){{ implode("\n", json_decode($campo->opciones, true) ?? []) }}@endif</textarea>
 
 
 </div>
@@ -166,22 +180,31 @@ Obligatorio
 <br>
 
 
-<button class="btn btn-success">
+<div class="mt-4">
 
-Actualizar
+    <button class="btn btn-primary">
 
-</button>
+        <i class="fa-solid fa-floppy-disk me-2"></i>
 
+        Actualizar
 
-<a href="/formulario-campos"
-class="btn btn-secondary">
+    </button>
 
-Cancelar
+    <a href="/formulario-campos"
+       class="btn btn-secondary">
 
-</a>
+        <i class="fa-solid fa-arrow-left me-2"></i>
 
+        Cancelar
+
+    </a>
+
+</div>
 
 </form>
 
+    </div>
+
+</div>
 
 @endsection

@@ -1,101 +1,283 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>@yield('title', 'Multitenant Laravel')</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        @yield('title','Multitenant Laravel')
+
+    </title>
+
+    <link rel="stylesheet"
+      href="{{ asset('assets/plugins/bootstrap/bootstrap.min.css') }}">
+
+<link rel="stylesheet"
+      href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
+
+<link rel="stylesheet"
+      href="{{ asset('assets/plugins/datatables/dataTables.dataTables.min.css') }}">
+
+<link rel="stylesheet"
+      href="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+<link rel="stylesheet"
+      href="{{ asset('css/layout.css') }}">
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+<div class="wrapper">
 
-<div class="container-fluid">
+    <aside
+    class="sidebar"
+    id="sidebar">
 
-<div>
+    <div class="sidebar-header">
 
-<span class="navbar-brand">
-Multitenant Laravel
-</span>
+        <button
+            id="toggleSidebar"
+            class="toggle-btn">
 
+            <i class="fa-solid fa-bars"></i>
 
-<a href="/dashboard"
-class="btn btn-outline-light btn-sm me-2">
-Dashboard
-</a>
+        </button>
 
+        <img
+            src="{{ asset('images/logo.png') }}"
+            class="sidebar-logo"
+            alt="Logo">
 
-@if(session('rol') == 5)
+        <span class="sidebar-title">
 
-<a href="/empresas"
-class="btn btn-outline-light btn-sm me-2">
-Empresas
-</a>
+            Multitenant
 
-@endif
+        </span>
 
-<a href="/usuarios"
-class="btn btn-outline-light btn-sm me-2">
-Usuarios
-</a>
+    </div>
 
-<a href="/formularios" class="btn btn-outline-light btn-sm me-2">
-    Formularios
-</a>
-<a href="/actividades" class="btn btn-outline-light btn-sm me-2">
-    Actividades
-</a>
-<a href="/asistencias"
-class="btn btn-outline-light btn-sm me-2">
-    Asistencias
-</a>
+    <nav class="sidebar-menu">
 
-<a href="/historico"
-class="btn btn-outline-light btn-sm me-2">
-    Histórico
-</a>
+        <a
+            href="/dashboard"
+            class="menu-item">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+
+                Dashboard
+
+            </span>
+
+        </a>
+
+        @if(session('rol') == 5)
+
+        <a
+            href="/empresas"
+            class="menu-item">
+
+            <i class="fa-solid fa-building"></i>
+
+            <span>
+
+                Empresas
+
+            </span>
+
+        </a>
+
+        @endif
+
+        <a
+            href="/usuarios"
+            class="menu-item">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>
+
+                Usuarios
+
+            </span>
+
+        </a>
+
+        <a
+            href="/formularios"
+            class="menu-item">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            <span>
+
+                Formularios
+
+            </span>
+
+        </a>
+
+        <a
+            href="/actividades"
+            class="menu-item">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <span>
+
+                Actividades
+
+            </span>
+
+        </a>
+
+        <a
+            href="/asistencias"
+            class="menu-item">
+
+            <i class="fa-solid fa-user-check"></i>
+
+            <span>
+
+                Asistencias
+
+            </span>
+
+        </a>
+
+        <a
+            href="/historico"
+            class="menu-item">
+
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            <span>
+
+                Histórico
+
+            </span>
+
+        </a>
+
+    </nav>
+  <div class="sidebar-footer">
+
+    <a
+        href="/configuracion"
+        class="menu-item">
+
+        <i class="fa-solid fa-gear"></i>
+
+        <span>
+
+            Configuración
+
+        </span>
+
+    </a>
 
 </div>
 
+</aside>
 
-<a href="/logout"
-class="btn btn-danger btn-sm">
-Cerrar sesión
-</a>
+    <div
+        class="main-content">
 
+        <header
+    class="topbar">
+
+    <div class="topbar-left">
+
+        <h5 class="page-title">
+
+            @yield('title','Dashboard')
+
+        </h5>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <div class="user-info">
+
+            <span class="user-name">
+
+                {{ session('nombre') }}
+
+            </span>
+
+        </div>
+
+        <a
+            href="/logout"
+            class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>
+
+                Salir
+
+            </span>
+
+        </a>
+
+    </div>
+
+</header>
+
+        <main
+            class="content-area">
+
+            @if(session('success'))
+
+                <div class="alert alert-success">
+
+                    {{ session('success') }}
+
+                </div>
+
+            @endif
+
+            @if(session('error'))
+
+                <div class="alert alert-danger">
+
+                    {{ session('error') }}
+
+                </div>
+
+            @endif
+
+            @yield('content')
+
+        </main>
+
+    </div>
 
 </div>
 
-</nav>
+<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 
+<script src="{{ asset('assets/plugins/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
-<div class="container mt-4">
+<script src="{{ asset('assets/plugins/datatables/dataTables.min.js') }}"></script>
 
+<script src="{{ asset('js/datatables.js') }}"></script>
 
-@if(session('success'))
+<script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
-<div class="alert alert-success">
-{{ session('success') }}
-</div>
+<script src="{{ asset('js/layout.js') }}"></script>
 
-@endif
-
-
-@if(session('error'))
-
-<div class="alert alert-danger">
-{{ session('error') }}
-</div>
-
-@endif
-
-
-@yield('content')
-
-
-</div>
-
+@stack('scripts')
 
 </body>
+
 </html>

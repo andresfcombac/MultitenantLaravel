@@ -1,107 +1,187 @@
 @extends('layouts.app')
 
-@section('title', 'Usuarios')
+@section('title','Usuarios')
 
 @section('content')
 
-<h2>Usuarios</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="mb-3">
+    <div>
 
-    <a
-        href="/usuarios/create"
-        class="btn btn-primary"
-    >
-        Agregar Usuario
+        <h2 class="fw-bold mb-0">
+            <i class="fa-solid fa-users me-2"></i>
+            Usuarios
+        </h2>
+
+        <small class="text-muted">
+            Administración de usuarios del sistema
+        </small>
+
+    </div>
+
+    <a href="/usuarios/create"
+       class="btn btn-primary">
+
+        <i class="fa-solid fa-plus me-2"></i>
+
+        Nuevo Usuario
+
     </a>
 
 </div>
-<table class="table table-bordered table-striped">
-
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Empresa</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    @foreach($usuarios as $usuario)
-
-        <tr>
-
-            <td>
-                {{ $usuario->id_usuario }}
-            </td>
-
-            <td>
-                {{ $usuario->nombre_usu }}
-                {{ $usuario->apellidos_usu }}
-            </td>
-
-            <td>
-                {{ $usuario->correo_usu }}
-            </td>
-
-            <td>
-                {{ $usuario->rol?->nombre_rol }}
-            </td>
-
-            <td>
-                {{ $usuario->empresa?->nombre_empresa }}
-            </td>
-
-<td>
-
-@if(
-    session('rol') == 5
-    ||
-    $usuario->empresa_usu == app('tenant_id')
-)
-
-    <a
-        href="/usuarios/{{ $usuario->id_usuario }}/edit"
-        class="btn btn-warning btn-sm"
-    >
-        Editar
-    </a>
 
 
-    <form
-        action="/usuarios/{{ $usuario->id_usuario }}/delete"
-        method="POST"
-        style="display:inline;"
-    >
+<div class="card shadow-sm border-0">
 
-        @csrf
+    <div class="card-body">
 
-        <button
-            type="submit"
-            class="btn btn-danger btn-sm"
-            onclick="return confirm('¿Eliminar usuario?')"
-        >
-            Eliminar
-        </button>
+        <div class="table-responsive">
 
-    </form>
+            <table
+                id="tablaUsuarios"
+                class="table table-hover align-middle datatable">
 
-@endif
+                <thead class="table-light">
 
-</td>
+                <tr>
 
-</td>
+                    <th>ID</th>
 
-        </tr>
+                    <th>Usuario</th>
 
-    @endforeach
+                    <th>Correo</th>
 
-    </tbody>
+                    <th>Rol</th>
 
-</table>
+                    <th>Empresa</th>
+
+                    <th width="170">
+                        Acciones
+                    </th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                @foreach($usuarios as $usuario)
+
+                    <tr>
+
+                        <td>
+
+                            {{ $usuario->id_usuario }}
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                {{ $usuario->nombre_usu }}
+
+                                {{ $usuario->apellidos_usu }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ $usuario->correo_usu }}
+
+                        </td>
+
+                        <td>
+
+                            @php
+
+                                $color='secondary';
+
+                                switch($usuario->rol?->nombre_rol){
+
+                                    case 'SuperAdmin':
+                                        $color='danger';
+                                    break;
+
+                                    case 'Administrador':
+                                        $color='primary';
+                                    break;
+
+                                    case 'Usuario':
+                                        $color='success';
+                                    break;
+
+                                }
+
+                            @endphp
+
+                            <span class="badge bg-{{ $color }}">
+
+                                {{ $usuario->rol?->nombre_rol }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {{ $usuario->empresa?->nombre_empresa }}
+
+                        </td>
+
+                        <td>
+
+                            @if(
+                                session('rol') == 5 ||
+                                $usuario->empresa_usu == app('tenant_id')
+                            )
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="/usuarios/{{ $usuario->id_usuario }}/edit"
+                                    class="btn btn-sm btn-warning">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </a>
+
+                                <form
+                                    action="/usuarios/{{ $usuario->id_usuario }}/delete"
+                                    method="POST">
+
+                                    @csrf
+
+                                    <button
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('¿Eliminar usuario?')">
+
+                                        <i class="fa-solid fa-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                            @endif
+
+                        </td>
+
+                    </tr>
+
+                @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 @endsection

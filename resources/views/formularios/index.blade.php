@@ -4,239 +4,205 @@
 
 @section('content')
 
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="d-flex justify-content-between mb-3">
+```
+<div>
 
-<h3>
-Formularios
-</h3>
+    <h2 class="fw-bold mb-0">
 
+        <i class="fa-solid fa-file-lines me-2"></i>
 
-<a href="/formularios/create"
-class="btn btn-primary">
+        Formularios
 
-Crear formulario
+    </h2>
 
-</a>
+    <small class="text-muted">
 
+        Administración de formularios del sistema
+
+    </small>
 
 </div>
 
+<a
+    href="/formularios/create"
+    class="btn btn-primary">
 
-<table class="table table-bordered">
+    <i class="fa-solid fa-plus me-2"></i>
 
-
-<thead>
-
-
-<tr>
-
-<th>Nombre</th>
-
-<th>Actividad</th>
-
-<th>Estado</th>
-
-<th>Acciones</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-
-<tbody>
-
-
-
-@foreach($formularios as $formulario)
-
-
-
-<tr>
-
-
-
-<td>
-
-{{ $formulario->nombre_formulario }}
-
-</td>
-
-
-
-
-<td>
-
-{{ $formulario->actividad->nombre_actividad ?? 'Sin actividad' }}
-
-</td>
-
-
-
-
-<td>
-
-
-@if($formulario->estado == 1)
-
-
-<span class="badge bg-success">
-
-Activo
-
-</span>
-
-
-@else
-
-
-<span class="badge bg-danger">
-
-Inactivo
-
-</span>
-
-
-@endif
-
-
-</td>
-
-
-
-
-
-<td>
-
-
-
-
-{{-- VER FORMULARIO --}}
-
-
-<a href="/formularios/{{ $formulario->id_formulario }}"
-
-class="btn btn-secondary btn-sm">
-
-
-Ver
+    Nuevo Formulario
 
 </a>
+```
 
+</div>
 
-{{-- VER RESPUESTAS --}}
+<div class="card shadow-sm border-0">
 
-<a href="/formularios/{{ $formulario->id_formulario }}/campos"
-class="btn btn-secondary btn-sm">
+```
+<div class="card-body">
 
-Campos
+    <div class="table-responsive">
 
-</a>
-<a href="/formularios/{{ $formulario->id_formulario }}/respuestas"
+        <table
+            id="tablaFormularios"
+            class="table table-hover align-middle">
 
-class="btn btn-info btn-sm">
+            <thead class="table-light">
 
+                <tr>
 
-Respuestas
+                    <th>Formulario</th>
 
+                    <th>Actividad</th>
 
-</a>
+                    <th>Estado</th>
 
+                    <th width="330">
 
-{{-- EDITAR --}}
+                        Acciones
 
+                    </th>
 
-<a href="/formularios/{{ $formulario->id_formulario }}/edit"
+                </tr>
 
-class="btn btn-warning btn-sm">
+            </thead>
 
+            <tbody>
 
-Editar
+                @foreach($formularios as $formulario)
 
+                <tr>
 
-</a>
+                    <td>
 
+                        <strong>
 
-{{-- ACTIVAR / DESACTIVAR --}}
+                            {{ $formulario->nombre_formulario }}
 
+                        </strong>
 
-@if($formulario->estado == 1)
+                    </td>
 
+                    <td>
 
-<form action="/formularios/{{ $formulario->id_formulario }}/estado"
+                        {{ $formulario->actividad->nombre_actividad ?? 'Sin actividad' }}
 
-method="POST"
+                    </td>
 
-style="display:inline">
+                    <td>
 
-@csrf
+                        @if($formulario->estado==1)
 
+                            <span class="badge bg-success">
 
-<button type="submit"
+                                Activo
 
-class="btn btn-danger btn-sm"
+                            </span>
 
+                        @else
 
-onclick="return confirm('¿Desea desactivar este formulario?')">
+                            <span class="badge bg-danger">
 
-Desactivar
+                                Inactivo
 
+                            </span>
 
-</button>
+                        @endif
 
+                    </td>
 
-</form>
+                    <td>
 
+                        <div class="d-flex flex-wrap gap-2">
 
+                            <a
+                                href="/formularios/{{ $formulario->id_formulario }}"
+                                class="btn btn-secondary btn-sm"
+                                title="Ver">
 
-@else
+                                <i class="fa-solid fa-eye"></i>
 
+                            </a>
 
-<form action="/formularios/{{ $formulario->id_formulario }}/estado"
+                            <a
+                                href="/formularios/{{ $formulario->id_formulario }}/campos"
+                                class="btn btn-dark btn-sm"
+                                title="Campos">
 
-method="POST"
+                                <i class="fa-solid fa-list"></i>
 
-style="display:inline">
+                            </a>
 
+                            <a
+                                href="/formularios/{{ $formulario->id_formulario }}/respuestas"
+                                class="btn btn-info btn-sm"
+                                title="Respuestas">
 
-@csrf
+                                <i class="fa-solid fa-inbox"></i>
 
+                            </a>
 
-<button type="submit"
+                            <a
+                                href="/formularios/{{ $formulario->id_formulario }}/edit"
+                                class="btn btn-warning btn-sm"
+                                title="Editar">
 
-class="btn btn-success btn-sm"
+                                <i class="fa-solid fa-pen"></i>
 
+                            </a>
 
-onclick="return confirm('¿Desea activar este formulario?')">
+                            <form
+                                action="/formularios/{{ $formulario->id_formulario }}/estado"
+                                method="POST">
 
+                                @csrf
 
-Activar
+                                @if($formulario->estado==1)
 
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Desea desactivar este formulario?')"
+                                        title="Desactivar">
 
-</button>
+                                        <i class="fa-solid fa-ban"></i>
 
+                                    </button>
 
-</form>
+                                @else
 
-@endif
+                                    <button
+                                        class="btn btn-success btn-sm"
+                                        onclick="return confirm('¿Desea activar este formulario?')"
+                                        title="Activar">
 
+                                        <i class="fa-solid fa-check"></i>
 
-</td>
+                                    </button>
 
+                                @endif
 
-</tr>
+                            </form>
 
+                        </div>
 
-@endforeach
+                    </td>
 
+                </tr>
 
-</tbody>
+                @endforeach
 
-</table>
+            </tbody>
 
+        </table>
+
+    </div>
+
+</div>
+```
+
+</div>
 
 @endsection
+

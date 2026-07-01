@@ -6,9 +6,29 @@
 
 <div class="card">
 
-    <div class="card-header">
-        <h3>Crear Usuario</h3>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-user-plus me-2"></i>
+
+            Crear Usuario
+
+        </h2>
+
+        <small class="text-muted">
+
+            Registro de un nuevo usuario del sistema
+
+        </small>
+
     </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
 
     <div class="card-body">
 
@@ -78,10 +98,7 @@
             </div>
 
             <div class="mb-3">
-
-    <div class="mb-3">
-
-
+    
 <label>Empresa</label>
 
 @if(session('rol') == 5)
@@ -119,19 +136,29 @@
 
 </div>
 
-            <button
-                type="submit"
-                class="btn btn-success"
-            >
-                Guardar
-            </button>
+            <div class="d-flex gap-2">
 
-            <a
-                href="/usuarios"
-                class="btn btn-secondary"
-            >
-                Volver
-            </a>
+    <button
+        type="submit"
+        class="btn btn-success">
+
+        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+        Guardar
+
+    </button>
+
+    <a
+        href="/usuarios"
+        class="btn btn-secondary">
+
+        <i class="fa-solid fa-arrow-left me-2"></i>
+
+        Volver
+
+    </a>
+
+</div>
 
         </form>
 

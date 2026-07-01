@@ -4,306 +4,281 @@
 
 @section('content')
 
-
 <div class="container">
 
+    <div class="card shadow-sm border-0">
 
-<h3>
-{{ $formulario->nombre_formulario }}
-</h3>
+        <div class="card-body">
 
+            <h3 class="fw-bold">
+                {{ $formulario->nombre_formulario }}
+            </h3>
 
-<p>
-{{ $formulario->descripcion }}
-</p>
+            <p class="text-muted">
+                {{ $formulario->descripcion }}
+            </p>
 
+            @if(session('success'))
 
+                <div class="alert alert-success">
 
-@if(session('success'))
+                    {{ session('success') }}
 
-<div class="alert alert-success">
+                </div>
 
-{{ session('success') }}
+            @endif
 
-</div>
+            <form
+                method="POST"
+                action="/formulario/{{ $formulario->id_formulario }}/respuesta">
 
-@endif
+                @csrf
 
+                <h5 class="border-bottom pb-2 mb-3">
+                    Datos personales
+                </h5>
 
+                <div class="mb-3">
 
-<form method="POST"
-action="/formulario/{{ $formulario->id_formulario }}/respuesta">
+                    <label class="form-label fw-semibold">
+                        Nombres
+                    </label>
 
+                    <input
+                        type="text"
+                        name="nombres"
+                        class="form-control"
+                        required>
 
-@csrf
+                </div>
 
+                <div class="mb-3">
 
+                    <label class="form-label fw-semibold">
+                        Apellidos
+                    </label>
 
-<h5 class="mt-4">
-Datos personales
-</h5>
+                    <input
+                        type="text"
+                        name="apellidos"
+                        class="form-control"
+                        required>
 
+                </div>
 
+                <div class="mb-3">
 
-<div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Correo
+                    </label>
 
-<label>
-Nombres
-</label>
+                    <input
+                        type="email"
+                        name="correo"
+                        class="form-control"
+                        required>
 
-<input type="text"
-name="nombres"
-class="form-control"
-required>
+                </div>
 
-</div>
+                <div class="mb-3">
 
+                    <label class="form-label fw-semibold">
+                        Teléfono
+                    </label>
 
+                    <input
+                        type="text"
+                        name="telefono"
+                        class="form-control"
+                        required>
 
+                </div>
 
-<div class="mb-3">
+                <div class="mb-3">
 
-<label>
-Apellidos
-</label>
+                    <label class="form-label fw-semibold">
+                        Tipo documento
+                    </label>
 
-<input type="text"
-name="apellidos"
-class="form-control"
-required>
+                    <select
+                        name="tipo_documento"
+                        class="form-control"
+                        required>
 
-</div>
+                        <option value="CC">CC</option>
 
+                        <option value="TI">TI</option>
 
+                        <option value="CE">CE</option>
 
+                        <option value="PASAPORTE">PASAPORTE</option>
 
-<div class="mb-3">
+                        <option value="NIT">NIT</option>
 
-<label>
-Correo
-</label>
+                        <option value="PEP">PEP</option>
 
-<input type="email"
-name="correo"
-class="form-control"
-required>
+                    </select>
 
-</div>
+                </div>
 
+                <div class="mb-3">
 
+                    <label class="form-label fw-semibold">
+                        Número documento
+                    </label>
 
+                    <input
+                        type="text"
+                        name="numero_documento"
+                        class="form-control"
+                        required>
 
-<div class="mb-3">
+                </div>
 
-<label>
-Teléfono
-</label>
+                <h5 class="border-bottom pb-2 mt-4 mb-3">
+                    Información del formulario
+                </h5>
 
-<input type="text"
-name="telefono"
-class="form-control"
-required>
+                @foreach($formulario->campos->sortBy('orden') as $campo)
 
-</div>
+                    <div class="mb-3">
 
+                        <label class="form-label fw-semibold">
 
+                            {{ $campo->etiqueta }}
 
+                            @if($campo->obligatorio)
 
-<div class="mb-3">
+                                <span class="text-danger">*</span>
 
-<label>
-Tipo documento
-</label>
+                            @endif
 
+                        </label>
 
-<select name="tipo_documento"
-class="form-control"
-required>
+                        @php
+                            $opciones = json_decode($campo->opciones, true) ?? [];
+                        @endphp
 
+                        @if($campo->tipo_campo == 'texto')
 
-<option value="CC">
-CC
-</option>
+                            <input
+                                type="text"
+                                name="{{ $campo->etiqueta }}"
+                                class="form-control"
+                                @if($campo->obligatorio) required @endif>
 
+                        @elseif($campo->tipo_campo == 'numero')
 
-<option value="TI">
-TI
-</option>
+                            <input
+                                type="number"
+                                name="{{ $campo->etiqueta }}"
+                                class="form-control"
+                                @if($campo->obligatorio) required @endif>
 
+                        @elseif($campo->tipo_campo == 'fecha')
 
-<option value="CE">
-CE
-</option>
+                            <input
+                                type="date"
+                                name="{{ $campo->etiqueta }}"
+                                class="form-control"
+                                @if($campo->obligatorio) required @endif>
 
+                        @elseif($campo->tipo_campo == 'email')
 
-<option value="PASAPORTE">
-PASAPORTE
-</option>
+                            <input
+                                type="email"
+                                name="{{ $campo->etiqueta }}"
+                                class="form-control"
+                                @if($campo->obligatorio) required @endif>
 
+                        @elseif($campo->tipo_campo == 'select')
 
-<option value="NIT">
-NIT
-</option>
+                            <select
+                                name="{{ $campo->etiqueta }}"
+                                class="form-control"
+                                @if($campo->obligatorio) required @endif>
 
+                                <option value="">
+                                    Seleccione...
+                                </option>
 
-<option value="PEP">
-PEP
-</option>
+                                @foreach($opciones as $opcion)
 
+                                    <option value="{{ $opcion }}">
+                                        {{ $opcion }}
+                                    </option>
 
-</select>
+                                @endforeach
 
+                            </select>
 
-</div>
+                        @elseif($campo->tipo_campo == 'radio')
 
+                            @foreach($opciones as $opcion)
 
+                                <div class="form-check">
 
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="{{ $campo->etiqueta }}"
+                                        value="{{ $opcion }}"
+                                        @if($campo->obligatorio) required @endif>
 
-<div class="mb-3">
+                                    <label class="form-check-label">
 
-<label>
-Número documento
-</label>
+                                        {{ $opcion }}
 
+                                    </label>
 
-<input type="text"
-name="numero_documento"
-class="form-control"
-required>
+                                </div>
 
+                            @endforeach
 
-</div>
+                        @elseif($campo->tipo_campo == 'checkbox')
 
+                            @foreach($opciones as $opcion)
 
+                                <div class="form-check">
 
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="{{ $campo->etiqueta }}[]"
+                                        value="{{ $opcion }}">
 
+                                    <label class="form-check-label">
 
-<hr>
+                                        {{ $opcion }}
 
+                                    </label>
 
-<h5>
-Información del formulario
-</h5>
+                                </div>
 
+                            @endforeach
 
+                        @endif
 
+                    </div>
 
-@foreach($formulario->campos as $campo)
+                @endforeach
 
-<div class="mb-3">
+                <button
+                    type="submit"
+                    class="btn btn-success">
 
-<label>{{ $campo->etiqueta }}</label>
+                    <i class="fa-solid fa-paper-plane me-2"></i>
 
-@if($campo->tipo_campo == 'texto')
+                    Enviar formulario
 
-<input
-    type="text"
-    name="{{ $campo->etiqueta }}"
-    class="form-control"
-    @if($campo->obligatorio) required @endif
->
+                </button>
 
-@elseif($campo->tipo_campo == 'numero')
+            </form>
 
-<input
-    type="number"
-    name="{{ $campo->etiqueta }}"
-    class="form-control"
-    @if($campo->obligatorio) required @endif
->
+        </div>
 
-@elseif($campo->tipo_campo == 'fecha')
-
-<input
-    type="date"
-    name="{{ $campo->etiqueta }}"
-    class="form-control"
-    @if($campo->obligatorio) required @endif
->
-
-@elseif($campo->tipo_campo == 'email')
-
-<input
-    type="email"
-    name="{{ $campo->etiqueta }}"
-    class="form-control"
-    @if($campo->obligatorio) required @endif
->
-
-@elseif($campo->tipo_campo == 'select')
-
-<select
-    name="{{ $campo->etiqueta }}"
-    class="form-control"
-    @if($campo->obligatorio) required @endif
->
-
-<option value="">Seleccione</option>
-
-@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
-
-<option value="{{ $opcion }}">
-    {{ $opcion }}
-</option>
-
-@endforeach
-
-</select>
-
-@elseif($campo->tipo_campo == 'radio')
-
-@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
-
-<div class="form-check">
-
-<input
-    class="form-check-input"
-    type="radio"
-    name="{{ $campo->etiqueta }}"
-    value="{{ $opcion }}"
-    @if($campo->obligatorio) required @endif
->
-
-<label class="form-check-label">
-{{ $opcion }}
-</label>
-
-</div>
-
-@endforeach
-
-@elseif($campo->tipo_campo == 'checkbox')
-
-@foreach(json_decode($campo->opciones, true) ?? [] as $opcion)
-
-<div class="form-check">
-
-<input
-    class="form-check-input"
-    type="checkbox"
-    name="{{ $campo->etiqueta }}[]"
-    value="{{ $opcion }}"
->
-
-<label class="form-check-label">
-{{ $opcion }}
-</label>
-
-</div>
-
-@endforeach
-
-@endif
-
-<button class="btn btn-success">
-
-Enviar formulario
-
-</button>
-
-</form>
+    </div>
 
 </div>
 
 @endsection
-

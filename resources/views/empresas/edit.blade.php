@@ -4,8 +4,31 @@
 
 @section('content')
 
-<h2>Editar Empresa</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div>
+
+        <h2 class="fw-bold mb-0">
+
+            <i class="fa-solid fa-building-pen me-2"></i>
+
+            Editar Empresa
+
+        </h2>
+
+        <small class="text-muted">
+
+            Actualización de la información de la empresa
+
+        </small>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
 
 <form method="POST" action="/empresas/{{ $empresa->id_empresa }}/update">
 
@@ -60,11 +83,33 @@ value="{{ $empresa->img }}"
 </div>
 
 
-<button class="btn btn-success">
-Actualizar
-</button>
+<div class="d-flex gap-2">
 
+    <button
+        type="submit"
+        class="btn btn-success">
 
+        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+        Actualizar
+
+    </button>
+
+    <a
+        href="/empresas"
+        class="btn btn-secondary">
+
+        <i class="fa-solid fa-arrow-left me-2"></i>
+
+        Volver
+
+    </a>
+
+</div>
 </form>
+
+    </div>
+
+</div>
 
 @endsection
