@@ -41,26 +41,92 @@
 
     <div class="sidebar-header">
 
-        <button
-            id="toggleSidebar"
-            class="toggle-btn">
+    <button
+        id="toggleSidebar"
+        class="toggle-btn">
 
-            <i class="fa-solid fa-bars"></i>
+        <i class="fa-solid fa-bars"></i>
 
-        </button>
+    </button>
 
-        <img
-            src="{{ asset('images/logo.png') }}"
-            class="sidebar-logo"
-            alt="Logo">
+    <img
+        src="{{ asset('images/logo.png') }}"
+        class="sidebar-logo"
+        alt="Logo">
 
-        <span class="sidebar-title">
+    <div>
+
+        <div class="sidebar-title">
 
             Multitenant
 
-        </span>
+        </div>
+
+        <small class="text-light">
+
+            @php
+
+                $empresas = [
+
+                    1 => 'Servientrega',
+
+                    2 => 'Servitel',
+
+                    3 => 'Global'
+
+                ];
+
+            @endphp
+
+            {{ $empresas[session('empresa')] ?? 'Empresa' }}
+
+        </small>
 
     </div>
+
+</div>
+
+<div class="px-3 py-3 border-bottom text-center">
+
+    <div
+        class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
+        style="width:60px;height:60px;font-size:24px;">
+
+        {{ strtoupper(substr(session('nombre'),0,1)) }}
+
+    </div>
+
+    <div class="mt-2 fw-bold">
+
+        {{ session('nombre') }}
+
+        {{ session('apellido') }}
+
+    </div>
+
+    <small class="text-secondary">
+
+       @php
+
+    $roles = [
+
+        5 => 'SuperAdmin',
+
+        3 => 'Administrador',
+
+        2 => 'Usuario',
+
+        1 => 'Supervisor'
+
+    ];
+
+@endphp
+
+{{ $roles[session('rol')] ?? 'Usuario' }}
+
+    </small>
+
+</div>
 
     <nav class="sidebar-menu">
 
@@ -236,25 +302,6 @@
         <main
             class="content-area">
 
-            @if(session('success'))
-
-                <div class="alert alert-success">
-
-                    {{ session('success') }}
-
-                </div>
-
-            @endif
-
-            @if(session('error'))
-
-                <div class="alert alert-danger">
-
-                    {{ session('error') }}
-
-                </div>
-
-            @endif
 
             @yield('content')
 
@@ -276,7 +323,92 @@
 
 <script src="{{ asset('js/layout.js') }}"></script>
 
+@if(session('success'))
+
+<script>
+
+Swal.fire({
+
+    icon:'success',
+
+    title:'Proceso exitoso',
+
+    text:@json(session('success')),
+
+    confirmButtonColor:'#0d6efd'
+
+});
+
+</script>
+
+@endif
+
+
+@if(session('error'))
+
+<script>
+
+Swal.fire({
+
+    icon:'error',
+
+    title:'Error',
+
+    text:@json(session('error')),
+
+    confirmButtonColor:'#dc3545'
+
+});
+
+</script>
+
+@endif
+
+
+@if(session('warning'))
+
+<script>
+
+Swal.fire({
+
+    icon:'warning',
+
+    title:'Advertencia',
+
+    text:@json(session('warning')),
+
+    confirmButtonColor:'#ffc107'
+
+});
+
+</script>
+
+@endif
+
+
+@if(session('info'))
+
+<script>
+
+Swal.fire({
+
+    icon:'info',
+
+    title:'Información',
+
+    text:@json(session('info')),
+
+    confirmButtonColor:'#0dcaf0'
+
+});
+
+</script>
+
+@endif
+
 @stack('scripts')
+
+
 
 </body>
 

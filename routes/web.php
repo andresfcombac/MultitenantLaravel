@@ -13,7 +13,7 @@ use App\Http\Controllers\FormularioPublicoController;
 use App\Http\Controllers\FormularioRespuestaController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\HistoricoController;
-
+use App\Http\Controllers\ConfiguracionController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -462,13 +462,10 @@ Route::get(
 
 Route::get(
     '/configuracion',
-    function () {
-
-        return view('configuracion.index');
-
-    }
+    [ConfiguracionController::class,'index']
 )->middleware([
     'auth.session',
     'tenant'
 ]);
+
 Route::get('/logout', [LoginController::class, 'logout']);

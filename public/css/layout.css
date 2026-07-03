@@ -308,3 +308,375 @@ body{
     font-size:38px;
 
 }
+/* ===========================================================
+   ESTILO VISUAL DEL PROYECTO PHP
+   =========================================================== */
+
+.card{
+    border:none;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+
+.card-header{
+    background:#0d6efd;
+    color:#fff;
+    border:none;
+    padding:15px 20px;
+    font-weight:600;
+}
+
+.card-body{
+    padding:25px;
+}
+
+.btn{
+    border-radius:10px;
+    font-weight:500;
+}
+
+.btn-sm{
+    border-radius:8px;
+}
+
+.table{
+    vertical-align:middle;
+}
+
+.table thead{
+    background:#0d6efd;
+    color:white;
+}
+
+.table thead th{
+    border:none;
+}
+
+.table tbody tr:hover{
+    background:#f8f9fa;
+}
+
+.form-control,
+.form-select{
+    border-radius:10px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#0d6efd;
+    box-shadow:0 0 0 .15rem rgba(13,110,253,.15);
+}
+
+.page-title{
+    font-weight:700;
+}
+
+.content-area{
+    padding:25px;
+}
+
+.badge{
+    border-radius:20px;
+}
+
+/* ==========================================
+   TABLAS
+========================================== */
+
+.table{
+    border-radius:15px;
+    overflow:hidden;
+    background:#fff;
+}
+
+.table thead{
+
+    background:linear-gradient(135deg,#ff6600,#ea6b19);
+
+}
+
+.table thead th{
+
+    color:#fff;
+
+    border:none;
+
+    font-weight:600;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+}
+
+.table tbody td{
+
+    vertical-align:middle;
+
+}
+
+.table-hover tbody tr:hover{
+
+    background:#fff4ed;
+
+}
+
+/* DataTables */
+
+.dataTables_wrapper .dataTables_filter input{
+
+    border-radius:10px;
+
+    border:1px solid #ddd;
+
+    padding:6px 10px;
+
+}
+
+.dataTables_wrapper .dataTables_length select{
+
+    border-radius:10px;
+
+    border:1px solid #ddd;
+
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+
+    background:#ff6600 !important;
+
+    color:#fff !important;
+
+    border:none !important;
+
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+
+    background:#ea6b19 !important;
+
+    color:white !important;
+
+}
+/* ==========================================
+   BOTONES
+========================================== */
+
+.btn{
+
+    border-radius:12px;
+
+    transition:.25s;
+
+    font-weight:600;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.btn-success{
+
+    background:#198754;
+
+}
+
+.btn-warning{
+
+    color:white;
+
+}
+
+.btn-danger{
+
+    background:#dc3545;
+
+}
+
+.btn-primary{
+
+    background:#ff6600;
+
+    border-color:#ff6600;
+
+}
+
+.btn-primary:hover{
+
+    background:#ea6b19;
+
+    border-color:#ea6b19;
+
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.card{
+
+    border:none;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.card-header{
+
+    background:linear-gradient(135deg,#ff6600,#ea6b19);
+
+    color:white;
+
+    font-weight:600;
+
+    border:none;
+
+}
+/* ==========================================
+   FORMULARIOS
+========================================== */
+
+.form-control,
+.form-select{
+
+    border-radius:12px;
+
+    border:1px solid #dcdcdc;
+
+    min-height:45px;
+
+    transition:.25s;
+
+    box-shadow:none;
+
+}
+
+textarea.form-control{
+
+    min-height:120px;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:#ff6600;
+
+    box-shadow:0 0 0 .2rem rgba(255,102,0,.15);
+
+}
+
+label{
+
+    font-weight:600;
+
+    margin-bottom:6px;
+
+    color:#444;
+
+}
+
+.form-text{
+
+    color:#777;
+
+}
+
+/* ==========================================
+   TITULOS
+========================================== */
+
+.page-title{
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+
+.text-muted{
+
+    font-size:14px;
+
+}
+
+/* ==========================================
+   ESPACIADOS
+========================================== */
+
+.mb-3{
+
+    margin-bottom:1.25rem !important;
+
+}
+
+.card-body{
+
+    padding:30px;
+
+}
+
+.content-area{
+
+    padding:30px;
+
+}
+/* ==========================================
+   BADGES
+========================================== */
+
+.badge{
+
+    border-radius:30px;
+
+    padding:8px 14px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+.fade-card{
+
+    animation:fadeCard .35s ease;
+
+}
+
+@keyframes fadeCard{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}

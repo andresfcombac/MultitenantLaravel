@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 
-```
+
 <div>
 
     <h2 class="fw-bold mb-0">
@@ -34,13 +34,13 @@
     Nuevo Formulario
 
 </a>
-```
+
 
 </div>
 
 <div class="card shadow-sm border-0">
 
-```
+
 <div class="card-body">
 
     <div class="table-responsive">
@@ -154,36 +154,41 @@
                             </a>
 
                             <form
-                                action="/formularios/{{ $formulario->id_formulario }}/estado"
-                                method="POST">
+    action="/formularios/{{ $formulario->id_formulario }}/estado"
+    method="POST"
+    class="form-cambiar-estado">
 
-                                @csrf
+    @csrf
 
-                                @if($formulario->estado==1)
+    @if($formulario->estado==1)
 
-                                    <button
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Desea desactivar este formulario?')"
-                                        title="Desactivar">
+        <button
+            type="submit"
+            class="btn btn-danger btn-sm"
+            data-mensaje="¿Desea desactivar este formulario?"
+            data-titulo="Desactivar formulario"
+            title="Desactivar">
 
-                                        <i class="fa-solid fa-ban"></i>
+            <i class="fa-solid fa-ban"></i>
 
-                                    </button>
+        </button>
 
-                                @else
+    @else
 
-                                    <button
-                                        class="btn btn-success btn-sm"
-                                        onclick="return confirm('¿Desea activar este formulario?')"
-                                        title="Activar">
+        <button
+            type="submit"
+            class="btn btn-success btn-sm"
+            data-mensaje="¿Desea activar este formulario?"
+            data-titulo="Activar formulario"
+            title="Activar">
 
-                                        <i class="fa-solid fa-check"></i>
+            <i class="fa-solid fa-check"></i>
 
-                                    </button>
+        </button>
 
-                                @endif
+    @endif
 
-                            </form>
+</form>
 
                         </div>
 
@@ -200,9 +205,56 @@
     </div>
 
 </div>
-```
 
 </div>
+
+@push('scripts')
+
+<script>
+
+document.querySelectorAll('.form-cambiar-estado').forEach(function(form){
+
+    form.addEventListener('submit',function(e){
+
+        e.preventDefault();
+
+        const boton=form.querySelector('button');
+
+        Swal.fire({
+
+            title:boton.dataset.titulo,
+
+            text:boton.dataset.mensaje,
+
+            icon:'warning',
+
+            showCancelButton:true,
+
+            confirmButtonColor:'#dc3545',
+
+            cancelButtonColor:'#6c757d',
+
+            confirmButtonText:'Sí',
+
+            cancelButtonText:'Cancelar'
+
+        }).then((result)=>{
+
+            if(result.isConfirmed){
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endpush
 
 @endsection
 

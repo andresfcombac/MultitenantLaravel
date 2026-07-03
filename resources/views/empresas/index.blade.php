@@ -124,22 +124,23 @@
                                 </a>
 
                                 <form
-                                    action="/empresas/{{ $empresa->id_empresa }}/delete"
-                                    method="POST">
+    action="/empresas/{{ $empresa->id_empresa }}/delete"
+    method="POST"
+    class="form-eliminar-empresa">
 
-                                    @csrf
+    @csrf
 
-                                    <button
-                                        type="submit"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Eliminar empresa?')">
+    <button
+        type="submit"
+        class="btn btn-danger btn-sm"
+        data-titulo="Eliminar empresa"
+        data-mensaje="¿Desea eliminar esta empresa?">
 
-                                        <i class="fa-solid fa-trash"></i>
+        <i class="fa-solid fa-trash"></i>
 
-                                    </button>
+    </button>
 
-                                </form>
-
+</form>
                             </div>
 
                         </td>
@@ -157,6 +158,54 @@
     </div>
 
 </div>
+
+@push('scripts')
+
+<script>
+
+document.querySelectorAll('.form-eliminar-empresa').forEach(function(form){
+
+    form.addEventListener('submit',function(e){
+
+        e.preventDefault();
+
+        const boton=form.querySelector('button');
+
+        Swal.fire({
+
+            title:boton.dataset.titulo,
+
+            text:boton.dataset.mensaje,
+
+            icon:'warning',
+
+            showCancelButton:true,
+
+            confirmButtonColor:'#dc3545',
+
+            cancelButtonColor:'#6c757d',
+
+            confirmButtonText:'Eliminar',
+
+            cancelButtonText:'Cancelar'
+
+        }).then((result)=>{
+
+            if(result.isConfirmed){
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endpush
 
 @endsection
 

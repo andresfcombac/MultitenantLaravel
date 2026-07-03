@@ -130,20 +130,14 @@
                             </a>
 
                             <form
-                                method="POST"
-                                action="/actividades/{{ $actividad->id_actividad }}/delete">
+    ...
+    class="form-eliminar-actividad">
 
-                                @csrf
-
-                                <button
-                                    class="btn btn-danger btn-sm"
-                                    onclick="return confirm('¿Eliminar actividad?')">
-
-                                    <i class="fa-solid fa-trash"></i>
-
-                                </button>
-
-                            </form>
+<button
+    type="submit"
+    class="btn btn-danger btn-sm"
+    data-titulo="Eliminar actividad"
+    data-mensaje="¿Desea eliminar esta actividad?">
 
                         </div>
 
@@ -163,5 +157,53 @@
 ```
 
 </div>
+
+@push('scripts')
+
+<script>
+
+document.querySelectorAll('.form-eliminar-actividad').forEach(function(form){
+
+    form.addEventListener('submit',function(e){
+
+        e.preventDefault();
+
+        const boton=form.querySelector('button');
+
+        Swal.fire({
+
+            title: boton.dataset.titulo,
+
+            text: boton.dataset.mensaje,
+
+            icon:'warning',
+
+            showCancelButton:true,
+
+            confirmButtonColor:'#dc3545',
+
+            cancelButtonColor:'#6c757d',
+
+            confirmButtonText:'Sí',
+
+            cancelButtonText:'Cancelar'
+
+        }).then((result)=>{
+
+            if(result.isConfirmed){
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endpush
 
 @endsection

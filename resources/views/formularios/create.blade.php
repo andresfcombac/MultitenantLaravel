@@ -4,123 +4,117 @@
 
 @section('content')
 
+<div class="container-fluid mt-3">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="row justify-content-center">
 
-    <div>
+        <div class="col-lg-10">
 
-        <h2 class="fw-bold mb-0">
+            <div class="card shadow-sm">
 
-            <i class="fa-solid fa-file-circle-plus me-2"></i>
+                <div class="card-header bg-primary text-white">
 
-            Crear Formulario
+                    <h5 class="mb-0">
 
-        </h2>
+                        {{ isset($formulario) ? 'Editar formulario' : 'Crear formulario' }}
 
-        <small class="text-muted">
+                    </h5>
 
-            Registro de un nuevo formulario
+                </div>
 
-        </small>
+                <div class="card-body">
 
-    </div>
+                    <form method="POST" action="/formularios/store">
 
-</div>
+                        @csrf
 
-<div class="card shadow-sm border-0">
+                        <div class="mb-3">
 
-    <div class="card-body">
+                            <label class="form-label">
 
-<form method="POST" action="/formularios/store">
+                                Nombre del formulario
 
-@csrf
+                            </label>
 
+                            <input
+                                type="text"
+                                name="nombre_formulario"
+                                class="form-control"
+                                value="{{ old('nombre_formulario') }}">
 
-<div class="mb-3">
+                        </div>
 
-<label>
-Nombre formulario
-</label>
+                        <div class="mb-3">
 
-<input 
-type="text"
-name="nombre_formulario"
-class="form-control">
+                            <label class="form-label">
 
-</div>
+                                Descripción
 
+                            </label>
 
-<div class="mb-3">
+                            <textarea
+                                name="descripcion"
+                                class="form-control"
+                                rows="3">{{ old('descripcion') }}</textarea>
 
-<label>
-Descripción
-</label>
+                        </div>
 
-<textarea
-name="descripcion"
-class="form-control"></textarea>
+                        <div class="mb-3">
 
-</div>
+                            <label class="form-label">
 
+                                Actividad
 
+                            </label>
 
-<div class="mb-3">
+                            <select
+                                name="id_actividad"
+                                class="form-control">
 
-<label>
-Actividad
-</label>
+                                @foreach($actividades as $actividad)
 
+                                    <option value="{{ $actividad->id_actividad }}">
 
-<select name="id_actividad"
-class="form-control">
+                                        {{ $actividad->nombre_actividad }}
 
+                                    </option>
 
-@foreach($actividades as $actividad)
+                                @endforeach
 
-<option value="{{ $actividad->id_actividad }}">
+                            </select>
 
-{{ $actividad->nombre_actividad }}
+                        </div>
 
-</option>
+                        <div class="d-flex justify-content-end gap-2">
 
+                            <a
+                                href="/formularios"
+                                class="btn btn-secondary">
 
-@endforeach
+                                Volver
 
+                            </a>
 
-</select>
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
 
+                                Guardar formulario
 
-</div>
+                            </button>
 
-<div class="d-flex gap-2">
+                        </div>
 
-    <button
-        type="submit"
-        class="btn btn-success">
+                    </form>
 
-        <i class="fa-solid fa-floppy-disk me-2"></i>
+                </div>
 
-        Guardar
+            </div>
 
-    </button>
-
-    <a
-        href="/formularios"
-        class="btn btn-secondary">
-
-        <i class="fa-solid fa-arrow-left me-2"></i>
-
-        Volver
-
-    </a>
-
-</div>
-
-</form>
+        </div>
 
     </div>
 
 </div>
-
 
 @endsection

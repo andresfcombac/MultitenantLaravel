@@ -30,7 +30,6 @@
 
 </div>
 
-
 <div class="card shadow-sm border-0">
 
     <div class="card-body">
@@ -46,18 +45,11 @@
                 <tr>
 
                     <th>ID</th>
-
                     <th>Usuario</th>
-
                     <th>Correo</th>
-
                     <th>Rol</th>
-
                     <th>Empresa</th>
-
-                    <th width="170">
-                        Acciones
-                    </th>
+                    <th width="170">Acciones</th>
 
                 </tr>
 
@@ -69,11 +61,7 @@
 
                     <tr>
 
-                        <td>
-
-                            {{ $usuario->id_usuario }}
-
-                        </td>
+                        <td>{{ $usuario->id_usuario }}</td>
 
                         <td>
 
@@ -87,11 +75,7 @@
 
                         </td>
 
-                        <td>
-
-                            {{ $usuario->correo_usu }}
-
-                        </td>
+                        <td>{{ $usuario->correo_usu }}</td>
 
                         <td>
 
@@ -103,24 +87,22 @@
 
                                     case 'SuperAdmin':
                                         $color='danger';
-                                    break;
+                                        break;
 
                                     case 'Administrador':
                                         $color='primary';
-                                    break;
+                                        break;
 
                                     case 'Usuario':
                                         $color='success';
-                                    break;
+                                        break;
 
                                 }
 
                             @endphp
 
                             <span class="badge bg-{{ $color }}">
-
                                 {{ $usuario->rol?->nombre_rol }}
-
                             </span>
 
                         </td>
@@ -150,13 +132,16 @@
 
                                 <form
                                     action="/usuarios/{{ $usuario->id_usuario }}/delete"
-                                    method="POST">
+                                    method="POST"
+                                    class="form-eliminar-usuario">
 
                                     @csrf
 
                                     <button
+                                        type="submit"
                                         class="btn btn-sm btn-danger"
-                                        onclick="return confirm('¿Eliminar usuario?')">
+                                        data-titulo="Eliminar usuario"
+                                        data-mensaje="¿Desea eliminar este usuario?">
 
                                         <i class="fa-solid fa-trash"></i>
 
@@ -183,5 +168,53 @@
     </div>
 
 </div>
+
+@push('scripts')
+
+<script>
+
+document.querySelectorAll('.form-eliminar-usuario').forEach(function(form){
+
+    form.addEventListener('submit',function(e){
+
+        e.preventDefault();
+
+        const boton = form.querySelector('button');
+
+        Swal.fire({
+
+            title: boton.dataset.titulo,
+
+            text: boton.dataset.mensaje,
+
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#dc3545',
+
+            cancelButtonColor: '#6c757d',
+
+            confirmButtonText: 'Sí',
+
+            cancelButtonText: 'Cancelar'
+
+        }).then((result)=>{
+
+            if(result.isConfirmed){
+
+                form.submit();
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+@endpush
 
 @endsection
