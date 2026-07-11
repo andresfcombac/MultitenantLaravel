@@ -325,6 +325,11 @@ Route::get(
     'tenant'
 ]);
 
+Route::get(
+    '/formularios/{id}/respuestas/exportar',
+    [FormularioRespuestaController::class, 'exportar']
+)->name('formularios.respuestas.exportar');
+
 
 // Exportar respuestas a CSV
 
@@ -346,6 +351,12 @@ Route::get(
     'tenant',
     'role:SuperAdmin,Administrador'
 ]);
+
+Route::post(
+    '/formularios/{id}/importar',
+    [FormularioRespuestaController::class, 'importar']
+)->name('formularios.importar');
+
 /* CAMPOS DEL FORMULARIO*/
 
 

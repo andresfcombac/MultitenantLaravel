@@ -31,3 +31,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+document.addEventListener("DOMContentLoaded", function () {
+
+    const botonVista = document.getElementById("btnVistaPrevia");
+
+    const contenedor = document.getElementById("contenedorVistaPrevia");
+
+    if (!botonVista || !contenedor) return;
+
+    botonVista.addEventListener("click", function () {
+
+        if (contenedor.style.display === "none") {
+
+            contenedor.style.display = "block";
+
+            botonVista.innerHTML =
+                '<i class="fa-solid fa-eye-slash me-2"></i>Ocultar vista previa';
+
+        } else {
+
+            contenedor.style.display = "none";
+
+            botonVista.innerHTML =
+                '<i class="fa-solid fa-eye me-2"></i>Mostrar vista previa';
+
+        }
+
+    });
+
+});
+

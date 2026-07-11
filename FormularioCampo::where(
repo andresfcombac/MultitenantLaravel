@@ -1,0 +1,10 @@
+[90m= [39m[34;4mApp\Models\Formulario[39;24m {#7896
+    [34mid_formulario[39m: [35m10[39m,
+    [34mnombre_formulario[39m: [32m"[39m[32m1[39m[32m"[39m,
+    [34mdescripcion[39m: [32m"[39m[32m2[39m[32m"[39m,
+    [34mimagen_fondo[39m: [36mnull[39m,
+    [34mid_actividad[39m: [35m1[39m,
+    [34mestado[39m: [35m1[39m,
+    [34mcreado_por[39m: [35m1[39m,
+    [34mfecha_crea[39m: [32m"[39m[32m2026-07-07 16:06:51[39m[32m"[39m,
+  }

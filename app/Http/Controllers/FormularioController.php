@@ -6,6 +6,7 @@ use App\Models\Formulario;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Models\FormularioCampo;
 
 class FormularioController extends Controller
 {
@@ -116,33 +117,72 @@ public function store(Request $request)
 
     }
 
+    $formulario = Formulario::create([
 
+    'nombre_formulario' => $request->nombre_formulario,
 
+    'descripcion' => $request->descripcion,
 
+    'imagen_fondo' => null,
 
-    Formulario::create([
+    'id_actividad' => $request->id_actividad,
 
+    'estado' => 1,
 
-        'nombre_formulario' => $request->nombre_formulario,
+    'creado_por' => session('usuario_id')
 
+]);
 
-        'descripcion' => $request->descripcion,
+/*$campos = json_decode($request->campos_json, true);
 
+if (is_array($campos)) {
 
-        'imagen_fondo' => null,
+    foreach ($campos as $index => $campo) {
 
+        FormularioCampo::create([
 
-        'id_actividad' => $request->id_actividad,
+            'id_formulario' => $formulario->id_formulario,
 
+            'etiqueta' => $campo['nombre'],
 
-        'estado' => 1,
+            'tipo_campo' => $campo['tipo'],
 
+            'opciones' => '[]',
 
-        'creado_por' => session('usuario_id')
+            'obligatorio' => !empty($campo['obligatorio']) ? 1 : 0,
 
+            'orden' => $index
 
-    ]);
+        ]);
 
+    }
+
+}*/
+if ($request->filled('campos_json')) {
+
+    $campos = json_decode($request->campos_json, true);
+
+    foreach ($campos as $i => $campo) {
+
+        \App\Models\FormularioCampo::create([
+
+            'id_formulario' => $formulario->id_formulario,
+
+            'etiqueta' => $campo['nombre'],
+
+            'tipo_campo' => $campo['tipo'],
+
+            'opciones' => json_encode($campo['opciones'] ?? []),
+
+            'obligatorio' => $campo['obligatorio'] ? 1 : 0,
+
+            'orden' => $i
+
+        ]);
+
+    }
+
+}
 
     return redirect('/formularios')
 
@@ -211,7 +251,8 @@ public function edit($id)
     if(session('rol') == 5){
 
 
-        $formulario = Formulario::findOrFail($id);
+        //$formulario = Formulario::findOrFail($id);
+        $formulario = Formulario::with('campos')->findOrFail($id);
 
 
     }else{
@@ -228,6 +269,7 @@ public function edit($id)
 
             }
         )
+        ->with('campos')
         ->findOrFail($id);
 
 
@@ -265,6 +307,91 @@ public function edit($id)
         )
     );
 
+
+}
+
+public function update(Request $request, $id)
+{
+
+    $request->validate([
+
+        'nombre_formulario' => 'required|max:255',
+
+        'descripcion' => 'nullable',
+
+        'id_actividad' => 'required'
+
+    ]);
+
+
+    if(session('rol') == 5){
+
+        $formulario = Formulario::findOrFail($id);
+
+    }else{
+
+        $formulario = Formulario::whereHas(
+            'actividad',
+            function($q){
+
+                $q->where(
+                    'empresa_id',
+                    app('tenant_id')
+                );
+
+            }
+        )->findOrFail($id);
+
+    }
+
+
+    $formulario->update([
+
+        'nombre_formulario' => $request->nombre_formulario,
+
+        'descripcion' => $request->descripcion,
+
+        'id_actividad' => $request->id_actividad
+
+    ]);
+
+    \App\Models\FormularioCampo::where(
+    'id_formulario',
+    $formulario->id_formulario
+)->delete();
+
+if ($request->filled('campos_json')) {
+
+    $campos = json_decode($request->campos_json, true);
+
+    foreach ($campos as $i => $campo) {
+
+        \App\Models\FormularioCampo::create([
+
+            'id_formulario' => $formulario->id_formulario,
+
+            'etiqueta' => $campo['nombre'],
+
+            'tipo_campo' => $campo['tipo'],
+
+            'opciones' => json_encode($campo['opciones'] ?? []),
+
+            'obligatorio' => $campo['obligatorio'] ? 1 : 0,
+
+            'orden' => $i
+
+        ]);
+
+    }
+
+}
+
+    return redirect('/formularios')
+
+        ->with(
+            'success',
+            'Formulario actualizado correctamente'
+        );
 
 }
 
@@ -318,7 +445,23 @@ public function edit($id)
 
     public function respuestas($id)
 {
+    $formulario = \App\Models\Formulario::with('campos')
+        ->findOrFail($id);
 
+    $respuestas = \App\Models\FormularioRespuesta::where(
+        'id_formulario',
+        $id
+    )
+    ->latest('id_respuesta')
+    ->get();
+
+    return view(
+        'formularios.respuestas',
+        compact(
+            'formulario',
+            'respuestas'
+        )
+    );
 }
 
 public function responder(Request $request, $id)
@@ -346,17 +489,17 @@ public function responder(Request $request, $id)
 
         'datos' => $datos,
 
-        'nombres' => session('nombre') ?? 'Usuario',
+        'nombres' => $request->nombres,
 
-        'apellidos' => session('apellido') ?? '',
+'apellidos' => $request->apellidos,
 
-        'correo' => session('correo') ?? 'correo@empresa.com',
+'correo' => $request->correo,
 
-        'telefono' => session('telefono') ?? '',
+'telefono' => $request->telefono,
 
-        'tipo_documento' => session('tipo_documento') ?? 'CC',
+'tipo_documento' => $request->tipo_documento,
 
-        'numero_documento' => session('numero_documento') ?? '0'
+'numero_documento' => $request->numero_documento
 
     ]);
 
