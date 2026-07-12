@@ -26,6 +26,13 @@
     <div class="card-body">
 
         <div class="table-responsive">
+            <style>
+#tablaAsistencias thead th{
+    color:#212529 !important;
+    background:#f8f9fa !important;
+    font-weight:600;
+}
+</style>
 
             <table
                 id="tablaAsistencias"
@@ -37,21 +44,29 @@
 
                         <th>ID</th>
 
-                        <th>Formulario</th>
+<th>Empresa</th>
 
-                        <th>Participante</th>
+<th>Actividad</th>
 
-                        <th>Correo</th>
+<th>Formulario</th>
 
-                        <th>Fecha respuesta</th>
+<th>Participante</th>
 
-                        <th>Estado</th>
+<th>Documento</th>
 
-                        <th>Acción</th>
+<th>Correo</th>
 
-                        <th>Confirmado por</th>
+<th>Teléfono</th>
 
-                        <th>Fecha confirmación</th>
+<th>Fecha respuesta</th>
+
+<th>Estado</th>
+
+<th>Acción</th>
+
+<th>Confirmado por</th>
+
+<th>Fecha confirmación</th>
 
                     </tr>
 
@@ -70,33 +85,41 @@
                         </td>
 
                         <td>
+    {{ $respuesta->formulario->actividad->empresa->nombre_empresa ?? '-' }}
+</td>
 
-                            {{ $respuesta->formulario->nombre_formulario ?? '' }}
+<td>
+    {{ $respuesta->formulario->actividad->nombre_actividad ?? '-' }}
+</td>
 
-                        </td>
+<td>
+    {{ $respuesta->formulario->nombre_formulario ?? '-' }}
+</td>
 
-                        <td>
+<td>
+    <strong>
+        {{ $respuesta->nombres }}
+        {{ $respuesta->apellidos }}
+    </strong>
+</td>
 
-                            <strong>
+<td>
+    {{ $respuesta->tipo_documento }}
+    <br>
+    {{ $respuesta->numero_documento }}
+</td>
 
-                                {{ $respuesta->nombres }}
-                                {{ $respuesta->apellidos }}
+<td>
+    {{ $respuesta->correo }}
+</td>
 
-                            </strong>
+<td>
+    {{ $respuesta->telefono }}
+</td>
 
-                        </td>
-
-                        <td>
-
-                            {{ $respuesta->correo }}
-
-                        </td>
-
-                        <td>
-
-                            {{ $respuesta->fecha_respuesta }}
-
-                        </td>
+<td>
+    {{ $respuesta->fecha_respuesta }}
+</td>
 
                         <td>
 
@@ -176,7 +199,7 @@
                     <tr>
 
                         <td
-                            colspan="9"
+                            colspan="13"
                             class="text-center">
 
                             No existen respuestas registradas.

@@ -10,14 +10,11 @@ class AsistenciaController extends Controller
    public function index()
 {
     $respuestas = FormularioRespuesta::with([
-        'formulario',
-        'asistencia.usuario'
-    ])
-    ->orderBy(
-        'fecha_respuesta',
-        'DESC'
-    )
-    ->get();
+    'formulario.actividad.empresa',
+    'asistencia.usuario'
+])
+->orderBy('fecha_respuesta', 'DESC')
+->get();
 
     return view(
         'asistencias.index',
