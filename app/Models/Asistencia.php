@@ -18,7 +18,7 @@ class Asistencia extends Model
 
         'id_respuesta',
         'confirmado_por',
-        'fecha_confirmacion'
+        'fecha_confirmacion',
 
     ];
 

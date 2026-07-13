@@ -15,7 +15,7 @@ class Role extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre_rol'
+        'nombre_rol',
     ];
 
     public function usuarios()

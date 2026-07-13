@@ -30,186 +30,170 @@ class ActividadController extends Controller
     }
 
     public function create()
-{
+    {
 
-    if(session('rol') == 5){
+        if (session('rol') == 5) {
+
+            $empresas = Empresa::all();
+
+        } else {
+
+            $empresas = Empresa::where(
+                'id_empresa',
+                app('tenant_id')
+            )->get();
+
+        }
+
+        return view(
+            'actividades.create',
+            compact('empresas')
+        );
+
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+
+            'nombre_actividad' => 'required|max:100',
+            'descripcion' => 'nullable',
+            'fecha' => 'required|date',
+            'hora_inicio' => 'nullable',
+            'hora_fin' => 'nullable',
+
+        ]);
+
+        Actividad::create([
+
+            'nombre_actividad' => $request->nombre_actividad,
+
+            'descripcion' => $request->descripcion,
+
+            'fecha' => $request->fecha,
+
+            'hora_inicio' => $request->hora_inicio,
+
+            'hora_fin' => $request->hora_fin,
+
+            'empresa_id' => session('rol') == 5
+                ? $request->empresa_id
+                : app('tenant_id'),
+
+        ]);
+
+        return redirect('/actividades')
+            ->with(
+                'success',
+                'Actividad creada correctamente'
+            );
+
+    }
+
+    public function edit($id)
+    {
+
+        if (session('rol') == 5) {
+
+            $actividad = Actividad::findOrFail($id);
+
+        } else {
+
+            $actividad = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )
+                ->findOrFail($id);
+
+        }
 
         $empresas = Empresa::all();
 
-    }else{
-
-        $empresas = Empresa::where(
-            'id_empresa',
-            app('tenant_id')
-        )->get();
-
-    }
-
-
-    return view(
-        'actividades.create',
-        compact('empresas')
-    );
-
-}
-
-    public function store(Request $request)
-{
-    $request->validate([
-
-        'nombre_actividad' => 'required|max:100',
-        'descripcion' => 'nullable',
-        'fecha' => 'required|date',
-        'hora_inicio' => 'nullable',
-        'hora_fin' => 'nullable'
-
-    ]);
-
-
-    Actividad::create([
-
-        'nombre_actividad' => $request->nombre_actividad,
-
-        'descripcion' => $request->descripcion,
-
-        'fecha' => $request->fecha,
-
-        'hora_inicio' => $request->hora_inicio,
-
-        'hora_fin' => $request->hora_fin,
-
-
-        'empresa_id' => session('rol') == 5
-            ? $request->empresa_id
-            : app('tenant_id')
-
-    ]);
-
-
-    return redirect('/actividades')
-        ->with(
-            'success',
-            'Actividad creada correctamente'
+        return view(
+            'actividades.edit',
+            compact(
+                'actividad',
+                'empresas'
+            )
         );
 
-}
+    }
 
+    public function update(Request $request, $id)
+    {
 
-public function edit($id)
-{
+        if (session('rol') == 5) {
 
-    if(session('rol') == 5){
+            $actividad = Actividad::findOrFail($id);
 
-        $actividad = Actividad::findOrFail($id);
+        } else {
 
-    }else{
+            $actividad = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )
+                ->findOrFail($id);
 
-        $actividad = Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )
-        ->findOrFail($id);
+        }
+
+        $request->validate([
+
+            'nombre_actividad' => 'required|max:100',
+            'descripcion' => 'nullable',
+            'fecha' => 'required|date',
+
+        ]);
+
+        $actividad->update([
+
+            'nombre_actividad' => $request->nombre_actividad,
+
+            'descripcion' => $request->descripcion,
+
+            'fecha' => $request->fecha,
+
+            'hora_inicio' => $request->hora_inicio,
+
+            'hora_fin' => $request->hora_fin,
+
+            'empresa_id' => session('rol') == 5
+                ? $request->empresa_id
+                : app('tenant_id'),
+
+        ]);
+
+        return redirect('/actividades')
+            ->with(
+                'success',
+                'Actividad actualizada correctamente'
+            );
 
     }
 
+    public function destroy($id)
+    {
 
-    $empresas = Empresa::all();
+        if (session('rol') == 5) {
 
+            $actividad = Actividad::findOrFail($id);
 
-    return view(
-        'actividades.edit',
-        compact(
-            'actividad',
-            'empresas'
-        )
-    );
+        } else {
 
-}
+            $actividad = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )
+                ->findOrFail($id);
 
+        }
 
+        $actividad->delete();
 
-public function update(Request $request, $id)
-{
-
-
-    if(session('rol') == 5){
-
-        $actividad = Actividad::findOrFail($id);
-
-    }else{
-
-        $actividad = Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )
-        ->findOrFail($id);
+        return redirect('/actividades')
+            ->with(
+                'success',
+                'Actividad eliminada correctamente'
+            );
 
     }
-
-
-    $request->validate([
-
-        'nombre_actividad' => 'required|max:100',
-        'descripcion' => 'nullable',
-        'fecha' => 'required|date'
-
-    ]);
-
-
-    $actividad->update([
-
-        'nombre_actividad' => $request->nombre_actividad,
-
-        'descripcion' => $request->descripcion,
-
-        'fecha' => $request->fecha,
-
-        'hora_inicio' => $request->hora_inicio,
-
-        'hora_fin' => $request->hora_fin,
-
-
-        'empresa_id' => session('rol') == 5
-            ? $request->empresa_id
-            : app('tenant_id')
-
-    ]);
-
-
-    return redirect('/actividades')
-        ->with(
-            'success',
-            'Actividad actualizada correctamente'
-        );
-
-}
-
-public function destroy($id)
-{
-
-    if(session('rol') == 5){
-
-        $actividad = Actividad::findOrFail($id);
-
-    }else{
-
-        $actividad = Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )
-        ->findOrFail($id);
-
-    }
-
-
-    $actividad->delete();
-
-
-    return redirect('/actividades')
-        ->with(
-            'success',
-            'Actividad eliminada correctamente'
-        );
-
-}
 }

@@ -41,14 +41,6 @@
 
     <div class="sidebar-header">
 
-    <button
-        id="toggleSidebar"
-        class="toggle-btn">
-
-        <i class="fa-solid fa-bars"></i>
-
-    </button>
-
     <img
         src="{{ asset('images/logo.png') }}"
         class="sidebar-logo"
@@ -62,23 +54,9 @@
 
         </div>
 
-        <small class="text-light">
+        <small class="text-light sidebar-subtitle">
 
-            @php
-
-                $empresas = [
-
-                    1 => 'Servientrega',
-
-                    2 => 'Servitel',
-
-                    3 => 'Global'
-
-                ];
-
-            @endphp
-
-            {{ $empresas[session('empresa')] ?? 'Empresa' }}
+            {{ $usuarioActual->empresa->nombre_empresa ?? 'Empresa' }}
 
         </small>
 
@@ -100,29 +78,13 @@
 
         {{ session('nombre') }}
 
-        {{ session('apellido') }}
+        {{ $usuarioActual->apellidos_usu ?? '' }}
 
     </div>
 
     <small class="text-secondary">
 
-       @php
-
-    $roles = [
-
-        5 => 'SuperAdmin',
-
-        3 => 'Administrador',
-
-        2 => 'Usuario',
-
-        1 => 'Supervisor'
-
-    ];
-
-@endphp
-
-{{ $roles[session('rol')] ?? 'Usuario' }}
+{{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}
 
     </small>
 
@@ -260,6 +222,14 @@
     class="topbar">
 
     <div class="topbar-left">
+
+        <button
+            id="toggleSidebar"
+            class="toggle-btn toggle-btn-topbar">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
 
         <h5 class="page-title">
 

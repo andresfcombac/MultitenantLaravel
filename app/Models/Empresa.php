@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
-{   
+{
     protected $connection = 'legacy';
-    
+
     protected $table = 'empresas';
 
     protected $primaryKey = 'id_empresa';
@@ -17,7 +17,7 @@ class Empresa extends Model
     protected $fillable = [
         'nombre_empresa',
         'url',
-        'img'
+        'img',
     ];
 
     public function usuarios()

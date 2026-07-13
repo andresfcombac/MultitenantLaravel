@@ -28,11 +28,11 @@ class Usuario extends Authenticatable
         'ultimo_ingreso',
         'fecha_crea',
         'fecha_up',
-        'fecha_del'
+        'fecha_del',
     ];
 
     protected $hidden = [
-        'pwd'
+        'pwd',
     ];
 
     public function getAuthPassword()

@@ -8,15 +8,28 @@ class HistoricoController extends Controller
 {
     public function index()
     {
-        $historicos = Asistencia::with([
+        $consulta = Asistencia::with([
             'respuesta.formulario',
-            'usuario'
-        ])
-        ->orderBy(
-            'fecha_confirmacion',
-            'DESC'
-        )
-        ->get();
+            'usuario',
+        ]);
+
+        if (session('rol') != 5) {
+
+            $consulta->whereHas(
+                'respuesta.formulario.actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
+
+        }
+
+        $historicos = $consulta
+            ->orderBy(
+                'fecha_confirmacion',
+                'DESC'
+            )
+            ->get();
 
         return view(
             'historico.index',

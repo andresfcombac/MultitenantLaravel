@@ -4,97 +4,98 @@ namespace App\Http\Controllers;
 
 use App\Models\Formulario;
 use App\Models\FormularioRespuesta;
+use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use Illuminate\Http\Request;
 
 class FormularioRespuestaController extends Controller
 {
     public function index(Request $request, $id)
-{
-    $formulario = Formulario::with('campos')->findOrFail($id);
+    {
+        $formulario = Formulario::with('campos')->findOrFail($id);
 
-    $query = FormularioRespuesta::where(
-        'id_formulario',
-        $id
-    );
-
-    if ($request->filled('nombre')) {
-
-        $query->where(
-            'nombres',
-            'like',
-            '%' . $request->nombre . '%'
+        $query = FormularioRespuesta::where(
+            'id_formulario',
+            $id
         );
 
-    }
+        if ($request->filled('nombre')) {
 
-    if ($request->filled('correo')) {
+            $query->where(
+                'nombres',
+                'like',
+                '%'.$request->nombre.'%'
+            );
 
-        $query->where(
-            'correo',
-            'like',
-            '%' . $request->correo . '%'
+        }
+
+        if ($request->filled('correo')) {
+
+            $query->where(
+                'correo',
+                'like',
+                '%'.$request->correo.'%'
+            );
+
+        }
+
+        if ($request->filled('documento')) {
+
+            $query->where(
+                'numero_documento',
+                'like',
+                '%'.$request->documento.'%'
+            );
+
+        }
+
+        $respuestas = $query
+            ->orderBy('fecha_respuesta', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
+        $totalRespuestas = FormularioRespuesta::where(
+            'id_formulario',
+            $id
+        )->count();
+
+        $respuestasHoy = FormularioRespuesta::where(
+            'id_formulario',
+            $id
+        )
+            ->whereDate(
+                'fecha_respuesta',
+                today()
+            )
+            ->count();
+
+        $respuestasMes = FormularioRespuesta::where(
+            'id_formulario',
+            $id
+        )
+            ->whereYear(
+                'fecha_respuesta',
+                now()->year
+            )
+            ->whereMonth(
+                'fecha_respuesta',
+                now()->month
+            )
+            ->count();
+
+        return view(
+            'formularios.respuestas',
+            compact(
+                'formulario',
+                'respuestas',
+                'totalRespuestas',
+                'respuestasHoy',
+                'respuestasMes'
+            )
         );
-
     }
-
-    if ($request->filled('documento')) {
-
-        $query->where(
-            'numero_documento',
-            'like',
-            '%' . $request->documento . '%'
-        );
-
-    }
-
-    $respuestas = $query
-    ->orderBy('fecha_respuesta', 'desc')
-    ->paginate(20)
-    ->withQueryString();
-
-    $totalRespuestas = FormularioRespuesta::where(
-    'id_formulario',
-    $id
-)->count();
-
-$respuestasHoy = FormularioRespuesta::where(
-    'id_formulario',
-    $id
-)
-->whereDate(
-    'fecha_respuesta',
-    today()
-)
-->count();
-
-$respuestasMes = FormularioRespuesta::where(
-    'id_formulario',
-    $id
-)
-->whereYear(
-    'fecha_respuesta',
-    now()->year
-)
-->whereMonth(
-    'fecha_respuesta',
-    now()->month
-)
-->count();
-
-    return view(
-    'formularios.respuestas',
-    compact(
-        'formulario',
-        'respuestas',
-        'totalRespuestas',
-        'respuestasHoy',
-        'respuestasMes'
-    )
-);
-}
 
     public function exportar($id)
     {
@@ -105,7 +106,7 @@ $respuestasMes = FormularioRespuesta::where(
             $id
         )->get();
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
 
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -202,7 +203,7 @@ $respuestasMes = FormularioRespuesta::where(
 
         $writer = new Xlsx($spreadsheet);
 
-        $nombre = 'Respuestas_' . $formulario->id_formulario . '.xlsx';
+        $nombre = 'Respuestas_'.$formulario->id_formulario.'.xlsx';
 
         return response()->streamDownload(
             function () use ($writer) {
@@ -210,99 +211,99 @@ $respuestasMes = FormularioRespuesta::where(
             },
             $nombre,
             [
-                'Content-Type' =>
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]
         );
     }
 
     private function celda($columna, $fila)
     {
-        return Coordinate::stringFromColumnIndex($columna) . $fila;
+        return Coordinate::stringFromColumnIndex($columna).$fila;
     }
+
     public function importar(Request $request, $id)
-{
-    $request->validate([
-        'archivo' => 'required|file|mimes:xlsx,xls,csv'
-    ]);
-
-    $formulario = Formulario::with('campos')->findOrFail($id);
-
-    $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(
-        $request->file('archivo')->getRealPath()
-    );
-
-    $sheet = $spreadsheet->getActiveSheet();
-
-    $filas = $sheet->toArray();
-
-    if (count($filas) < 2) {
-
-        return back()->with(
-            'error',
-            'El archivo no contiene información.'
-        );
-
-    }
-
-    // Encabezados del Excel
-
-    $encabezados = array_map(
-        'trim',
-        $filas[0]
-    );
-
-    unset($filas[0]);
-
-    $importadas = 0;
-
-    foreach ($filas as $filaExcel) {
-
-        if (count(array_filter($filaExcel)) == 0) {
-            continue;
-        }
-
-        $fila = array_combine(
-            $encabezados,
-            $filaExcel
-        );
-
-        $datos = [];
-
-        foreach ($formulario->campos as $campo) {
-
-            $datos[$campo->etiqueta] =
-                $fila[$campo->etiqueta] ?? '';
-
-        }
-
-        FormularioRespuesta::create([
-
-            'id_formulario' => $id,
-
-            'datos' => $datos,
-
-            'nombres' => $fila['Nombres'] ?? '',
-
-            'apellidos' => $fila['Apellidos'] ?? '',
-
-            'correo' => $fila['Correo'] ?? '',
-
-            'telefono' => $fila['Teléfono'] ?? '',
-
-            'tipo_documento' => $fila['Tipo documento'] ?? '',
-
-            'numero_documento' => $fila['Número documento'] ?? ''
-
+    {
+        $request->validate([
+            'archivo' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
-        $importadas++;
+        $formulario = Formulario::with('campos')->findOrFail($id);
 
+        $spreadsheet = IOFactory::load(
+            $request->file('archivo')->getRealPath()
+        );
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $filas = $sheet->toArray();
+
+        if (count($filas) < 2) {
+
+            return back()->with(
+                'error',
+                'El archivo no contiene información.'
+            );
+
+        }
+
+        // Encabezados del Excel
+
+        $encabezados = array_map(
+            'trim',
+            $filas[0]
+        );
+
+        unset($filas[0]);
+
+        $importadas = 0;
+
+        foreach ($filas as $filaExcel) {
+
+            if (count(array_filter($filaExcel)) == 0) {
+                continue;
+            }
+
+            $fila = array_combine(
+                $encabezados,
+                $filaExcel
+            );
+
+            $datos = [];
+
+            foreach ($formulario->campos as $campo) {
+
+                $datos[$campo->etiqueta] =
+                    $fila[$campo->etiqueta] ?? '';
+
+            }
+
+            FormularioRespuesta::create([
+
+                'id_formulario' => $id,
+
+                'datos' => $datos,
+
+                'nombres' => $fila['Nombres'] ?? '',
+
+                'apellidos' => $fila['Apellidos'] ?? '',
+
+                'correo' => $fila['Correo'] ?? '',
+
+                'telefono' => $fila['Teléfono'] ?? '',
+
+                'tipo_documento' => $fila['Tipo documento'] ?? '',
+
+                'numero_documento' => $fila['Número documento'] ?? '',
+
+            ]);
+
+            $importadas++;
+
+        }
+
+        return back()->with(
+            'success',
+            "Se importaron {$importadas} respuestas correctamente."
+        );
     }
-
-    return back()->with(
-        'success',
-        "Se importaron {$importadas} respuestas correctamente."
-    );
-}
 }

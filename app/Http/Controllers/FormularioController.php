@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Actividad;
 use App\Models\Formulario;
+use App\Models\FormularioCampo;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use App\Models\FormularioCampo;
 
 class FormularioController extends Controller
 {
-
     public function index()
     {
 
@@ -18,15 +18,13 @@ class FormularioController extends Controller
             'actividad'
         );
 
-
         // Control tenant
 
-        if(session('rol') != 5){
-
+        if (session('rol') != 5) {
 
             $consulta->whereHas(
                 'actividad',
-                function($q){
+                function ($q) {
 
                     $q->where(
                         'empresa_id',
@@ -36,13 +34,9 @@ class FormularioController extends Controller
                 }
             );
 
-
         }
 
-
         $formularios = $consulta->get();
-
-
 
         return view(
             'formularios.index',
@@ -51,366 +45,192 @@ class FormularioController extends Controller
 
     }
 
-
     public function create()
-{
+    {
 
-    if(session('rol') == 5){
+        if (session('rol') == 5) {
 
-        $actividades = \App\Models\Actividad::all();
+            $actividades = Actividad::all();
 
-    }else{
+        } else {
 
-        $actividades = \App\Models\Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )->get();
+            $actividades = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )->get();
+
+        }
+
+        return view(
+            'formularios.create',
+            compact('actividades')
+        );
 
     }
 
+    public function store(Request $request)
+    {
 
-    return view(
-        'formularios.create',
-        compact('actividades')
-    );
+        $request->validate([
 
-}
+            'nombre_formulario' => 'required|max:255',
 
-public function store(Request $request)
-{
+            'descripcion' => 'nullable',
 
-
-    $request->validate([
-
-        'nombre_formulario' => 'required|max:255',
-
-        'descripcion' => 'nullable',
-
-        'id_actividad' => 'required'
-
-    ]);
-
-
-
-
-    // validar actividad según tenant
-
-    if(session('rol') == 5){
-
-
-        $actividad = \App\Models\Actividad::findOrFail(
-            $request->id_actividad
-        );
-
-
-    }else{
-
-
-        $actividad = \App\Models\Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )
-        ->findOrFail(
-            $request->id_actividad
-        );
-
-
-    }
-
-    $formulario = Formulario::create([
-
-    'nombre_formulario' => $request->nombre_formulario,
-
-    'descripcion' => $request->descripcion,
-
-    'imagen_fondo' => null,
-
-    'id_actividad' => $request->id_actividad,
-
-    'estado' => 1,
-
-    'creado_por' => session('usuario_id')
-
-]);
-
-/*$campos = json_decode($request->campos_json, true);
-
-if (is_array($campos)) {
-
-    foreach ($campos as $index => $campo) {
-
-        FormularioCampo::create([
-
-            'id_formulario' => $formulario->id_formulario,
-
-            'etiqueta' => $campo['nombre'],
-
-            'tipo_campo' => $campo['tipo'],
-
-            'opciones' => '[]',
-
-            'obligatorio' => !empty($campo['obligatorio']) ? 1 : 0,
-
-            'orden' => $index
+            'id_actividad' => 'required',
 
         ]);
 
-    }
+        // validar actividad según tenant
 
-}*/
-if ($request->filled('campos_json')) {
+        if (session('rol') == 5) {
 
-    $campos = json_decode($request->campos_json, true);
+            $actividad = Actividad::findOrFail(
+                $request->id_actividad
+            );
 
-    foreach ($campos as $i => $campo) {
+        } else {
 
-        \App\Models\FormularioCampo::create([
+            $actividad = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )
+                ->findOrFail(
+                    $request->id_actividad
+                );
 
-            'id_formulario' => $formulario->id_formulario,
+        }
 
-            'etiqueta' => $campo['nombre'],
+        $formulario = Formulario::create([
 
-            'tipo_campo' => $campo['tipo'],
+            'nombre_formulario' => $request->nombre_formulario,
 
-            'opciones' => json_encode($campo['opciones'] ?? []),
+            'descripcion' => $request->descripcion,
 
-            'obligatorio' => $campo['obligatorio'] ? 1 : 0,
+            'imagen_fondo' => null,
 
-            'orden' => $i
+            'id_actividad' => $request->id_actividad,
+
+            'estado' => 1,
+
+            'creado_por' => session('usuario_id'),
 
         ]);
 
+        /*$campos = json_decode($request->campos_json, true);
+
+        if (is_array($campos)) {
+
+            foreach ($campos as $index => $campo) {
+
+                FormularioCampo::create([
+
+                    'id_formulario' => $formulario->id_formulario,
+
+                    'etiqueta' => $campo['nombre'],
+
+                    'tipo_campo' => $campo['tipo'],
+
+                    'opciones' => '[]',
+
+                    'obligatorio' => !empty($campo['obligatorio']) ? 1 : 0,
+
+                    'orden' => $index
+
+                ]);
+
+            }
+
+        }*/
+        if ($request->filled('campos_json')) {
+
+            $campos = json_decode($request->campos_json, true);
+
+            foreach ($campos as $i => $campo) {
+
+                FormularioCampo::create([
+
+                    'id_formulario' => $formulario->id_formulario,
+
+                    'etiqueta' => $campo['nombre'],
+
+                    'tipo_campo' => $campo['tipo'],
+
+                    'opciones' => json_encode($campo['opciones'] ?? []),
+
+                    'obligatorio' => $campo['obligatorio'] ? 1 : 0,
+
+                    'orden' => $i,
+
+                ]);
+
+            }
+
+        }
+
+        return redirect('/formularios')
+            ->with(
+
+                'success',
+
+                'Formulario creado correctamente'
+
+            );
+
     }
-
-}
-
-    return redirect('/formularios')
-
-    ->with(
-
-        'success',
-
-        'Formulario creado correctamente'
-
-    );
-
-
-}
 
     public function show($id)
     {
 
-
-        if(session('rol') == 5){
-
+        if (session('rol') == 5) {
 
             $formulario = Formulario::with(
                 'campos',
                 'actividad'
             )
-            ->findOrFail($id);
+                ->findOrFail($id);
 
-
-        }else{
-
+        } else {
 
             $formulario = Formulario::with(
                 'campos',
                 'actividad'
             )
-            ->whereHas(
-                'actividad',
-                function($q){
+                ->whereHas(
+                    'actividad',
+                    function ($q) {
 
-                    $q->where(
-                        'empresa_id',
-                        app('tenant_id')
-                    );
+                        $q->where(
+                            'empresa_id',
+                            app('tenant_id')
+                        );
 
-                }
-            )
-            ->findOrFail($id);
-
+                    }
+                )
+                ->findOrFail($id);
 
         }
-
-
 
         return view(
             'formularios.show',
             compact('formulario')
         );
 
-
     }
 
-public function edit($id)
-{
-
-
-    if(session('rol') == 5){
-
-
-        //$formulario = Formulario::findOrFail($id);
-        $formulario = Formulario::with('campos')->findOrFail($id);
-
-
-    }else{
-
-
-        $formulario = Formulario::whereHas(
-            'actividad',
-            function($q){
-
-                $q->where(
-                    'empresa_id',
-                    app('tenant_id')
-                );
-
-            }
-        )
-        ->with('campos')
-        ->findOrFail($id);
-
-
-    }
-
-
-
-    // actividades disponibles
-
-    if(session('rol') == 5){
-
-
-        $actividades = \App\Models\Actividad::all();
-
-
-    }else{
-
-
-        $actividades = \App\Models\Actividad::where(
-            'empresa_id',
-            app('tenant_id')
-        )
-        ->get();
-
-
-    }
-
-
-
-    return view(
-        'formularios.edit',
-        compact(
-            'formulario',
-            'actividades'
-        )
-    );
-
-
-}
-
-public function update(Request $request, $id)
-{
-
-    $request->validate([
-
-        'nombre_formulario' => 'required|max:255',
-
-        'descripcion' => 'nullable',
-
-        'id_actividad' => 'required'
-
-    ]);
-
-
-    if(session('rol') == 5){
-
-        $formulario = Formulario::findOrFail($id);
-
-    }else{
-
-        $formulario = Formulario::whereHas(
-            'actividad',
-            function($q){
-
-                $q->where(
-                    'empresa_id',
-                    app('tenant_id')
-                );
-
-            }
-        )->findOrFail($id);
-
-    }
-
-
-    $formulario->update([
-
-        'nombre_formulario' => $request->nombre_formulario,
-
-        'descripcion' => $request->descripcion,
-
-        'id_actividad' => $request->id_actividad
-
-    ]);
-
-    \App\Models\FormularioCampo::where(
-    'id_formulario',
-    $formulario->id_formulario
-)->delete();
-
-if ($request->filled('campos_json')) {
-
-    $campos = json_decode($request->campos_json, true);
-
-    foreach ($campos as $i => $campo) {
-
-        \App\Models\FormularioCampo::create([
-
-            'id_formulario' => $formulario->id_formulario,
-
-            'etiqueta' => $campo['nombre'],
-
-            'tipo_campo' => $campo['tipo'],
-
-            'opciones' => json_encode($campo['opciones'] ?? []),
-
-            'obligatorio' => $campo['obligatorio'] ? 1 : 0,
-
-            'orden' => $i
-
-        ]);
-
-    }
-
-}
-
-    return redirect('/formularios')
-
-        ->with(
-            'success',
-            'Formulario actualizado correctamente'
-        );
-
-}
-
-    public function estado($id)
+    public function edit($id)
     {
 
+        if (session('rol') == 5) {
 
-        if(session('rol') == 5){
+            // $formulario = Formulario::findOrFail($id);
+            $formulario = Formulario::with('campos')->findOrFail($id);
 
-
-            $formulario = Formulario::findOrFail($id);
-
-
-        }else{
-
+        } else {
 
             $formulario = Formulario::whereHas(
                 'actividad',
-                function($q){
+                function ($q) {
 
                     $q->where(
                         'empresa_id',
@@ -419,20 +239,149 @@ if ($request->filled('campos_json')) {
 
                 }
             )
-            ->findOrFail($id);
-
+                ->with('campos')
+                ->findOrFail($id);
 
         }
 
+        // actividades disponibles
 
+        if (session('rol') == 5) {
 
-        $formulario->update([
+            $actividades = Actividad::all();
 
-            'estado' => $formulario->estado == 1 ? 0 : 1
+        } else {
+
+            $actividades = Actividad::where(
+                'empresa_id',
+                app('tenant_id')
+            )
+                ->get();
+
+        }
+
+        return view(
+            'formularios.edit',
+            compact(
+                'formulario',
+                'actividades'
+            )
+        );
+
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $request->validate([
+
+            'nombre_formulario' => 'required|max:255',
+
+            'descripcion' => 'nullable',
+
+            'id_actividad' => 'required',
 
         ]);
 
+        if (session('rol') == 5) {
 
+            $formulario = Formulario::findOrFail($id);
+
+        } else {
+
+            $formulario = Formulario::whereHas(
+                'actividad',
+                function ($q) {
+
+                    $q->where(
+                        'empresa_id',
+                        app('tenant_id')
+                    );
+
+                }
+            )->findOrFail($id);
+
+        }
+
+        $formulario->update([
+
+            'nombre_formulario' => $request->nombre_formulario,
+
+            'descripcion' => $request->descripcion,
+
+            'id_actividad' => $request->id_actividad,
+
+        ]);
+
+        FormularioCampo::where(
+            'id_formulario',
+            $formulario->id_formulario
+        )->delete();
+
+        if ($request->filled('campos_json')) {
+
+            $campos = json_decode($request->campos_json, true);
+
+            foreach ($campos as $i => $campo) {
+
+                FormularioCampo::create([
+
+                    'id_formulario' => $formulario->id_formulario,
+
+                    'etiqueta' => $campo['nombre'],
+
+                    'tipo_campo' => $campo['tipo'],
+
+                    'opciones' => json_encode($campo['opciones'] ?? []),
+
+                    'obligatorio' => $campo['obligatorio'] ? 1 : 0,
+
+                    'orden' => $i,
+
+                ]);
+
+            }
+
+        }
+
+        return redirect('/formularios')
+
+            ->with(
+                'success',
+                'Formulario actualizado correctamente'
+            );
+
+    }
+
+    public function estado($id)
+    {
+
+        if (session('rol') == 5) {
+
+            $formulario = Formulario::findOrFail($id);
+
+        } else {
+
+            $formulario = Formulario::whereHas(
+                'actividad',
+                function ($q) {
+
+                    $q->where(
+                        'empresa_id',
+                        app('tenant_id')
+                    );
+
+                }
+            )
+                ->findOrFail($id);
+
+        }
+
+        $formulario->update([
+
+            'estado' => $formulario->estado == 1 ? 0 : 1,
+
+        ]);
 
         return redirect('/formularios')
             ->with(
@@ -440,139 +389,115 @@ if ($request->filled('campos_json')) {
                 'Estado actualizado correctamente'
             );
 
-
     }
 
-    public function respuestas($id)
-{
-    $formulario = \App\Models\Formulario::with('campos')
-        ->findOrFail($id);
+    public function responder(Request $request, $id)
+    {
+        $formulario = Formulario::with('campos')
+            ->findOrFail($id);
 
-    $respuestas = \App\Models\FormularioRespuesta::where(
-        'id_formulario',
-        $id
-    )
-    ->latest('id_respuesta')
-    ->get();
+        $datos = [];
 
-    return view(
-        'formularios.respuestas',
-        compact(
-            'formulario',
-            'respuestas'
-        )
-    );
-}
+        foreach ($formulario->campos as $campo) {
 
-public function responder(Request $request, $id)
-{
-    $formulario = \App\Models\Formulario::with('campos')
-        ->findOrFail($id);
+            $valor = $request->input($campo->etiqueta);
 
-    $datos = [];
+            // Si es checkbox múltiple
+            if (is_array($valor)) {
+                $valor = implode(', ', $valor);
+            }
 
-    foreach ($formulario->campos as $campo) {
-
-        $valor = $request->input($campo->etiqueta);
-
-        // Si es checkbox múltiple
-        if (is_array($valor)) {
-            $valor = implode(', ', $valor);
+            $datos[$campo->etiqueta] = $valor;
         }
 
-        $datos[$campo->etiqueta] = $valor;
-    }
+        FormularioRespuesta::create([
 
-    \App\Models\FormularioRespuesta::create([
+            'id_formulario' => $id,
 
-        'id_formulario' => $id,
+            'datos' => $datos,
 
-        'datos' => $datos,
+            'nombres' => $request->nombres,
 
-        'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
 
-'apellidos' => $request->apellidos,
+            'correo' => $request->correo,
 
-'correo' => $request->correo,
+            'telefono' => $request->telefono,
 
-'telefono' => $request->telefono,
+            'tipo_documento' => $request->tipo_documento,
 
-'tipo_documento' => $request->tipo_documento,
+            'numero_documento' => $request->numero_documento,
 
-'numero_documento' => $request->numero_documento
-
-    ]);
-
-    return redirect()
-        ->back()
-        ->with('success', 'Formulario enviado correctamente.');
-}
-
-public function exportar($id)
-{
-    $formulario = Formulario::findOrFail($id);
-
-    $respuestas = FormularioRespuesta::where(
-        'id_formulario',
-        $id
-    )->get();
-
-    $response = new StreamedResponse(function () use ($respuestas) {
-
-        $handle = fopen('php://output', 'w');
-
-        fputcsv($handle, [
-            'ID',
-            'Nombres',
-            'Apellidos',
-            'Correo',
-            'Telefono',
-            'Tipo Documento',
-            'Numero Documento',
-            'Fecha',
-            'Datos'
         ]);
 
-        foreach ($respuestas as $respuesta) {
+        return redirect()
+            ->back()
+            ->with('success', 'Formulario enviado correctamente.');
+    }
+
+    public function exportar($id)
+    {
+        $formulario = Formulario::findOrFail($id);
+
+        $respuestas = FormularioRespuesta::where(
+            'id_formulario',
+            $id
+        )->get();
+
+        $response = new StreamedResponse(function () use ($respuestas) {
+
+            $handle = fopen('php://output', 'w');
 
             fputcsv($handle, [
-
-                $respuesta->id_respuesta,
-                $respuesta->nombres,
-                $respuesta->apellidos,
-                $respuesta->correo,
-                $respuesta->telefono,
-                $respuesta->tipo_documento,
-                $respuesta->numero_documento,
-                $respuesta->fecha_respuesta,
-                json_encode(
-                    $respuesta->datos,
-                    JSON_UNESCAPED_UNICODE
-                )
-
+                'ID',
+                'Nombres',
+                'Apellidos',
+                'Correo',
+                'Telefono',
+                'Tipo Documento',
+                'Numero Documento',
+                'Fecha',
+                'Datos',
             ]);
 
-        }
+            foreach ($respuestas as $respuesta) {
 
-        fclose($handle);
+                fputcsv($handle, [
 
-    });
+                    $respuesta->id_respuesta,
+                    $respuesta->nombres,
+                    $respuesta->apellidos,
+                    $respuesta->correo,
+                    $respuesta->telefono,
+                    $respuesta->tipo_documento,
+                    $respuesta->numero_documento,
+                    $respuesta->fecha_respuesta,
+                    json_encode(
+                        $respuesta->datos,
+                        JSON_UNESCAPED_UNICODE
+                    ),
 
-    $nombre = 'respuestas_formulario_'.$formulario->id_formulario.'.csv';
+                ]);
 
-    $response->headers->set(
-        'Content-Type',
-        'text/csv'
-    );
+            }
 
-    $response->headers->set(
-        'Content-Disposition',
-        'attachment; filename="'.$nombre.'"'
-    );
+            fclose($handle);
 
-    return $response;
+        });
 
-}
+        $nombre = 'respuestas_formulario_'.$formulario->id_formulario.'.csv';
 
+        $response->headers->set(
+            'Content-Type',
+            'text/csv'
+        );
 
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="'.$nombre.'"'
+        );
+
+        return $response;
+
+    }
 }

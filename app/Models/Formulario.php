@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Formulario extends Model
 {
-
     protected $connection = 'legacy';
 
     protected $table = 'formularios';
@@ -14,7 +13,6 @@ class Formulario extends Model
     protected $primaryKey = 'id_formulario';
 
     public $timestamps = false;
-
 
     protected $fillable = [
 
@@ -24,10 +22,9 @@ class Formulario extends Model
         'id_actividad',
         'estado',
         'creado_por',
-        'fecha_crea'
+        'fecha_crea',
 
     ];
-
 
     public function actividad()
     {
@@ -38,7 +35,6 @@ class Formulario extends Model
         );
     }
 
-
     public function creador()
     {
         return $this->belongsTo(
@@ -47,7 +43,6 @@ class Formulario extends Model
             'id_usuario'
         );
     }
-
 
     public function campos()
     {
@@ -59,12 +54,11 @@ class Formulario extends Model
     }
 
     public function respuestas()
-{
-    return $this->hasMany(
-        FormularioRespuesta::class,
-        'id_formulario',
-        'id_formulario'
-    );
-}
-
+    {
+        return $this->hasMany(
+            FormularioRespuesta::class,
+            'id_formulario',
+            'id_formulario'
+        );
+    }
 }

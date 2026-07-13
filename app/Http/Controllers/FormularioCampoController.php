@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FormularioCampo;
 use App\Models\Formulario;
+use App\Models\FormularioCampo;
 use Illuminate\Http\Request;
 
 class FormularioCampoController extends Controller
 {
-
-
     public function index()
     {
 
-        $campos = FormularioCampo::with(
-            'formulario'
-        )->get();
+        $consulta = FormularioCampo::with('formulario');
 
+        if (session('rol') != 5) {
+
+            $consulta->whereHas(
+                'formulario.actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
+
+        }
+
+        $campos = $consulta->get();
 
         return view(
             'formulario_campos.index',
@@ -25,33 +33,51 @@ class FormularioCampoController extends Controller
 
     }
 
-public function camposFormulario($id)
-{
+    public function camposFormulario($id)
+    {
 
-    $formulario = Formulario::findOrFail($id);
+        $formulario = Formulario::with('actividad')->findOrFail($id);
 
-    $campos = FormularioCampo::where(
-        'id_formulario',
-        $id
-    )
-    ->orderBy('orden')
-    ->get();
+        if (session('rol') != 5 && $formulario->actividad->empresa_id != app('tenant_id')) {
 
-    return view(
-        'formulario_campos.index',
-        compact(
-            'formulario',
-            'campos'
+            abort(403, 'Acceso no autorizado');
+
+        }
+
+        $campos = FormularioCampo::where(
+            'id_formulario',
+            $id
         )
-    );
+            ->orderBy('orden')
+            ->get();
 
-}
+        return view(
+            'formulario_campos.index',
+            compact(
+                'formulario',
+                'campos'
+            )
+        );
+
+    }
 
     public function create()
     {
 
-        $formularios = Formulario::all();
+        if (session('rol') == 5) {
 
+            $formularios = Formulario::all();
+
+        } else {
+
+            $formularios = Formulario::whereHas(
+                'actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            )->get();
+
+        }
 
         return view(
             'formulario_campos.create',
@@ -59,8 +85,6 @@ public function camposFormulario($id)
         );
 
     }
-
-
 
     public function store(Request $request)
     {
@@ -71,25 +95,22 @@ public function camposFormulario($id)
             'etiqueta' => 'required|max:255',
             'tipo_campo' => 'required',
             'opciones' => 'nullable',
-            'orden' => 'nullable|integer'
+            'orden' => 'nullable|integer',
 
         ]);
-
 
         $formulario = Formulario::with('actividad')
             ->findOrFail(
                 $request->id_formulario
             );
 
-
         // Control tenant
-        if(session('rol') != 5){
+        if (session('rol') != 5) {
 
-
-            if(
+            if (
                 $formulario->actividad->empresa_id
                 != app('tenant_id')
-            ){
+            ) {
 
                 abort(
                     403,
@@ -100,39 +121,37 @@ public function camposFormulario($id)
 
         }
 
+        // Convertir opciones a JSON cuando aplique
 
-// Convertir opciones a JSON cuando aplique
+        $opciones = [];
 
-$opciones = [];
+        if (! empty($request->opciones)) {
 
-if (!empty($request->opciones)) {
+            $opciones = array_filter(
+                array_map(
+                    'trim',
+                    explode("\n", $request->opciones)
+                )
+            );
 
-    $opciones = array_filter(
-        array_map(
-            'trim',
-            explode("\n", $request->opciones)
-        )
-    );
+        }
 
-}
+        FormularioCampo::create([
 
+            'id_formulario' => $request->id_formulario,
 
-FormularioCampo::create([
+            'etiqueta' => $request->etiqueta,
 
-    'id_formulario' => $request->id_formulario,
+            'tipo_campo' => $request->tipo_campo,
 
-    'etiqueta' => $request->etiqueta,
+            'opciones' => json_encode($opciones),
 
-    'tipo_campo' => $request->tipo_campo,
+            'obligatorio' => $request->obligatorio ?? 0,
 
-    'opciones' => json_encode($opciones),
+            'orden' => $request->orden ?? 0,
 
-    'obligatorio' => $request->obligatorio ?? 0,
+        ]);
 
-    'orden' => $request->orden ?? 0
-
-]);
-        
         return redirect('/formulario-campos')
             ->with(
                 'success',
@@ -141,16 +160,12 @@ FormularioCampo::create([
 
     }
 
-
-
     public function edit($id)
     {
 
         $campo = FormularioCampo::findOrFail($id);
 
-
         $formularios = Formulario::all();
-
 
         return view(
             'formulario_campos.edit',
@@ -162,24 +177,17 @@ FormularioCampo::create([
 
     }
 
-
-
     public function update(Request $request, $id)
     {
 
-
         $campo = FormularioCampo::findOrFail($id);
-
-
 
         $request->validate([
 
             'etiqueta' => 'required|max:255',
-            'tipo_campo' => 'required'
+            'tipo_campo' => 'required',
 
         ]);
-
-
 
         $campo->update([
 
@@ -193,11 +201,9 @@ FormularioCampo::create([
 
             'obligatorio' => $request->obligatorio ?? 0,
 
-            'orden' => $request->orden ?? 0
+            'orden' => $request->orden ?? 0,
 
         ]);
-
-
 
         return redirect('/formulario-campos')
             ->with(
@@ -212,10 +218,7 @@ FormularioCampo::create([
 
         $campo = FormularioCampo::findOrFail($id);
 
-
         $campo->delete();
-
-
 
         return redirect('/formulario-campos')
             ->with(
@@ -224,5 +227,4 @@ FormularioCampo::create([
             );
 
     }
-
 }

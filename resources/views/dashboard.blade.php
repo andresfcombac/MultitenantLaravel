@@ -4,34 +4,38 @@
 
 @section('content')
 
-<h2 class="mb-4">
-    Bienvenido, {{ $usuario->nombre_usu }}
-</h2>
+<div class="welcome-banner">
+
+    <div>
+
+        <h2>
+            Hola, {{ $usuario->nombre_usu }} 👋
+        </h2>
+
+        <p>
+            Resumen del sistema — {{ now()->format('d/m/Y') }}
+        </p>
+
+    </div>
+
+    <i class="fa-solid fa-layer-group welcome-banner-icon"></i>
+
+</div>
 
 <div class="row g-4">
 
-```
 @if(session('rol') == 5)
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/empresas" class="text-decoration-none">
+    <a href="/empresas" class="stat-card">
 
-        <div class="card dashboard-card bg-primary text-white border-0">
+        <div class="stat-icon" style="background:#0d6efd;">
+            <i class="fa-solid fa-building"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-building dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Empresas
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['empresas'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Empresas</small>
+            <h3>{{ $estadisticas['empresas'] }}</h3>
         </div>
 
     </a>
@@ -39,168 +43,148 @@
 </div>
 @endif
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/usuarios" class="text-decoration-none">
+    <a href="/usuarios" class="stat-card">
 
-        <div class="card dashboard-card bg-success text-white border-0">
+        <div class="stat-icon" style="background:#198754;">
+            <i class="fa-solid fa-users"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-users dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Usuarios
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['usuarios'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Usuarios</small>
+            <h3>{{ $estadisticas['usuarios'] }}</h3>
         </div>
 
     </a>
 
 </div>
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/formularios" class="text-decoration-none">
+    <a href="/formularios" class="stat-card">
 
-        <div class="card dashboard-card bg-warning text-dark border-0">
+        <div class="stat-icon" style="background:#ea6b19;">
+            <i class="fa-solid fa-file-lines"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-file-lines dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Formularios
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['formularios'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Formularios</small>
+            <h3>{{ $estadisticas['formularios'] }}</h3>
         </div>
 
     </a>
 
 </div>
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/actividades" class="text-decoration-none">
+    <a href="/actividades" class="stat-card">
 
-        <div class="card dashboard-card bg-info text-white border-0">
+        <div class="stat-icon" style="background:#0dcaf0;">
+            <i class="fa-solid fa-calendar-days"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-calendar-days dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Actividades
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['actividades'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Actividades</small>
+            <h3>{{ $estadisticas['actividades'] }}</h3>
         </div>
 
     </a>
 
 </div>
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="#" class="text-decoration-none">
+    <a href="/formularios" class="stat-card">
 
-        <div class="card dashboard-card bg-secondary text-white border-0">
+        <div class="stat-icon" style="background:#6c757d;">
+            <i class="fa-solid fa-list-check"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-list-check dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Respuestas
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['respuestas'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Respuestas</small>
+            <h3>{{ $estadisticas['respuestas'] }}</h3>
         </div>
 
     </a>
 
 </div>
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/asistencias" class="text-decoration-none">
+    <a href="/asistencias" class="stat-card">
 
-        <div class="card dashboard-card bg-danger text-white border-0">
+        <div class="stat-icon" style="background:#dc3545;">
+            <i class="fa-solid fa-user-check"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-user-check dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Asistencias
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['asistencias'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Asistencias</small>
+            <h3>{{ $estadisticas['asistencias'] }}</h3>
         </div>
 
     </a>
 
 </div>
 
-<div class="col-md-4 col-xl-3">
+<div class="col-md-6 col-xl-3">
 
-    <a href="/historico" class="text-decoration-none">
+    <a href="/historico" class="stat-card">
 
-        <div class="card dashboard-card bg-dark text-white border-0">
+        <div class="stat-icon" style="background:#212529;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
 
-            <div class="card-body">
-
-                <i class="fa-solid fa-clock-rotate-left dashboard-icon"></i>
-
-                <h6 class="mt-3">
-                    Histórico
-                </h6>
-
-                <h2>
-                    {{ $estadisticas['historico'] }}
-                </h2>
-
-            </div>
-
+        <div class="stat-info">
+            <small>Histórico</small>
+            <h3>{{ $estadisticas['historico'] }}</h3>
         </div>
 
     </a>
 
 </div>
-```
+
+</div>
+
+<div class="quick-access-title">
+    ACCESOS RÁPIDOS
+</div>
+
+<div class="row g-3">
+
+    <div class="col-6 col-md-3">
+        <a href="/actividades" class="quick-access-btn">
+            <i class="fa-solid fa-calendar-days" style="color:#0dcaf0;"></i>
+            Actividades
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/asistencias" class="quick-access-btn">
+            <i class="fa-solid fa-user-check" style="color:#dc3545;"></i>
+            Asistencias
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/formularios" class="quick-access-btn">
+            <i class="fa-solid fa-file-lines" style="color:#ea6b19;"></i>
+            Formularios
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/usuarios" class="quick-access-btn">
+            <i class="fa-solid fa-users" style="color:#198754;"></i>
+            Usuarios
+        </a>
+    </div>
 
 </div>
 
 <div class="card mt-5 shadow-sm border-0">
 
-```
 <div class="card-body">
 
     <h5>
@@ -229,7 +213,6 @@
     @endif
 
 </div>
-```
 
 </div>
 

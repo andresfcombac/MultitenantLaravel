@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\AuthSessionMiddleware;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\SuperAdminMiddleware;
+use App\Http\Middleware\TenantMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,11 +19,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
 
-            'tenant' => \App\Http\Middleware\TenantMiddleware::class,
+            'auth.session' => AuthSessionMiddleware::class,
 
-            'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+            'tenant' => TenantMiddleware::class,
 
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'superadmin' => SuperAdminMiddleware::class,
+
+            'role' => RoleMiddleware::class,
 
         ]);
 

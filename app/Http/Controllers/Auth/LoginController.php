@@ -21,14 +21,14 @@ class LoginController extends Controller
             $request->correo_usu
         )->first();
 
-        if (!$usuario) {
+        if (! $usuario) {
             return back()->with(
                 'error',
                 'Usuario no encontrado'
             );
         }
 
-        if (!Hash::check(
+        if (! Hash::check(
             $request->password,
             $usuario->pwd
         )) {
@@ -38,30 +38,29 @@ class LoginController extends Controller
             );
         }
 
-        if(
-    $usuario->rol_usu != 5 
-    && !$usuario->empresa_usu
-){
+        if (
+            $usuario->rol_usu != 5
+            && ! $usuario->empresa_usu
+        ) {
 
-    return back()->with(
-        'error',
-        'Usuario sin empresa asignada'
-    );
+            return back()->with(
+                'error',
+                'Usuario sin empresa asignada'
+            );
 
-}
+        }
 
+        session([
 
-session([
+            'usuario_id' => $usuario->id_usuario,
 
-    'usuario_id' => $usuario->id_usuario,
+            'nombre' => $usuario->nombre_usu,
 
-    'nombre' => $usuario->nombre_usu,
+            'rol' => $usuario->rol_usu,
 
-    'rol' => $usuario->rol_usu,
+            'empresa' => $usuario->empresa_usu,
 
-    'empresa' => $usuario->empresa_usu
-
-]);
+        ]);
 
         return redirect('/dashboard');
     }

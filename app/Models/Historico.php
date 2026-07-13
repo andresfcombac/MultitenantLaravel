@@ -22,7 +22,7 @@ class Historico extends Model
         'ingreso',
         'salida',
         'id_dato',
-        'id_actividad'
+        'id_actividad',
 
     ];
 }

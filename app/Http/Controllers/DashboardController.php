@@ -2,126 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\Actividad;
+use App\Models\Asistencia;
 use App\Models\Empresa;
 use App\Models\Formulario;
-use App\Models\Actividad;
 use App\Models\FormularioRespuesta;
-use App\Models\Asistencia;
 use App\Models\Historico;
+use App\Models\Usuario;
 
 class DashboardController extends Controller
 {
     public function index()
     {
 
-        if (!session()->has('usuario_id')) {
+        if (! session()->has('usuario_id')) {
 
             return redirect('/login');
 
         }
 
-
-        if(session('rol') == 5){
-
-            $usuario = Usuario::with(
-                'rol',
-                'empresa'
-            )
-            ->findOrFail(
-                session('usuario_id')
-            );
-
-
-        }else{
-
+        if (session('rol') == 5) {
 
             $usuario = Usuario::with(
                 'rol',
                 'empresa'
             )
-            ->where(
-                'empresa_usu',
-                session('empresa')
-            )
-            ->findOrFail(
-                session('usuario_id')
-            );
+                ->findOrFail(
+                    session('usuario_id')
+                );
 
+        } else {
+
+            $usuario = Usuario::with(
+                'rol',
+                'empresa'
+            )
+                ->where(
+                    'empresa_usu',
+                    session('empresa')
+                )
+                ->findOrFail(
+                    session('usuario_id')
+                );
 
         }
 
+        if (session('rol') == 5) {
 
-       if(session('rol') == 5){
+            $estadisticas = [
 
-    $estadisticas = [
+                'empresas' => Empresa::count(),
 
-        'empresas'     => Empresa::count(),
+                'usuarios' => Usuario::count(),
 
-        'usuarios'     => Usuario::count(),
+                'formularios' => Formulario::count(),
 
-        'formularios'  => Formulario::count(),
+                'actividades' => Actividad::count(),
 
-        'actividades'  => Actividad::count(),
+                'respuestas' => FormularioRespuesta::count(),
 
-        'respuestas'   => FormularioRespuesta::count(),
+                'asistencias' => Asistencia::count(),
 
-        'asistencias'  => Asistencia::count(),
+                'historico' => Historico::count(),
 
-        'historico'    => Historico::count()
+            ];
 
-    ];
+        } else {
 
-}else{
+            $empresaId = session('empresa');
 
-    $empresaId = session('empresa');
+            $estadisticas = [
 
-    $estadisticas = [
+                'usuarios' => Usuario::where(
+                    'empresa_usu',
+                    $empresaId
+                )->count(),
 
-        'usuarios' => Usuario::where(
-            'empresa_usu',
-            $empresaId
-        )->count(),
+                'formularios' => Formulario::whereHas(
+                    'actividad',
+                    function ($q) use ($empresaId) {
+                        $q->where('empresa_id', $empresaId);
+                    }
+                )->count(),
 
-        'formularios' => Formulario::whereHas(
-            'actividad',
-            function($q) use ($empresaId){
-                $q->where('empresa_id', $empresaId);
-            }
-        )->count(),
+                'actividades' => Actividad::where(
+                    'empresa_id',
+                    $empresaId
+                )->count(),
 
-        'actividades' => Actividad::where(
-            'empresa_id',
-            $empresaId
-        )->count(),
+                'respuestas' => FormularioRespuesta::whereHas(
+                    'formulario.actividad',
+                    function ($q) use ($empresaId) {
+                        $q->where('empresa_id', $empresaId);
+                    }
+                )->count(),
 
-        'respuestas' => FormularioRespuesta::whereHas(
-            'formulario.actividad',
-            function($q) use ($empresaId){
-                $q->where('empresa_id', $empresaId);
-            }
-        )->count(),
+                'asistencias' => Asistencia::whereHas(
+                    'respuesta.formulario.actividad',
+                    function ($q) use ($empresaId) {
+                        $q->where('empresa_id', $empresaId);
+                    }
+                )->count(),
 
-        'asistencias' => Asistencia::whereHas(
-            'respuesta.formulario.actividad',
-            function($q) use ($empresaId){
-                $q->where('empresa_id', $empresaId);
-            }
-        )->count(),
+                'historico' => 0,
 
-        'historico' => 0
+            ];
 
-    ];
+        }
 
-}
-
-return view(
-    'dashboard',
-    compact(
-        'usuario',
-        'estadisticas'
-    )
-);
+        return view(
+            'dashboard',
+            compact(
+                'usuario',
+                'estadisticas'
+            )
+        );
 
     }
 }

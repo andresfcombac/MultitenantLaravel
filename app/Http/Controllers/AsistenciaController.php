@@ -2,52 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FormularioRespuesta;
 use App\Models\Asistencia;
+use App\Models\FormularioRespuesta;
 
 class AsistenciaController extends Controller
 {
-   public function index()
-{
-    $respuestas = FormularioRespuesta::with([
-    'formulario.actividad.empresa',
-    'asistencia.usuario'
-])
-->orderBy('fecha_respuesta', 'DESC')
-->get();
+    public function index()
+    {
+        $consulta = FormularioRespuesta::with([
+            'formulario.actividad.empresa',
+            'asistencia.usuario',
+        ]);
 
-    return view(
-        'asistencias.index',
-        compact('respuestas')
-    );
-}
-    
-    public function confirmar($id)
-{
-    $respuesta = FormularioRespuesta::findOrFail($id);
+        if (session('rol') != 5) {
 
-    if ($respuesta->asistencia) {
+            $consulta->whereHas(
+                'formulario.actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
 
-        return back()->with(
-            'warning',
-            'La asistencia ya fue confirmada.'
+        }
+
+        $respuestas = $consulta
+            ->orderBy('fecha_respuesta', 'DESC')
+            ->get();
+
+        return view(
+            'asistencias.index',
+            compact('respuestas')
         );
-
     }
 
-    Asistencia::create([
+    public function confirmar($id)
+    {
+        $consulta = FormularioRespuesta::query();
 
-        'id_respuesta' => $respuesta->id_respuesta,
+        if (session('rol') != 5) {
 
-        'confirmado_por' => session('usuario_id'),
+            $consulta->whereHas(
+                'formulario.actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
 
-        'fecha_confirmacion' => now()
+        }
 
-    ]);
+        $respuesta = $consulta->findOrFail($id);
 
-    return back()->with(
-        'success',
-        'Asistencia confirmada correctamente.'
-    );
-}
+        if ($respuesta->asistencia) {
+
+            return back()->with(
+                'warning',
+                'La asistencia ya fue confirmada.'
+            );
+
+        }
+
+        Asistencia::create([
+
+            'id_respuesta' => $respuesta->id_respuesta,
+
+            'confirmado_por' => session('usuario_id'),
+
+            'fecha_confirmacion' => now(),
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Asistencia confirmada correctamente.'
+        );
+    }
 }

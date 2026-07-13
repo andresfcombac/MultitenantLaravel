@@ -1,19 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresaController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ActividadController;
-use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\FormularioCampoController;
+use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\FormularioPublicoController;
 use App\Http\Controllers\FormularioRespuestaController;
-use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\HistoricoController;
-use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UsuarioController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -26,102 +26,102 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get(
     '/dashboard',
     [DashboardController::class, 'index']
-)->middleware('auth.session','tenant');
+)->middleware('auth.session', 'tenant');
 
 Route::get(
     '/empresas',
     [EmpresaController::class, 'index']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::get(
     '/empresas/create',
     [EmpresaController::class, 'create']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::post(
     '/empresas/store',
     [EmpresaController::class, 'store']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::get(
     '/empresas/{id}/edit',
     [EmpresaController::class, 'edit']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::post(
     '/empresas/{id}/delete',
     [EmpresaController::class, 'destroy']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::post(
     '/empresas/{id}/update',
     [EmpresaController::class, 'update']
-)->middleware(['auth.session','superadmin']);
+)->middleware(['auth.session', 'superadmin']);
 
 Route::get(
     '/usuarios',
     [UsuarioController::class, 'index']
 )->middleware([
     'auth.session',
-    'tenant'
+    'tenant',
 ]);
 
 Route::get(
-'/usuarios/create',
-[UsuarioController::class,'create']
+    '/usuarios/create',
+    [UsuarioController::class, 'create']
 )
-->middleware([
-'auth.session',
-'tenant',
-'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
-'/usuarios/store',
-[UsuarioController::class,'store']
+    '/usuarios/store',
+    [UsuarioController::class, 'store']
 )
-->middleware([
-'auth.session',
-'tenant',
-'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
-'/usuarios/{id}/edit',
-[UsuarioController::class,'edit']
+    '/usuarios/{id}/edit',
+    [UsuarioController::class, 'edit']
 )
-->middleware([
-'auth.session',
-'tenant',
-'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
-'/usuarios/{id}/update',
-[UsuarioController::class,'update']
+    '/usuarios/{id}/update',
+    [UsuarioController::class, 'update']
 )
-->middleware([
-'auth.session',
-'tenant',
-'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
-'/usuarios/{id}/delete',
-[UsuarioController::class,'destroy']
+    '/usuarios/{id}/delete',
+    [UsuarioController::class, 'destroy']
 )
-->middleware([
-'auth.session',
-'tenant',
-'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
     '/roles',
     [RoleController::class, 'index']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::get(
@@ -129,7 +129,7 @@ Route::get(
     [RoleController::class, 'create']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::post(
@@ -137,7 +137,7 @@ Route::post(
     [RoleController::class, 'store']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::get(
@@ -145,7 +145,7 @@ Route::get(
     [RoleController::class, 'edit']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::post(
@@ -153,7 +153,7 @@ Route::post(
     [RoleController::class, 'update']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::post(
@@ -161,7 +161,7 @@ Route::post(
     [RoleController::class, 'destroy']
 )->middleware([
     'auth.session',
-    'superadmin'
+    'superadmin',
 ]);
 
 Route::get(
@@ -169,9 +169,8 @@ Route::get(
     [ActividadController::class, 'index']
 )->middleware([
     'auth.session',
-    'tenant'
+    'tenant',
 ]);
-
 
 Route::get(
     '/actividades/create',
@@ -179,9 +178,8 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador'
+    'role:SuperAdmin,Administrador',
 ]);
-
 
 Route::post(
     '/actividades/store',
@@ -189,9 +187,8 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador'
+    'role:SuperAdmin,Administrador',
 ]);
-
 
 Route::get(
     '/actividades/{id}/edit',
@@ -199,9 +196,8 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador'
+    'role:SuperAdmin,Administrador',
 ]);
-
 
 Route::post(
     '/actividades/{id}/update',
@@ -209,9 +205,8 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador'
+    'role:SuperAdmin,Administrador',
 ]);
-
 
 Route::post(
     '/actividades/{id}/delete',
@@ -219,264 +214,242 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador'
+    'role:SuperAdmin,Administrador',
 ]);
 
-/* FORMULARIOS*/
-
+/* FORMULARIOS */
 
 Route::get(
     '/formularios',
-    [FormularioController::class,'index']
+    [FormularioController::class, 'index']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 Route::get(
     '/formularios/create',
-    [FormularioController::class,'create']
+    [FormularioController::class, 'create']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formularios/store',
-    [FormularioController::class,'store']
+    [FormularioController::class, 'store']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 // Visualizar formulario
 // IMPORTANTE: va antes de edit/update/delete
 
 Route::get(
     '/formularios/{id}',
-    [FormularioController::class,'show']
+    [FormularioController::class, 'show']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 Route::get(
     '/formularios/{id}/edit',
-    [FormularioController::class,'edit']
+    [FormularioController::class, 'edit']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formularios/{id}/update',
-    [FormularioController::class,'update']
+    [FormularioController::class, 'update']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 // Activar / Desactivar formulario
 // No elimina
 
 Route::post(
     '/formularios/{id}/estado',
-    [FormularioController::class,'estado']
+    [FormularioController::class, 'estado']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formularios/{id}/responder',
-    [FormularioController::class,'responder']
+    [FormularioController::class, 'responder']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 // Ver respuestas del formulario
-
-Route::get(
-    '/formularios/{id}/respuestas',
-    [FormularioController::class,'respuestas']
-)
-->middleware([
-    'auth.session',
-    'tenant'
-]);
+// (la ruta con filtros/paginación y control de rol está definida más abajo:
+// GET /formularios/{id}/respuestas -> FormularioRespuestaController::index)
 
 Route::get(
     '/formularios/{id}/respuestas/exportar',
     [FormularioRespuestaController::class, 'exportar']
 )->name('formularios.respuestas.exportar');
 
-
 // Exportar respuestas a CSV
 
 Route::get(
     '/formularios/{id}/exportar',
-    [FormularioController::class,'exportar']
+    [FormularioController::class, 'exportar']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 Route::get(
     '/formularios/{id}/campos',
-    [FormularioCampoController::class,'camposFormulario']
+    [FormularioCampoController::class, 'camposFormulario']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formularios/{id}/importar',
     [FormularioRespuestaController::class, 'importar']
 )->name('formularios.importar');
 
-/* CAMPOS DEL FORMULARIO*/
-
+/* CAMPOS DEL FORMULARIO */
 
 Route::get(
     '/formulario-campos',
-    [FormularioCampoController::class,'index']
+    [FormularioCampoController::class, 'index']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
     '/formulario-campos/create',
-    [FormularioCampoController::class,'create']
+    [FormularioCampoController::class, 'create']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formulario-campos/store',
-    [FormularioCampoController::class,'store']
+    [FormularioCampoController::class, 'store']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
     '/formulario-campos/{id}/edit',
-    [FormularioCampoController::class,'edit']
+    [FormularioCampoController::class, 'edit']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formulario-campos/{id}/update',
-    [FormularioCampoController::class,'update']
+    [FormularioCampoController::class, 'update']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
-
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::post(
     '/formulario-campos/{id}/delete',
-    [FormularioCampoController::class,'destroy']
+    [FormularioCampoController::class, 'destroy']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
     '/formulario/{id}',
-    [FormularioPublicoController::class,'show']
-);
-
+    [FormularioPublicoController::class, 'show']
+)->middleware('throttle:30,1');
 
 Route::post(
     '/formulario/{id}/respuesta',
-    [FormularioPublicoController::class,'store']
-);
+    [FormularioPublicoController::class, 'store']
+)->middleware('throttle:10,1');
 Route::get(
     '/formularios/{id}/respuestas',
-    [FormularioRespuestaController::class,'index']
+    [FormularioRespuestaController::class, 'index']
 )
-->middleware([
-    'auth.session',
-    'tenant',
-    'role:SuperAdmin,Administrador'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ]);
 
 Route::get(
     '/asistencias',
-    [AsistenciaController::class,'index']
+    [AsistenciaController::class, 'index']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 Route::post(
     '/asistencias/{id}/confirmar',
     [AsistenciaController::class, 'confirmar']
 )->middleware([
     'auth.session',
-    'tenant'
+    'tenant',
 ]);
 
 Route::get(
     '/historico',
-    [HistoricoController::class,'index']
+    [HistoricoController::class, 'index']
 )
-->middleware([
-    'auth.session',
-    'tenant'
-]);
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ]);
 
 Route::get(
     '/configuracion',
-    [ConfiguracionController::class,'index']
+    [ConfiguracionController::class, 'index']
 )->middleware([
     'auth.session',
-    'tenant'
+    'tenant',
 ]);
 
 Route::get('/logout', [LoginController::class, 'logout']);

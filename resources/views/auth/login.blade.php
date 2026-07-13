@@ -51,19 +51,19 @@
 
             <span class="company-badge">
 
-                Servitel
+                <i class="fa-solid fa-building"></i> Servientrega
 
             </span>
 
             <span class="company-badge">
 
-                Servientrega
+                <i class="fa-solid fa-building"></i> Servitel
 
             </span>
 
             <span class="company-badge">
 
-                Global
+                <i class="fa-solid fa-building"></i> Global
 
             </span>
 
@@ -91,7 +91,7 @@
 
         <p class="login-subtitle">
 
-            Inicia sesión para continuar.
+            Ingresa tus credenciales para continuar
 
         </p>
 
@@ -123,6 +123,7 @@
                     type="email"
                     name="correo_usu"
                     class="form-control"
+                    placeholder="correo@empresa.com"
                     required
                     autocomplete="username">
 
@@ -143,6 +144,7 @@
                         id="password"
                         name="password"
                         class="form-control"
+                        placeholder="••••••••"
                         required
                         autocomplete="current-password">
 

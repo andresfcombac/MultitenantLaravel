@@ -6,7 +6,6 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 
-```
 <div>
 
     <h2 class="fw-bold mb-0">
@@ -34,13 +33,11 @@
     Nueva Actividad
 
 </a>
-```
 
 </div>
 
 <div class="card shadow-sm border-0">
 
-```
 <div class="card-body">
 
     <div class="table-responsive">
@@ -154,7 +151,6 @@
     </div>
 
 </div>
-```
 
 </div>
 

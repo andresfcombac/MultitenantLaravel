@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormularioRespuesta extends Model
 {
-
     protected $connection = 'legacy';
 
     protected $table = 'formulario_respuestas';
@@ -14,7 +13,6 @@ class FormularioRespuesta extends Model
     protected $primaryKey = 'id_respuesta';
 
     public $timestamps = false;
-
 
     protected $fillable = [
 
@@ -25,15 +23,13 @@ class FormularioRespuesta extends Model
         'correo',
         'telefono',
         'tipo_documento',
-        'numero_documento'
+        'numero_documento',
 
     ];
-
 
     protected $casts = [
-        'datos' => 'array'
+        'datos' => 'array',
     ];
-
 
     public function formulario()
     {
@@ -45,11 +41,11 @@ class FormularioRespuesta extends Model
     }
 
     public function asistencia()
-{
-    return $this->hasOne(
-        Asistencia::class,
-        'id_respuesta',
-        'id_respuesta'
-    );
-}
+    {
+        return $this->hasOne(
+            Asistencia::class,
+            'id_respuesta',
+            'id_respuesta'
+        );
+    }
 }

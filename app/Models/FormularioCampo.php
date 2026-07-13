@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormularioCampo extends Model
 {
-
     protected $connection = 'legacy';
 
     protected $table = 'formulario_campos';
@@ -15,7 +14,6 @@ class FormularioCampo extends Model
 
     public $timestamps = false;
 
-
     protected $fillable = [
 
         'id_formulario',
@@ -23,10 +21,9 @@ class FormularioCampo extends Model
         'tipo_campo',
         'opciones',
         'obligatorio',
-        'orden'
+        'orden',
 
     ];
-
 
     public function formulario()
     {
@@ -36,5 +33,4 @@ class FormularioCampo extends Model
             'id_formulario'
         );
     }
-
 }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Actividad extends Model
 {
-
     protected $connection = 'legacy';
 
     protected $table = 'actividades';
@@ -15,16 +14,14 @@ class Actividad extends Model
 
     public $timestamps = false;
 
-
     protected $fillable = [
         'nombre_actividad',
         'descripcion',
         'fecha',
         'hora_inicio',
         'hora_fin',
-        'empresa_id'
+        'empresa_id',
     ];
-
 
     public function empresa()
     {
@@ -35,7 +32,6 @@ class Actividad extends Model
         );
     }
 
-
     public function formularios()
     {
         return $this->hasMany(
@@ -44,5 +40,4 @@ class Actividad extends Model
             'id_actividad'
         );
     }
-
 }
