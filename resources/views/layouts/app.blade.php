@@ -239,33 +239,101 @@
 
     </div>
 
-    <div class="topbar-right">
+   <div class="topbar-right">
 
-        <div class="user-info">
+    <div class="dropdown">
 
-            <span class="user-name">
+        <button
+            class="btn btn-light border dropdown-toggle d-flex align-items-center"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
 
-                {{ session('nombre') }}
+            <div
+                class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-2"
+                style="width:36px;height:36px;font-weight:bold;">
 
-            </span>
+                {{ strtoupper(substr(session('nombre'),0,1)) }}
 
-        </div>
+            </div>
 
-        <a
-            href="/logout"
-            class="logout-btn">
+            <div class="text-start">
 
-            <i class="fa-solid fa-right-from-bracket"></i>
+                <div class="fw-bold">
 
-            <span>
+                    {{ session('nombre') }}
 
-                Salir
+                    {{ $usuarioActual->apellidos_usu ?? '' }}
 
-            </span>
+                </div>
 
-        </a>
+                <small class="text-muted">
+
+                    {{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}
+
+                </small>
+
+            </div>
+
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+
+            <li>
+
+                <h6 class="dropdown-header">
+
+                    {{ session('nombre') }}
+
+                    {{ $usuarioActual->apellidos_usu ?? '' }}
+
+                </h6>
+
+            </li>
+
+            <li>
+
+                <a class="dropdown-item" href="{{ route('perfil') }}">
+
+                    <i class="fa-solid fa-user me-2"></i>
+
+                    Mi perfil
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a class="dropdown-item" href="/configuracion">
+
+                    <i class="fa-solid fa-gear me-2"></i>
+
+                    Configuración
+
+                </a>
+
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+
+                <a class="dropdown-item text-danger" href="/logout">
+
+                    <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                    Cerrar sesión
+
+                </a>
+
+            </li>
+
+        </ul>
 
     </div>
+
+</div>
 
 </header>
 

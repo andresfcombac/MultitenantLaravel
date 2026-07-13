@@ -242,4 +242,101 @@ class UsuarioController extends Controller
             );
 
     }
+
+    public function perfil()
+{
+    $usuario = Usuario::with([
+        'rol',
+        'empresa'
+    ])->findOrFail(session('usuario_id'));
+
+    return view(
+        'usuarios.perfil',
+        compact('usuario')
+    );
+}
+
+public function actualizarPerfil(Request $request)
+{
+    $usuario = Usuario::findOrFail(
+        session('usuario_id')
+    );
+
+    $request->validate([
+    'nombre_usu' => 'required|max:50',
+    'apellidos_usu' => 'required|max:50',
+    'correo_usu' =>
+        'required|email|unique:legacy.usuarios,correo_usu,' .
+        $usuario->id_usuario .
+        ',id_usuario',
+
+    'telefono_usu' => 'nullable|max:20',
+
+    'password' => 'nullable|min:6|confirmed',
+]);
+
+if ($request->filled('password')) {
+
+    if (!$request->filled('password_actual')) {
+
+        return back()
+            ->withErrors([
+                'password_actual' =>
+                    'Debe ingresar la contraseña actual.'
+            ])
+            ->withInput();
+
+    }
+
+    if (!Hash::check(
+        $request->password_actual,
+        $usuario->pwd
+    )) {
+
+        return back()
+            ->withErrors([
+                'password_actual' =>
+                    'La contraseña actual es incorrecta.'
+            ])
+            ->withInput();
+
+    }
+
+}
+   $datosActualizar = [
+
+    'nombre_usu' => $request->nombre_usu,
+
+    'apellidos_usu' => $request->apellidos_usu,
+
+    'correo_usu' => $request->correo_usu,
+
+    'telefono_usu' => $request->telefono_usu,
+
+    'fecha_up' => now(),
+
+];
+
+if ($request->filled('password')) {
+
+    $datosActualizar['pwd'] = Hash::make(
+        $request->password
+    );
+
+}
+
+$usuario->update($datosActualizar);
+
+    session([
+        'nombre' => $usuario->nombre_usu
+    ]);
+
+    return redirect()
+        ->route('perfil')
+        ->with(
+            'success',
+            'Perfil actualizado correctamente.'
+        );
+}
+
 }

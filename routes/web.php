@@ -452,4 +452,21 @@ Route::get(
     'tenant',
 ]);
 
+Route::get(
+    '/mi-perfil',
+    [UsuarioController::class, 'perfil']
+)->middleware([
+    'auth.session',
+    'tenant',
+])->name('perfil');
+
+
+Route::post(
+    '/mi-perfil',
+    [UsuarioController::class, 'actualizarPerfil']
+)->middleware([
+    'auth.session',
+    'tenant',
+])->name('perfil.actualizar');
+
 Route::get('/logout', [LoginController::class, 'logout']);
