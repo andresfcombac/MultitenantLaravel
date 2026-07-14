@@ -131,13 +131,15 @@
 
                 </p>
 
+                
                 <a
-                    href="/roles"
-                    class="btn btn-warning">
+    href="{{ route('perfil') }}"
+    class="btn btn-success">
 
-                    Administrar
+    Administrar
 
-                </a>
+</a>
+
 
             </div>
 
@@ -224,24 +226,67 @@
 
     {{-- ACERCA DEL SISTEMA --}}
 
-    <div class="col-md-6 col-xl-4">
+<div class="col-md-6 col-xl-4">
 
-        <div class="card shadow-sm border-0 h-100">
+    <div class="card shadow-sm border-0 h-100">
 
-            <div class="card-body text-center">
+        <div class="card-body text-center">
 
-                <i class="fa-solid fa-circle-info fa-3x text-secondary mb-3"></i>
+            <i class="fa-solid fa-circle-info fa-3x text-secondary mb-3"></i>
 
-                <h5>
+            <h5>
 
-                    Acerca del sistema
+                Acerca del sistema
 
-                </h5>
+            </h5>
 
-                <p class="text-muted mb-3">
+            <p class="text-muted mb-3">
 
-                    Información de la plataforma.
+                Información de la plataforma.
 
+            </p>
+
+            <hr>
+
+            <div class="text-start small">
+
+                <p class="mb-2">
+
+                    <strong>Versión:</strong>
+
+                    {{ $version }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    <strong>Laravel:</strong>
+
+                    {{ $laravel }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    <strong>PHP:</strong>
+
+                    {{ $php }}
+
+                </p>
+
+                <p class="mb-2">
+
+    <strong>Empresa:</strong>
+
+    {{ $usuario->empresa->nombre_empresa ?? 'No aplica' }}
+
+</p>
+
+                <p class="mb-0">
+
+                    <strong>Rol:</strong>
+
+                    {{ $usuario->rol->nombre_rol ?? 'No asignado' }}
                 </p>
 
             </div>
@@ -249,6 +294,8 @@
         </div>
 
     </div>
+
+</div>
 
 </div>
 

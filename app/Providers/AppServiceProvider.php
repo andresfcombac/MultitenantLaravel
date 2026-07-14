@@ -20,20 +20,20 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-        View::composer('layouts.app', function ($view) {
+{
+    View::composer('layouts.app', function ($view) {
 
-            $usuarioActual = null;
+        $usuarioActual = null;
 
-            if (session()->has('usuario_id')) {
+        if (session()->has('usuario_id')) {
 
-                $usuarioActual = Usuario::with(['rol', 'empresa'])
-                    ->find(session('usuario_id'));
+            $usuarioActual = Usuario::with(['rol', 'empresa'])
+                ->find(session('usuario_id'));
 
-            }
+        }
 
-            $view->with('usuarioActual', $usuarioActual);
+        $view->with('usuarioActual', $usuarioActual);
 
-        });
-    }
+    });
+}
 }

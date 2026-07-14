@@ -13,20 +13,15 @@ class SuperAdminMiddleware
         Closure $next
     ) {
 
-        $rol = Role::find(
-            session('rol')
-        );
+        $rol = Role::find(session('rol'));
 
-       if (
-    ! $rol ||
-    $rol->nombre_rol != 'SuperAdmin'
-) {
+        if (! $rol || $rol->nombre_rol != 'SuperAdmin') {
 
-    return redirect('/dashboard')
-        ->with(
-            'error',
-            'No tiene permisos para acceder a este módulo.'
-        );
+            abort(403, 'Acceso no autorizado');
 
-}
+        }
+
+        return $next($request);
+
+    }
 }
