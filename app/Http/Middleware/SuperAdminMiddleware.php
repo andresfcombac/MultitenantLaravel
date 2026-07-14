@@ -17,19 +17,16 @@ class SuperAdminMiddleware
             session('rol')
         );
 
-        if (
-            ! $rol ||
-            $rol->nombre_rol != 'SuperAdmin'
-        ) {
+       if (
+    ! $rol ||
+    $rol->nombre_rol != 'SuperAdmin'
+) {
 
-            abort(
-                403,
-                'Acceso no autorizado'
-            );
+    return redirect('/dashboard')
+        ->with(
+            'error',
+            'No tiene permisos para acceder a este módulo.'
+        );
 
-        }
-
-        return $next($request);
-
-    }
+}
 }

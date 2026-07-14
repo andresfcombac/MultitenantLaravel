@@ -36,6 +36,7 @@
         <div class="stat-info">
             <small>Empresas</small>
             <h3>{{ $estadisticas['empresas'] }}</h3>
+            <span class="stat-desc">Registradas</span>
         </div>
 
     </a>
@@ -54,6 +55,7 @@
         <div class="stat-info">
             <small>Usuarios</small>
             <h3>{{ $estadisticas['usuarios'] }}</h3>
+            <span class="stat-desc">En el sistema</span>
         </div>
 
     </a>
@@ -71,6 +73,7 @@
         <div class="stat-info">
             <small>Formularios</small>
             <h3>{{ $estadisticas['formularios'] }}</h3>
+            <span class="stat-desc">Creados</span>
         </div>
 
     </a>
@@ -88,6 +91,7 @@
         <div class="stat-info">
             <small>Actividades</small>
             <h3>{{ $estadisticas['actividades'] }}</h3>
+            <span class="stat-desc">Programadas</span>
         </div>
 
     </a>
@@ -105,6 +109,7 @@
         <div class="stat-info">
             <small>Respuestas</small>
             <h3>{{ $estadisticas['respuestas'] }}</h3>
+            <span class="stat-desc">Recibidas</span>
         </div>
 
     </a>
@@ -122,6 +127,7 @@
         <div class="stat-info">
             <small>Asistencias</small>
             <h3>{{ $estadisticas['asistencias'] }}</h3>
+            <span class="stat-desc">Confirmadas</span>
         </div>
 
     </a>
@@ -139,6 +145,7 @@
         <div class="stat-info">
             <small>Histórico</small>
             <h3>{{ $estadisticas['historico'] }}</h3>
+            <span class="stat-desc">Registros</span>
         </div>
 
     </a>

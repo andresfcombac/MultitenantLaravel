@@ -18,20 +18,22 @@ class RoleMiddleware
             session('rol')
         );
 
-        if (
-            ! $rol ||
-            ! in_array(
-                $rol->nombre_rol,
-                $roles
-            )
-        ) {
+       if (
+    ! $rol ||
+    ! in_array(
+        $rol->nombre_rol,
+        $roles
+    )
+) {
 
-            abort(
-                403,
-                'Acceso no autorizado'
-            );
+    return redirect('/dashboard')
+        ->with(
+            'error',
+            'No tiene permisos para acceder a este módulo.'
+        );
 
-        }
+}
+
 
         return $next($request);
 

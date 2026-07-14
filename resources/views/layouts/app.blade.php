@@ -91,7 +91,12 @@
 </div>
 
     <nav class="sidebar-menu">
-
+        
+        @php
+        
+            $rolNombre = $usuarioActual->rol->nombre_rol ?? null;
+            $menuCompleto = in_array($rolNombre, ['SuperAdmin','Administrador']);
+        @endphp
         <a
             href="/dashboard"
             class="menu-item">
@@ -138,19 +143,18 @@
 
         </a>
 
+        @if($menuCompleto)
         <a
+           
+        
             href="/formularios"
             class="menu-item">
-
             <i class="fa-solid fa-file-lines"></i>
-
             <span>
-
                 Formularios
-
             </span>
-
         </a>
+        @endif
 
         <a
             href="/actividades"
@@ -180,37 +184,29 @@
 
         </a>
 
+        @if($menuCompleto)
         <a
+            
+        
             href="/historico"
             class="menu-item">
-
             <i class="fa-solid fa-clock-rotate-left"></i>
-
             <span>
-
                 Histórico
-
             </span>
-
         </a>
-
+        @endif
     </nav>
   <div class="sidebar-footer">
-
+    @if($menuCompleto)
     <a
-        href="/configuracion"
-        class="menu-item">
-
+        href="/configuracion"   class="menu-item">
         <i class="fa-solid fa-gear"></i>
-
         <span>
-
             Configuración
-
         </span>
-
     </a>
-
+    @endif
 </div>
 
 </aside>
@@ -292,28 +288,19 @@
             </li>
 
             <li>
-
                 <a class="dropdown-item" href="{{ route('perfil') }}">
-
                     <i class="fa-solid fa-user me-2"></i>
-
                     Mi perfil
-
                 </a>
-
             </li>
-
+            @if($menuCompleto)
             <li>
-
                 <a class="dropdown-item" href="/configuracion">
-
                     <i class="fa-solid fa-gear me-2"></i>
-
                     Configuración
-
                 </a>
-
             </li>
+            @endif
 
             <li><hr class="dropdown-divider"></li>
 
@@ -339,14 +326,12 @@
 
         <main
             class="content-area">
-
-
             @yield('content')
-
         </main>
-
+        <footer class="app-footer">
+            Multitenant &copy; {{ now()->year }} — {{ $usuarioActual->empresa->nombre_empresa ?? 'Sistema' }}
+        </footer>
     </div>
-
 </div>
 
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
@@ -390,7 +375,7 @@ Swal.fire({
 
     icon:'error',
 
-    title:'Error',
+    title:'Acceso denegado',
 
     text:@json(session('error')),
 

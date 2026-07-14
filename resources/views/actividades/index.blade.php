@@ -120,7 +120,9 @@
 
                             <a
                                 href="/actividades/{{ $actividad->id_actividad }}/edit"
-                                class="btn btn-warning btn-sm">
+                                class="btn btn-warning btn-sm"data-mensaje="¿Desea eliminar esta actividad?"
+                                title="Editar actividad">
+                                
 
                                 <i class="fa-solid fa-pen"></i>
 
@@ -130,11 +132,17 @@
     ...
     class="form-eliminar-actividad">
 
-<button
+
+    <button
     type="submit"
     class="btn btn-danger btn-sm"
     data-titulo="Eliminar actividad"
-    data-mensaje="¿Desea eliminar esta actividad?">
+    data-mensaje="¿Desea eliminar esta actividad?"
+    title="Eliminar actividad">
+
+    <i class="fa-solid fa-trash me-1"></i>
+
+</button>
 
                         </div>
 

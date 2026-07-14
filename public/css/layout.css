@@ -406,9 +406,17 @@ body{
 }
 
 .stat-info h3{
-    margin:4px 0 0;
+    margin:4px 0 2px;
     font-weight:700;
     font-size:24px;
+}
+
+.stat-info .stat-desc{
+    display:block;
+    color:#aaa;
+    font-size:12px;
+    text-transform:none;
+    letter-spacing:0;
 }
 
 /* ===========================================================
@@ -446,6 +454,55 @@ body{
     font-size:24px;
     margin-bottom:10px;
     display:block;
+}
+
+/* ===========================================================
+   FOOTER
+   =========================================================== */
+
+.app-footer{
+    text-align:center;
+    color:#999;
+    font-size:13px;
+    padding:20px 0 10px;
+}
+
+.app-footer a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* ===========================================================
+   DROPDOWN DE USUARIO (TOPBAR)
+   =========================================================== */
+
+.user-dropdown-toggle{
+    background:none;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    color:#333;
+    cursor:pointer;
+}
+
+.user-dropdown-menu{
+    min-width:180px;
+    border:none;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    border-radius:12px;
+    padding:8px;
+}
+
+.user-dropdown-menu .dropdown-item{
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:14px;
+}
+
+.user-dropdown-menu .dropdown-item.text-danger:hover{
+    background:#fdecea;
 }
 /* ===========================================================
    ESTILO VISUAL DEL PROYECTO PHP
