@@ -585,17 +585,23 @@ body{
 
 .table thead{
 
-    background:linear-gradient(135deg,#ff6600,#ea6b19) !important;
+    background:#eef2f7 !important;
 
 }
 
 .table thead th{
 
-    background:linear-gradient(135deg,#ff6600,#ea6b19) !important;
+    background:#eef2f7 !important;
 
-    color:#fff !important;
+    color:#374151 !important;
 
-    border:none;
+    border-bottom:1px solid #d6dce5 !important;
+
+    border-top:none;
+
+    border-left:none;
+
+    border-right:none;
 
     font-weight:600;
 
