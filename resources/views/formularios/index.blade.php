@@ -126,16 +126,7 @@
 
                             </a>
 
-                            <a
-                                href="/formularios/{{ $formulario->id_formulario }}/campos"
-                                class="btn btn-dark btn-sm"
-                                title="Campos">
-
-                                <i class="fa-solid fa-list"></i>
-
-                            </a>
-
-                            <a
+                                                        <a
                                 href="/formularios/{{ $formulario->id_formulario }}/respuestas"
                                 class="btn btn-info btn-sm"
                                 title="Respuestas">
