@@ -24,7 +24,7 @@
 
         <tr>
 
-            <th>ID</th>
+            <th style="display:none;">ID</th>
 
             <th>Nombre Rol</th>
 
@@ -42,7 +42,7 @@
 
         <tr>
 
-            <td>
+            <td style="display:none;">
 
                 {{ $rol->id_rol }}
 

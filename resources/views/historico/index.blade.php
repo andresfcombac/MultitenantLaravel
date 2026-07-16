@@ -40,7 +40,7 @@
 
                     <tr>
 
-                        <th>ID</th>
+                        <th style="display:none;">ID</th>
 
                         <th>Formulario</th>
 
@@ -66,7 +66,7 @@
 
                     <tr>
 
-                        <td>
+                        <td style="display:none;">
 
                             {{ $historico->id_asistencia }}
 

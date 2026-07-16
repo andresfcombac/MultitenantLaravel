@@ -42,7 +42,7 @@
 
                     <tr>
 
-                        <th>ID</th>
+                        <th style="display:none;">ID</th>
 
 <th>Empresa</th>
 
@@ -78,7 +78,7 @@
 
                     <tr>
 
-                        <td>
+                        <td style="display:none;">
 
                             {{ $respuesta->id_respuesta }}
 

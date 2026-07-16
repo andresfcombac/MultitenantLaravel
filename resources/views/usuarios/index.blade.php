@@ -44,7 +44,7 @@
 
                 <tr>
 
-                    <th>ID</th>
+                    <th style="display:none;">ID</th>
                     <th>Usuario</th>
                     <th>Correo</th>
                     <th>Rol</th>
@@ -61,7 +61,7 @@
 
                     <tr>
 
-                        <td>{{ $usuario->id_usuario }}</td>
+                        <td style="display:none;">{{ $usuario->id_usuario }}</td>
 
                         <td>
 
