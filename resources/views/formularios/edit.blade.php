@@ -144,6 +144,7 @@
                                         <select
                                             id="tipoCampo"
                                             class="form-control">
+                                            
 
                                             <option value="texto">Texto</option>
                                             <option value="numero">Número</option>
@@ -154,7 +155,24 @@
                                             <option value="checkbox">Checkbox</option>
 
                                         </select>
+<div
+    class="col-md-3 mb-3"
+    id="contenedorOpciones"
+    style="display:none;">
 
+    <label class="form-label">
+
+        Opciones
+
+    </label>
+
+    <input
+        type="text"
+        id="opcionesCampo"
+        class="form-control"
+        placeholder="Ej: Sí,No,Aprobado">
+
+</div>
                                     </div>
 
                                     <div class="col-md-2 mb-3 d-flex align-items-end">
@@ -350,6 +368,30 @@
         </div>
 
     </div>
+
+</div>
+{{-- Opciones para Select / Radio / Checkbox --}}
+<div
+    id="contenedorOpciones"
+    class="mt-3"
+    style="display:none;">
+
+    <label class="form-label">
+        Opciones
+    </label>
+
+    <textarea
+        id="opcionesCampo"
+        class="form-control"
+        rows="3"
+        placeholder="Ejemplo:
+Opción 1
+Opción 2
+Opción 3"></textarea>
+
+    <small class="text-muted">
+        Una opción por línea.
+    </small>
 
 </div>
 

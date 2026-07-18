@@ -19,61 +19,68 @@
 
     </div>
 
-    <div>
+    <div class="d-flex align-items-center gap-2">
 
-    <a href="/formularios/{{ $formulario->id_formulario }}/exportar"
-       class="btn btn-primary">
+        <a
+            href="/formularios/{{ $formulario->id_formulario }}/exportar"
+            class="btn btn-primary" title="Exportar respuestas en formato CSV">
 
-        <i class="fa-solid fa-file-csv me-2"></i>
+            <i class="fa-solid fa-file-csv me-2"></i>
+            
 
-        Exportar CSV
+        </a>
 
-    </a>
+        <a
+            href="{{ route('formularios.respuestas.exportar', $formulario->id_formulario) }}"
+            class="btn btn-success"  title="Exportar respuestas en formato Excel">
 
-    <a href="{{ route('formularios.respuestas.exportar', $formulario->id_formulario) }}"
-       class="btn btn-success ms-2">
+            <i class="fa-solid fa-file-excel me-2"></i>
+            
 
-        <i class="fa-solid fa-file-excel me-2"></i>
+        </a>
 
-        Exportar Excel
+        <form
+            action="{{ route('formularios.importar', $formulario->id_formulario) }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="d-flex align-items-center gap-2 mb-0">
 
-    </a>
+            @csrf
 
-    <form action="{{ route('formularios.importar', $formulario->id_formulario) }}"
-      method="POST"
-      enctype="multipart/form-data"
-      class="d-inline">
+            <input
+    type="file"
+    name="archivo"
+    class="form-control"
+    style="width:220px"
+    title="Seleccione el archivo Excel (.xlsx) que desea importar"
+    required>
 
-    @csrf
+            <button
+                type="submit"
+                class="btn btn-warning" title="Importar respuestas desde un archivo Excel">
 
-    <input
-        type="file"
-        name="archivo"
-        class="form-control d-inline"
-        style="width:220px"
-        required>
+                <i class="fa-solid fa-file-import me-2"></i>
+                
 
-    <button
-        class="btn btn-warning">
+            </button>
 
-        <i class="fa-solid fa-file-import me-2"></i>
+        </form>
 
-        Importar Excel
+        <a
+    href="/formularios"
+    class="btn btn-secondary"
+    title="Regresar al listado de formularios">
 
-    </button>
+    <i class="fa-solid fa-arrow-left me-2"></i>
+    
 
-</form>
+</a>
 
-    <a href="/formularios"
-       class="btn btn-secondary ms-2">
+    </div>
 
-        <i class="fa-solid fa-arrow-left me-2"></i>
+</div>
 
-        Volver
-
-    </a>
-
-    <div class="card mt-3 mb-3">
+<div class="card mt-3 mb-3">
 
     <div class="card-body">
 
@@ -116,12 +123,11 @@
 
                 <div class="col-md-3">
 
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary"
+                    title="Buscar">
 
                         <i class="fa fa-search me-2"></i>
-
-                        Buscar
-
+                       
                     </button>
 
                 </div>
@@ -134,195 +140,179 @@
 
 </div>
 
-</div>
-
-</div>
-
 <div class="card shadow-sm border-0">
 
     <div class="card-body">
 
+        <div class="row mb-4">
+
+            <div class="col-md-4">
+
+                <div class="card border-primary shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+
+                            Total respuestas
+
+                        </h6>
+
+                        <h2 class="fw-bold text-primary">
+
+                            {{ $totalRespuestas }}
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-success shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+
+                            Respuestas hoy
+
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+
+                            {{ $respuestasHoy }}
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card border-warning shadow-sm">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+
+                            Respuestas este mes
+
+                        </h6>
+
+                        <h2 class="fw-bold text-warning">
+
+                            {{ $respuestasMes }}
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="table-responsive">
 
-        <style>
+<style>
 #tablaRespuestas thead th{
     color:#212529 !important;
     background:#f8f9fa !important;
     font-weight:600;
 }
 </style>
-<div class="row mb-4">
 
-    <div class="col-md-4">
+<table
+    id="tablaRespuestas"
+    class="table table-hover align-middle">
 
-        <div class="card border-primary shadow-sm">
+    <thead class="table-light">
 
-            <div class="card-body text-center">
+        <tr>
 
-                <h6 class="text-muted">
+            <th>Nombres</th>
 
-                    Total respuestas
+            <th>Apellidos</th>
 
-                </h6>
+            <th>Correo</th>
 
-                <h2 class="fw-bold text-primary">
+            <th>Teléfono</th>
 
-                    {{ $totalRespuestas }}
+            <th>Documento</th>
 
-                </h2>
+            @foreach($formulario->campos->sortBy('orden') as $campo)
 
-            </div>
+                <th>{{ $campo->etiqueta }}</th>
 
-        </div>
+            @endforeach
 
-    </div>
+            <th>Fecha</th>
 
-    <div class="col-md-4">
+        </tr>
 
-        <div class="card border-success shadow-sm">
+    </thead>
 
-            <div class="card-body text-center">
+    <tbody>
 
-                <h6 class="text-muted">
+        @foreach($respuestas as $respuesta)
 
-                    Respuestas hoy
+            <tr>
 
-                </h6>
+                <td>{{ $respuesta->nombres }}</td>
 
-                <h2 class="fw-bold text-success">
+                <td>{{ $respuesta->apellidos }}</td>
 
-                    {{ $respuestasHoy }}
+                <td>{{ $respuesta->correo }}</td>
 
-                </h2>
+                <td>{{ $respuesta->telefono }}</td>
 
-            </div>
+                <td>
 
-        </div>
+                    {{ $respuesta->tipo_documento }}
 
-    </div>
+                    <br>
 
-    <div class="col-md-4">
+                    {{ $respuesta->numero_documento }}
 
-        <div class="card border-warning shadow-sm">
+                </td>
+                                @foreach($formulario->campos->sortBy('orden') as $campo)
 
-            <div class="card-body text-center">
+                    <td>
 
-                <h6 class="text-muted">
+                        {{ $respuesta->datos[$campo->etiqueta] ?? '' }}
 
-                    Respuestas este mes
+                    </td>
 
-                </h6>
+                @endforeach
 
-                <h2 class="fw-bold text-warning">
+                <td>
 
-                    {{ $respuestasMes }}
+                    {{ $respuesta->fecha_respuesta }}
 
-                </h2>
+                </td>
 
-            </div>
+            </tr>
 
-        </div>
+        @endforeach
 
-    </div>
+    </tbody>
 
-</div>
-            <table
-                id="tablaRespuestas"
-                class="table table-hover align-middle">
+</table>
 
-                <thead class="table-light">
-
-                    <tr>
-
-                        <th>Nombres</th>
-
-                        <th>Apellidos</th>
-
-                        <th>Correo</th>
-
-                        <th>Teléfono</th>
-
-                        <th>Documento</th>
-
-                           @foreach($formulario->campos->sortBy('orden') as $campo)
-        <th>{{ $campo->etiqueta }}</th>
-    @endforeach
-
-
-                        <th>Fecha</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @foreach($respuestas as $respuesta)
-
-                        <tr>
-
-                            <td>
-
-                                {{ $respuesta->nombres }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $respuesta->apellidos }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $respuesta->correo }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $respuesta->telefono }}
-
-                            </td>
-
-                            <td>
-
-                                {{ $respuesta->tipo_documento }}
-
-                                <br>
-
-                                {{ $respuesta->numero_documento }}
-
-                            </td>
-
-                            @foreach($formulario->campos->sortBy('orden') as $campo)
-
-    <td>
-
-        {{ $respuesta->datos[$campo->etiqueta] ?? '' }}
-
-    </td>
-
-@endforeach
-
-                            <td>
-
-                                {{ $respuesta->fecha_respuesta }}
-
-                            </td>
-
-                        </tr>
-
-                    @endforeach
-
-                </tbody>
-
-            </table>
 <div class="mt-3">
 
     {{ $respuestas->links() }}
 
 </div>
+
         </div>
 
     </div>

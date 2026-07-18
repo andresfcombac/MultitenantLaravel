@@ -94,6 +94,7 @@
                                     value="{{ old('telefono_usu', $usuario->telefono_usu) }}">
 
                             </div>
+                            </div>
                              <hr class="my-4">
 
 <h5 class="mb-3">
@@ -144,6 +145,9 @@
 
 </div>
 
+<hr class="my-4">
+
+<div class="row">
                             <div class="col-md-6 mb-3">
 
                                 <label class="form-label">

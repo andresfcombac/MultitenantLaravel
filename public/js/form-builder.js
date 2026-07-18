@@ -41,21 +41,23 @@ if (
 
 if (typeof window.camposExistentes !== "undefined") {
 
-    campos = window.camposExistentes.map(function (campo) {
+  campos = window.camposExistentes.map(function (campo) {
 
-        return {
+    return {
 
-            nombre: campo.etiqueta,
+        nombre: campo.etiqueta,
 
-            tipo: campo.tipo_campo,
+        tipo: campo.tipo_campo,
 
-            obligatorio: campo.obligatorio == 1,
+        obligatorio: campo.obligatorio == 1,
 
-            opciones: campo.opciones ?? "[]"
+        opciones: campo.opciones
+            ? JSON.parse(campo.opciones)
+            : []
 
-        };
+    };
 
-    });
+});
 
 }
 
