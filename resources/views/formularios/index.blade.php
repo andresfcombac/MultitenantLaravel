@@ -120,7 +120,7 @@
                             <a
                                 href="/formularios/{{ $formulario->id_formulario }}"
                                 class="btn btn-secondary btn-sm"
-                                title="Ver">
+                                title="Responder">
 
                                 <i class="fa-solid fa-eye"></i>
 

@@ -210,7 +210,16 @@ class FormularioController extends Controller
                 ->findOrFail($id);
 
         }
+// No permitir responder formularios inactivos
+if ($formulario->estado == 0) {
 
+    return redirect('/formularios')
+        ->with(
+            'warning',
+            'El formulario está inactivo. Debe activarlo antes de poder diligenciarlo.'
+        );
+
+}
         return view(
             'formularios.show',
             compact('formulario')
@@ -219,56 +228,66 @@ class FormularioController extends Controller
     }
 
     public function edit($id)
-    {
+{
 
-        if (session('rol') == 5) {
+    if (session('rol') == 5) {
 
-            // $formulario = Formulario::findOrFail($id);
-            $formulario = Formulario::with('campos')->findOrFail($id);
+        $formulario = Formulario::with('campos')
+            ->findOrFail($id);
 
-        } else {
+    } else {
 
-            $formulario = Formulario::whereHas(
-                'actividad',
-                function ($q) {
+        $formulario = Formulario::whereHas(
+            'actividad',
+            function ($q) {
 
-                    $q->where(
-                        'empresa_id',
-                        app('tenant_id')
-                    );
+                $q->where(
+                    'empresa_id',
+                    app('tenant_id')
+                );
 
-                }
-            )
-                ->with('campos')
-                ->findOrFail($id);
-
-        }
-
-        // actividades disponibles
-
-        if (session('rol') == 5) {
-
-            $actividades = Actividad::all();
-
-        } else {
-
-            $actividades = Actividad::where(
-                'empresa_id',
-                app('tenant_id')
-            )
-                ->get();
-
-        }
-
-        return view(
-            'formularios.edit',
-            compact(
-                'formulario',
-                'actividades'
-            )
-        );
+            }
+        )
+        ->with('campos')
+        ->findOrFail($id);
 
     }
+
+    // No permitir editar formularios inactivos
+    if ($formulario->estado == 0) {
+
+        return redirect('/formularios')
+            ->with(
+                'warning',
+                'El formulario está inactivo. Debe activarlo antes de poder editarlo.'
+            );
+
+    }
+
+    // Actividades disponibles
+
+    if (session('rol') == 5) {
+
+        $actividades = Actividad::all();
+
+    } else {
+
+        $actividades = Actividad::where(
+            'empresa_id',
+            app('tenant_id')
+        )->get();
+
+    }
+
+    return view(
+        'formularios.edit',
+        compact(
+            'formulario',
+            'actividades'
+        )
+    );
+
+}
 
     public function update(Request $request, $id)
     {
