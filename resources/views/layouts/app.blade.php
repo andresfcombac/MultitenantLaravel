@@ -142,7 +142,7 @@
 
         @endif
 
-        @if($menuGestion)
+     @if($menuGestion)
 
 <a
     href="/usuarios"
@@ -305,14 +305,14 @@
                     Mi perfil
                 </a>
             </li>
-            @@if($menuAdministracion)
+            @if($menuAdministracion)
 <li>
     <a class="dropdown-item" href="/configuracion">
         <i class="fa-solid fa-gear me-2"></i>
         Configuración
     </a>
 </li>
-
+@endif
             <li><hr class="dropdown-divider"></li>
 
             <li>

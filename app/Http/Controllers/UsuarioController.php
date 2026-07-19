@@ -178,35 +178,35 @@ class UsuarioController extends Controller
         }
 
         $request->validate([
-            'nombre_usu' => 'required|max:50',
-            'apellidos_usu' => 'required|max:50',
-            'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu,'.$usuario->id_usuario.',id_usuario',
-            'rol_usu' => [
-                'required',
-                function ($attribute, $value, $fail) {
+    'nombre_usu' => 'required|max:50',
+    'apellidos_usu' => 'required|max:50',
+    'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu,'.$usuario->id_usuario.',id_usuario',
+]);
 
-                    if (session('rol') != 5 && $value == 5) {
+        $datos = [
+    'nombre_usu' => $request->nombre_usu,
+    'apellidos_usu' => $request->apellidos_usu,
+    'correo_usu' => $request->correo_usu,
+    'telefono_usu' => $request->telefono_usu,
+    'cargo' => $request->cargo,
+    'fecha_up' => now(),
+];
 
-                        $fail('No tiene permisos para asignar SuperAdmin');
+// Solo SuperAdmin y Administrador pueden cambiar rol
+if (in_array(session('rol'), [5, 3])) {
 
-                    }
+    $datos['rol_usu'] = $request->rol_usu;
 
-                },
-            ],
-        ]);
+}
 
-        $usuario->update([
-            'nombre_usu' => $request->nombre_usu,
-            'apellidos_usu' => $request->apellidos_usu,
-            'correo_usu' => $request->correo_usu,
-            'telefono_usu' => $request->telefono_usu,
-            'cargo' => $request->cargo,
-            'rol_usu' => $request->rol_usu,
-            'empresa_usu' => session('rol') == 5
-                ? $request->empresa_usu
-                : app('tenant_id'),
-            'fecha_up' => now(),
-        ]);
+// Solo SuperAdmin puede cambiar empresa
+if (session('rol') == 5) {
+
+    $datos['empresa_usu'] = $request->empresa_usu;
+
+}
+
+$usuario->update($datos);
 
         return redirect('/usuarios')
             ->with(
