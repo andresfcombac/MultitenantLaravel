@@ -93,7 +93,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
-        'role:SuperAdmin,Administrador',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::post(
@@ -103,7 +103,7 @@ Route::post(
     ->middleware([
         'auth.session',
         'tenant',
-        'role:SuperAdmin,Administrador',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::post(
@@ -113,7 +113,7 @@ Route::post(
     ->middleware([
         'auth.session',
         'tenant',
-        'role:SuperAdmin,Administrador',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::get(
@@ -178,7 +178,7 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 Route::post(
@@ -187,7 +187,7 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 Route::get(
@@ -196,7 +196,7 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 Route::post(
@@ -205,7 +205,7 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 Route::post(
@@ -214,7 +214,8 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador',
+    'role:SuperAdmin,Administrador,Supervisor
+    ',
 ]);
 
 /* FORMULARIOS */
@@ -415,7 +416,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
-        'role:SuperAdmin,Administrador',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::get(

@@ -93,10 +93,23 @@
     <nav class="sidebar-menu">
         
         @php
-        
-            $rolNombre = $usuarioActual->rol->nombre_rol ?? null;
-            $menuCompleto = in_array($rolNombre, ['SuperAdmin','Administrador']);
-        @endphp
+
+    $rolNombre = $usuarioActual->rol->nombre_rol ?? null;
+
+    // Gestión operativa por empresa
+    $menuGestion = in_array($rolNombre, [
+        'SuperAdmin',
+        'Administrador',
+        'Supervisor'
+    ]);
+
+    // Administración de empresa / sistema
+    $menuAdministracion = in_array($rolNombre, [
+        'SuperAdmin',
+        'Administrador'
+    ]);
+
+@endphp
         <a
             href="/dashboard"
             class="menu-item">
@@ -111,7 +124,7 @@
 
         </a>
 
-        @if(session('rol') == 5)
+@if($rolNombre === 'SuperAdmin')
 
         <a
             href="/empresas"
@@ -129,33 +142,33 @@
 
         @endif
 
-        <a
-            href="/usuarios"
-            class="menu-item">
+        @if($menuGestion)
 
-            <i class="fa-solid fa-users"></i>
+<a
+    href="/usuarios"
+    class="menu-item">
 
-            <span>
+    <i class="fa-solid fa-users"></i>
 
-                Usuarios
+    <span>
+        Usuarios
+    </span>
 
-            </span>
+</a>
 
-        </a>
+@endif
 
-        @if($menuCompleto)
-        <a
-           
-        
-            href="/formularios"
-            class="menu-item">
-            <i class="fa-solid fa-file-lines"></i>
-            <span>
-                Formularios
-            </span>
-        </a>
-        @endif
+<a
+    href="/formularios"
+    class="menu-item">
 
+    <i class="fa-solid fa-file-lines"></i>
+
+    <span>
+        Formularios
+    </span>
+
+</a>
         <a
             href="/actividades"
             class="menu-item">
@@ -184,10 +197,9 @@
 
         </a>
 
-        @if($menuCompleto)
-        <a
-            
-        
+        @if($menuGestion)
+              <a
+               
             href="/historico"
             class="menu-item">
             <i class="fa-solid fa-clock-rotate-left"></i>
@@ -198,7 +210,7 @@
         @endif
     </nav>
   <div class="sidebar-footer">
-    @if($menuCompleto)
+    @if($menuAdministracion)
     <a
         href="/configuracion"   class="menu-item">
         <i class="fa-solid fa-gear"></i>
@@ -293,14 +305,13 @@
                     Mi perfil
                 </a>
             </li>
-            @if($menuCompleto)
-            <li>
-                <a class="dropdown-item" href="/configuracion">
-                    <i class="fa-solid fa-gear me-2"></i>
-                    Configuración
-                </a>
-            </li>
-            @endif
+            @@if($menuAdministracion)
+<li>
+    <a class="dropdown-item" href="/configuracion">
+        <i class="fa-solid fa-gear me-2"></i>
+        Configuración
+    </a>
+</li>
 
             <li><hr class="dropdown-divider"></li>
 
