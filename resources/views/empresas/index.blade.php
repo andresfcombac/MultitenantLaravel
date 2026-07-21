@@ -10,15 +10,13 @@
 
         <h2 class="fw-bold mb-0">
 
-            <i class="fa-solid fa-building me-2"></i>
-
-            Empresas
+            <i class="fa-solid fa-building fa-2x text-primary me-3"> </i>       
 
         </h2>
 
         <small class="text-muted">
 
-            Administración de empresas registradas
+            Gestión de empresas registradas
 
         </small>
 
