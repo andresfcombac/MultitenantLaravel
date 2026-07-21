@@ -4,6 +4,12 @@
 
 @section('content')
 
+@php
+    $rolNombreFormularios = \App\Models\Role::find(session('rol'))->nombre_rol ?? null;
+    $menuAdministracion = in_array($rolNombreFormularios, ['SuperAdmin','Administrador']);
+    $puedeVerRespuestas = in_array($rolNombreFormularios, ['SuperAdmin','Administrador','Supervisor']);
+@endphp
+
 <div class="d-flex justify-content-between align-items-center mb-4">
 
 
@@ -25,6 +31,8 @@
 
 </div>
 
+@if($menuAdministracion)
+
 <a
     href="/formularios/create"
     class="btn btn-primary">
@@ -34,6 +42,8 @@
     Nuevo Formulario
 
 </a>
+
+@endif
 
 
 </div>
@@ -126,6 +136,8 @@
 
                             </a>
 
+                            @if($puedeVerRespuestas)
+
                                                         <a
                                 href="/formularios/{{ $formulario->id_formulario }}/respuestas"
                                 class="btn btn-info btn-sm"
@@ -134,6 +146,10 @@
                                 <i class="fa-solid fa-inbox"></i>
 
                             </a>
+
+                            @endif
+
+                            @if($menuAdministracion)
 
                             <a
                                 href="/formularios/{{ $formulario->id_formulario }}/edit"
@@ -180,6 +196,8 @@
     @endif
 
 </form>
+
+                            @endif
 
                         </div>
 

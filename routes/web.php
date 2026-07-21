@@ -64,6 +64,7 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 Route::get(
@@ -227,6 +228,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
+        
     ]);
 
 Route::get(
@@ -443,6 +445,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::get(

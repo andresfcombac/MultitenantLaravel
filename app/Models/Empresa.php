@@ -18,6 +18,7 @@ class Empresa extends Model
         'nombre_empresa',
         'url',
         'img',
+        'color_corporativo',
     ];
 
     public function usuarios()

@@ -4,6 +4,11 @@
 
 @section('content')
 
+@php
+    $rolNombreDashboard = $usuario->rol->nombre_rol ?? null;
+    $menuGestion = in_array($rolNombreDashboard, ['SuperAdmin','Administrador','Supervisor']);
+@endphp
+
 <div class="welcome-banner">
 
     <div>
@@ -44,6 +49,8 @@
 </div>
 @endif
 
+@if($menuGestion)
+
 <div class="col-md-6 col-xl-3">
 
     <a href="/usuarios" class="stat-card">
@@ -61,6 +68,10 @@
     </a>
 
 </div>
+
+@endif
+
+
 
 <div class="col-md-6 col-xl-3">
 
@@ -80,6 +91,8 @@
 
 </div>
 
+
+
 <div class="col-md-6 col-xl-3">
 
     <a href="/actividades" class="stat-card">
@@ -97,6 +110,8 @@
     </a>
 
 </div>
+
+
 
 <div class="col-md-6 col-xl-3">
 
@@ -116,6 +131,8 @@
 
 </div>
 
+
+
 <div class="col-md-6 col-xl-3">
 
     <a href="/asistencias" class="stat-card">
@@ -134,6 +151,7 @@
 
 </div>
 
+@if($menuGestion)
 <div class="col-md-6 col-xl-3">
 
     <a href="/historico" class="stat-card">
@@ -151,6 +169,7 @@
     </a>
 
 </div>
+@endif
 
 </div>
 
@@ -174,6 +193,8 @@
         </a>
     </div>
 
+
+
     <div class="col-6 col-md-3">
         <a href="/formularios" class="quick-access-btn">
             <i class="fa-solid fa-file-lines" style="color:#ea6b19;"></i>
@@ -187,6 +208,8 @@
             Usuarios
         </a>
     </div>
+
+
 
 </div>
 

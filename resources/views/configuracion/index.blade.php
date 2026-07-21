@@ -72,39 +72,35 @@
 
     {{-- PERFIL --}}
 
-    <div class="col-md-6 col-xl-4">
+<div class="col-md-6 col-xl-4">
 
-        <div class="card shadow-sm border-0 h-100">
+    <div class="card shadow-sm border-0 h-100">
 
-            <div class="card-body text-center">
+        <div class="card-body text-center">
 
-                <i class="fa-solid fa-user fa-3x text-success mb-3"></i>
+            <i class="fa-solid fa-user fa-3x text-success mb-3"></i>
 
-                <h5>
+            <h5>
+                Mi perfil
+            </h5>
 
-                    Mi perfil
+            <p class="text-muted">
+                Información del usuario autenticado.
+            </p>
 
-                </h5>
+            <a
+                href="{{ route('perfil') }}"
+                class="btn btn-success">
 
-                <p class="text-muted">
+                Abrir perfil
 
-                    Información del usuario autenticado.
-
-                </p>
-
-                <button
-                    class="btn btn-success"
-                    disabled>
-
-                    Próximamente
-
-                </button>
-
-            </div>
+            </a>
 
         </div>
 
     </div>
+
+</div>
 
 
     {{-- ROLES --}}
@@ -153,42 +149,35 @@
 
     {{-- SEGURIDAD --}}
 
-    <div class="col-md-6 col-xl-4">
+<div class="col-md-6 col-xl-4">
 
-        <div class="card shadow-sm border-0 h-100">
+    <div class="card shadow-sm border-0 h-100">
 
-            <div class="card-body text-center">
+        <div class="card-body text-center">
 
-                <i class="fa-solid fa-lock fa-3x text-danger mb-3"></i>
+            <i class="fa-solid fa-lock fa-3x text-danger mb-3"></i>
 
-                <h5>
+            <h5>
+                Seguridad
+            </h5>
 
-                    Seguridad
+            <p class="text-muted">
+                Cambio de contraseña y políticas de acceso.
+            </p>
 
-                </h5>
+            <a
+                href="{{ route('perfil') }}"
+                class="btn btn-danger">
 
-                <p class="text-muted">
+                Gestionar contraseña
 
-                    Cambio de contraseña y políticas de acceso.
-
-                </p>
-
-                <button
-                    class="btn btn-danger"
-                    disabled>
-
-                    Próximamente
-
-                </button>
-
-            </div>
+            </a>
 
         </div>
 
     </div>
 
-
-    
+</div>    
 
 </div>
 

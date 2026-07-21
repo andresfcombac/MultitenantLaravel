@@ -39,7 +39,8 @@
     class="sidebar"
     id="sidebar">
 
-    <div class="sidebar-header">
+<div class="sidebar-header text-white"
+     style="background-color: {{ $usuarioActual->empresa?->color_corporativo ?? '#0B3D91' }} !important;">
 
     <img
         src="{{ asset('images/logo.png') }}"
@@ -74,19 +75,21 @@
 
     </div>
 
-    <div class="mt-2 fw-bold">
+    <div class="mt-2 fw-bold text-truncate px-2"
+     style="max-width: 190px;"
+     title="{{ session('nombre') }} {{ $usuarioActual->apellidos_usu ?? '' }}">
 
-        {{ session('nombre') }}
+    {{ session('nombre') }}
 
-        {{ $usuarioActual->apellidos_usu ?? '' }}
+</div>
 
-    </div>
+<small class="text-secondary text-truncate d-block"
+       style="max-width: 190px;"
+       title="{{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}">
 
-    <small class="text-secondary">
+    {{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}
 
-{{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}
-
-    </small>
+</small>
 
 </div>
 
@@ -158,6 +161,8 @@
 
 @endif
 
+
+
 <a
     href="/formularios"
     class="menu-item">
@@ -169,6 +174,8 @@
     </span>
 
 </a>
+
+
         <a
             href="/actividades"
             class="menu-item">
