@@ -450,7 +450,10 @@ if ($formulario->estado == 0) {
         ]);
 
        return redirect('/formularios')
-    ->with('success', 'Formulario enviado correctamente.');
+    ->with(
+        'success',
+        'Formulario enviado correctamente.'
+    );
     }
 
     public function exportar($id)
