@@ -8,19 +8,8 @@
 
 <div>
 
-    <h2 class="fw-bold mb-0">
-
-        <i class="fa-solid fa-calendar-days me-2"></i>
-
-        Actividades
-
-    </h2>
-
-    <small class="text-muted">
-
-        Administración de actividades registradas
-
-    </small>
+    <i class="fa-solid fa-calendar-days fa-2x text-primary"></i>
+<small class="text-muted">Programación y seguimiento de actividades</small>
 
 </div>
 

@@ -8,14 +8,8 @@
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-            <i class="fa-solid fa-users me-2"></i>
-            Usuarios
-        </h2>
-
-        <small class="text-muted">
-            Administración de usuarios del sistema
-        </small>
+        <i class="fa-solid fa-users fa-2x text-primary"></i>
+<small class="text-muted">Gestión de usuarios por empresa</small>
 
     </div>
 

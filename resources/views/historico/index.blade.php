@@ -8,19 +8,8 @@
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-
-            <i class="fa-solid fa-clock-rotate-left me-2"></i>
-
-            Histórico
-
-        </h2>
-
-        <small class="text-muted">
-
-            Historial de confirmaciones de asistencia
-
-        </small>
+        <i class="fa-solid fa-clock-rotate-left fa-2x text-primary"></i>
+<small class="text-muted">Consulta de información histórica</small>
 
     </div>
 

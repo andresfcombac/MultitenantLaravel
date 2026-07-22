@@ -12,24 +12,17 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 
+    <div class="d-flex flex-column">
 
-<div>
+        <div class="mb-1">
+            <i class="fa-solid fa-file-lines fa-2x text-primary"></i>
+        </div>
 
-    <h2 class="fw-bold mb-0">
+        <small class="text-muted">
+            Administración de formularios del sistema
+        </small>
 
-        <i class="fa-solid fa-file-lines me-2"></i>
-
-        Formularios
-
-    </h2>
-
-    <small class="text-muted">
-
-        Administración de formularios del sistema
-
-    </small>
-
-</div>
+    </div>
 
 @if($menuAdministracion)
 

@@ -8,14 +8,8 @@
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-            <i class="fa-solid fa-user-check me-2"></i>
-            Asistencias
-        </h2>
-
-        <small class="text-muted">
-            Confirmación de asistencia de participantes
-        </small>
+        <i class="fa-solid fa-user-check fa-2x text-primary"></i>
+<small class="text-muted">Control de asistencia y registros</small>
 
     </div>
 

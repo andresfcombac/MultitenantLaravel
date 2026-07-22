@@ -8,17 +8,8 @@
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-
-            <i class="fa-solid fa-building fa-2x text-primary me-3"> </i>       
-
-        </h2>
-
-        <small class="text-muted">
-
-            Gestión de empresas registradas
-
-        </small>
+        <i class="fa-solid fa-building fa-2x text-primary"></i>
+<small class="text-muted">Administración de empresas del sistema</small>
 
     </div>
 
