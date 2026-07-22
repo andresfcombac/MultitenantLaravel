@@ -31,9 +31,7 @@
 
     <div class="table-responsive">
 
-        <table
-            id="tablaActividades"
-            class="table table-hover align-middle">
+        <table class="table table-hover align-middle datatable">
 
             <thead class="table-light">
 

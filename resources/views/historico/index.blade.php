@@ -21,9 +21,7 @@
 
         <div class="table-responsive">
 
-            <table
-                id="tablaHistorico"
-                class="table table-hover align-middle">
+            <table class="table table-hover align-middle datatable">
 
                 <thead class="table-light">
 

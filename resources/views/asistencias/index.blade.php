@@ -29,8 +29,8 @@
 </style>
 
             <table
-                id="tablaAsistencias"
-                class="table table-hover align-middle">
+    id="tablaAsistencias"
+    class="table table-hover align-middle datatable">
 
                 <thead class="table-light">
 
