@@ -173,65 +173,11 @@
 
 </div>
 
-<div class="quick-access-title">
-    ACCESOS RÁPIDOS
-</div>
-
-<div class="row g-3">
-
-    <div class="col-6 col-md-3">
-        <a href="/actividades" class="quick-access-btn">
-            <i class="fa-solid fa-calendar-days" style="color:#0dcaf0;"></i>
-            Actividades
-        </a>
-    </div>
-
-    <div class="col-6 col-md-3">
-        <a href="/asistencias" class="quick-access-btn">
-            <i class="fa-solid fa-user-check" style="color:#dc3545;"></i>
-            Asistencias
-        </a>
-    </div>
-
-
-
-    <div class="col-6 col-md-3">
-        <a href="/formularios" class="quick-access-btn">
-            <i class="fa-solid fa-file-lines" style="color:#ea6b19;"></i>
-            Formularios
-        </a>
-    </div>
-
-    <div class="col-6 col-md-3">
-        <a href="/usuarios" class="quick-access-btn">
-            <i class="fa-solid fa-users" style="color:#198754;"></i>
-            Usuarios
-        </a>
-    </div>
-
-
-
-</div>
 
 <div class="card mt-5 shadow-sm border-0">
 
 <div class="card-body">
 
-    <h5>
-        Información del usuario
-    </h5>
-
-    <hr>
-
-    <p>
-        <strong>Correo:</strong>
-        {{ $usuario->correo_usu }}
-    </p>
-
-    <p>
-        <strong>Rol:</strong>
-        {{ $usuario->rol?->nombre_rol }}
-    </p>
 
     @if(session('rol') != 5)
 
