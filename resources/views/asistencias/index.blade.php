@@ -21,10 +21,58 @@
 
         <div class="table-responsive">
             <style>
+#tablaAsistencias{
+    width:100% !important;
+    table-layout:auto;
+}
+
 #tablaAsistencias thead th{
     color:#212529 !important;
     background:#f8f9fa !important;
     font-weight:600;
+    white-space:nowrap;
+    vertical-align:middle;
+}
+
+/* Anchos mínimos por columna */
+#tablaAsistencias th:nth-child(2),
+#tablaAsistencias td:nth-child(2){ min-width:140px; } /* Empresa */
+
+#tablaAsistencias th:nth-child(3),
+#tablaAsistencias td:nth-child(3){ min-width:220px; } /* Actividad */
+
+#tablaAsistencias th:nth-child(4),
+#tablaAsistencias td:nth-child(4){ min-width:140px; } /* Formulario */
+
+#tablaAsistencias th:nth-child(5),
+#tablaAsistencias td:nth-child(5){ min-width:180px; } /* Participante */
+
+#tablaAsistencias th:nth-child(6),
+#tablaAsistencias td:nth-child(6){ min-width:150px; } /* Documento */
+
+#tablaAsistencias th:nth-child(7),
+#tablaAsistencias td:nth-child(7){ min-width:260px; } /* Correo */
+
+#tablaAsistencias th:nth-child(8),
+#tablaAsistencias td:nth-child(8){ min-width:140px; } /* Teléfono */
+
+#tablaAsistencias th:nth-child(9),
+#tablaAsistencias td:nth-child(9){ min-width:170px; } /* Fecha respuesta */
+
+#tablaAsistencias th:nth-child(10),
+#tablaAsistencias td:nth-child(10){ min-width:120px; } /* Estado */
+
+#tablaAsistencias th:nth-child(11),
+#tablaAsistencias td:nth-child(11){ min-width:150px; } /* Acción */
+
+#tablaAsistencias th:nth-child(12),
+#tablaAsistencias td:nth-child(12){ min-width:160px; } /* Confirmado por */
+
+#tablaAsistencias th:nth-child(13),
+#tablaAsistencias td:nth-child(13){ min-width:180px; } /* Fecha confirmación */
+
+#tablaAsistencias td{
+    vertical-align:middle;
 }
 </style>
 
@@ -36,7 +84,7 @@
 
                     <tr>
 
-                        <th style="display:none;">ID</th>
+                        <th>ID</th>
 
 <th>Empresa</th>
 
@@ -72,7 +120,7 @@
 
                     <tr>
 
-                        <td style="display:none;">
+                        <td>
 
                             {{ $respuesta->id_respuesta }}
 
