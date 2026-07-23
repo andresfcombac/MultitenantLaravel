@@ -20,6 +20,7 @@
 
 </div>
 
+    
 <div class="card shadow-sm border-0">
 
     <div class="card-body">
@@ -105,70 +106,65 @@
     </div>
 
     <div class="mb-3">
-        
 
-<label>Empresa</label>
+        <label>Empresa</label>
 
-@if(session('rol') == 5)
+        @if(session('rol') == 5)
 
-    <select
-        name="empresa_usu"
-        class="form-control"
-    >
-
-        @foreach($empresas as $empresa)
-
-            <option
-                value="{{ $empresa->id_empresa }}"
-                {{ $usuario->empresa_usu == $empresa->id_empresa ? 'selected' : '' }}
+            <select
+                name="empresa_usu"
+                class="form-control"
             >
-                {{ $empresa->nombre_empresa }}
-            </option>
 
-        @endforeach
+                @foreach($empresas as $empresa)
 
-    </select>
+                    <option
+                        value="{{ $empresa->id_empresa }}"
+                        {{ $usuario->empresa_usu == $empresa->id_empresa ? 'selected' : '' }}
+                    >
+                        {{ $empresa->nombre_empresa }}
+                    </option>
 
-@else
+                @endforeach
 
-    <input
-        type="text"
-        class="form-control"
-        value="{{ $usuario->empresa?->nombre_empresa }}"
-        readonly
-    >
+            </select>
 
-@endif
+        @else
 
+            <input
+                type="text"
+                class="form-control"
+                value="{{ $usuario->empresa?->nombre_empresa }}"
+                readonly
+            >
 
-</div>
-
+        @endif
 
     </div>
 
-   <div class="d-flex gap-2">
+    <div class="d-flex gap-2 mt-4">
 
-    <button
-        type="submit"
-        class="btn btn-success">
+        <button
+            type="submit"
+            class="btn btn-success">
 
-        <i class="fa-solid fa-floppy-disk me-2"></i>
+            <i class="fa-solid fa-floppy-disk me-2"></i>
 
-        Actualizar
+            Actualizar
 
-    </button>
+        </button>
 
-    <a
-        href="/usuarios"
-        class="btn btn-secondary">
+        <a
+            href="/usuarios"
+            class="btn btn-secondary">
 
-        <i class="fa-solid fa-arrow-left me-2"></i>
+            <i class="fa-solid fa-arrow-left me-2"></i>
 
-        Volver
+            Volver
 
-    </a>
+        </a>
 
-</div>
+    </div>
 
 </form>
 
