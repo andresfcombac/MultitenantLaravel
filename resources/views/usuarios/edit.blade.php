@@ -4,19 +4,13 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex align-items-center mb-4">
 
     <div>
 
-        <h2 class="fw-bold mb-0">
-
-            <i class="fa-solid fa-user-pen me-2"></i>
-
-            Editar Usuario
-
-        </h2>
-
         <small class="text-muted">
+
+            <i class="fa-solid fa-user-pen me-2 text-primary"></i>
 
             Actualización de la información del usuario
 
