@@ -89,111 +89,130 @@ class ActividadController extends Controller
             );
 
     }
+    
+public function edit($id)
+{
+    if (session('rol') == 5) {
 
-    public function edit($id)
-    {
+        $actividad = Actividad::find($id);
 
-        if (session('rol') == 5) {
+    } else {
 
-            $actividad = Actividad::findOrFail($id);
+        $actividad = Actividad::where(
+            'empresa_id',
+            app('tenant_id')
+        )->find($id);
 
-        } else {
+    }
 
-            $actividad = Actividad::where(
-                'empresa_id',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
+    // Validación de acceso al recurso
+    if (! $actividad) {
 
-        }
+        return redirect('/actividades')
+            ->with(
+                'error',
+                'No tiene permisos para visualizar esta actividad.'
+            );
 
-        $empresas = Empresa::all();
+    }
 
-        return view(
-            'actividades.edit',
-            compact(
-                'actividad',
-                'empresas'
-            )
+    $empresas = Empresa::all();
+
+    return view(
+        'actividades.edit',
+        compact(
+            'actividad',
+            'empresas'
+        )
+    );
+}
+    
+public function update(Request $request, $id)
+{
+    if (session('rol') == 5) {
+
+        $actividad = Actividad::find($id);
+
+    } else {
+
+        $actividad = Actividad::where(
+            'empresa_id',
+            app('tenant_id')
+        )->find($id);
+
+    }
+
+    // Validación de acceso al recurso
+    if (! $actividad) {
+
+        return redirect('/actividades')
+            ->with(
+                'error',
+                'No tiene permisos para modificar esta actividad.'
+            );
+
+    }
+
+    $request->validate([
+
+        'nombre_actividad' => 'required|max:100',
+        'descripcion' => 'nullable',
+        'fecha' => 'required|date',
+
+    ]);
+
+    $actividad->update([
+
+        'nombre_actividad' => $request->nombre_actividad,
+        'descripcion' => $request->descripcion,
+        'fecha' => $request->fecha,
+        'hora_inicio' => $request->hora_inicio,
+        'hora_fin' => $request->hora_fin,
+        'empresa_id' => session('rol') == 5
+            ? $request->empresa_id
+            : app('tenant_id'),
+
+    ]);
+
+    return redirect('/actividades')
+        ->with(
+            'success',
+            'Actividad actualizada correctamente'
         );
+}
+
+public function destroy($id)
+{
+    if (session('rol') == 5) {
+
+        $actividad = Actividad::find($id);
+
+    } else {
+
+        $actividad = Actividad::where(
+            'empresa_id',
+            app('tenant_id')
+        )->find($id);
 
     }
 
-    public function update(Request $request, $id)
-    {
-
-        if (session('rol') == 5) {
-
-            $actividad = Actividad::findOrFail($id);
-
-        } else {
-
-            $actividad = Actividad::where(
-                'empresa_id',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
-
-        }
-
-        $request->validate([
-
-            'nombre_actividad' => 'required|max:100',
-            'descripcion' => 'nullable',
-            'fecha' => 'required|date',
-
-        ]);
-
-        $actividad->update([
-
-            'nombre_actividad' => $request->nombre_actividad,
-
-            'descripcion' => $request->descripcion,
-
-            'fecha' => $request->fecha,
-
-            'hora_inicio' => $request->hora_inicio,
-
-            'hora_fin' => $request->hora_fin,
-
-            'empresa_id' => session('rol') == 5
-                ? $request->empresa_id
-                : app('tenant_id'),
-
-        ]);
+    // Validación de acceso al recurso
+    if (! $actividad) {
 
         return redirect('/actividades')
             ->with(
-                'success',
-                'Actividad actualizada correctamente'
+                'error',
+                'No tiene permisos para eliminar esta actividad.'
             );
 
     }
 
-    public function destroy($id)
-    {
+    $actividad->delete();
 
-        if (session('rol') == 5) {
-
-            $actividad = Actividad::findOrFail($id);
-
-        } else {
-
-            $actividad = Actividad::where(
-                'empresa_id',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
-
-        }
-
-        $actividad->delete();
-
-        return redirect('/actividades')
-            ->with(
-                'success',
-                'Actividad eliminada correctamente'
-            );
-
-    }
+    return redirect('/actividades')
+        ->with(
+            'success',
+            'Actividad eliminada correctamente'
+        );
+}
 }
