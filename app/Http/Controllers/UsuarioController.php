@@ -122,10 +122,16 @@ class UsuarioController extends Controller
         } else {
 
             $usuario = Usuario::where(
-                'empresa_usu',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
+    'empresa_usu',
+    app('tenant_id')
+)->find($id);
+
+if (! $usuario) {
+    return redirect()->back()->with(
+        'error',
+        'No tiene permisos para visualizar este usuario.'
+    );
+}
 
             $empresas = Empresa::where(
                 'id_empresa',
@@ -169,11 +175,17 @@ class UsuarioController extends Controller
 
         } else {
 
-            $usuario = Usuario::where(
-                'empresa_usu',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
+           $usuario = Usuario::where(
+    'empresa_usu',
+    app('tenant_id')
+)->find($id);
+
+if (! $usuario) {
+    return redirect()->back()->with(
+        'error',
+        'No tiene permisos para visualizar este usuario.'
+    );
+}
 
         }
 
@@ -226,10 +238,16 @@ $usuario->update($datos);
         } else {
 
             $usuario = Usuario::where(
-                'empresa_usu',
-                app('tenant_id')
-            )
-                ->findOrFail($id);
+    'empresa_usu',
+    app('tenant_id')
+)->find($id);
+
+if (! $usuario) {
+    return redirect()->back()->with(
+        'error',
+        'No tiene permisos para visualizar este usuario.'
+    );
+}
 
         }
 

@@ -18,7 +18,7 @@ class RoleMiddleware
             session('rol')
         );
 
-       if (
+      if (
     ! $rol ||
     ! in_array(
         $rol->nombre_rol,
@@ -26,14 +26,22 @@ class RoleMiddleware
     )
 ) {
 
-    return redirect('/dashboard')
-        ->with(
-            'error',
-            'No tiene permisos para acceder a este módulo.'
-        );
+    $modulo = match (true) {
+        str_contains($request->path(), 'usuarios') => 'Usuarios',
+        str_contains($request->path(), 'formularios') => 'Formularios',
+        str_contains($request->path(), 'actividades') => 'Actividades',
+        str_contains($request->path(), 'asistencias') => 'Asistencias',
+        str_contains($request->path(), 'historico') => 'Histórico',
+        str_contains($request->path(), 'configuracion') => 'Configuración',
+        default => 'este módulo',
+    };
+
+    return redirect()->back()->with(
+        'error',
+        "No tiene permisos para acceder a {$modulo}."
+    );
 
 }
-
 
         return $next($request);
 

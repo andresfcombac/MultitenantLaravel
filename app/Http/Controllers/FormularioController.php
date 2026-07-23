@@ -116,32 +116,7 @@ class FormularioController extends Controller
             'creado_por' => session('usuario_id'),
 
         ]);
-
-        /*$campos = json_decode($request->campos_json, true);
-
-        if (is_array($campos)) {
-
-            foreach ($campos as $index => $campo) {
-
-                FormularioCampo::create([
-
-                    'id_formulario' => $formulario->id_formulario,
-
-                    'etiqueta' => $campo['nombre'],
-
-                    'tipo_campo' => $campo['tipo'],
-
-                    'opciones' => '[]',
-
-                    'obligatorio' => !empty($campo['obligatorio']) ? 1 : 0,
-
-                    'orden' => $index
-
-                ]);
-
-            }
-
-        }*/
+        
         if ($request->filled('campos_json')) {
 
             $campos = json_decode($request->campos_json, true);
@@ -232,26 +207,37 @@ if ($formulario->estado == 0) {
 
     if (session('rol') == 5) {
 
-        $formulario = Formulario::with('campos')
-            ->findOrFail($id);
+    $formulario = Formulario::with('campos')
+        ->find($id);
 
-    } else {
+} else {
 
-        $formulario = Formulario::whereHas(
-            'actividad',
-            function ($q) {
+    $formulario = Formulario::whereHas(
+        'actividad',
+        function ($q) {
 
-                $q->where(
-                    'empresa_id',
-                    app('tenant_id')
-                );
+            $q->where(
+                'empresa_id',
+                app('tenant_id')
+            );
 
-            }
-        )
-        ->with('campos')
-        ->findOrFail($id);
+        }
+    )
+    ->with('campos')
+    ->find($id);
 
-    }
+}
+
+// Validación de acceso al recurso
+if (! $formulario) {
+
+    return redirect('/formularios')
+        ->with(
+            'error',
+            'No tiene permisos para visualizar este formulario.'
+        );
+
+}
 
     // No permitir editar formularios inactivos
     if ($formulario->estado == 0) {
@@ -304,23 +290,34 @@ if ($formulario->estado == 0) {
 
         if (session('rol') == 5) {
 
-            $formulario = Formulario::findOrFail($id);
+    $formulario = Formulario::find($id);
 
-        } else {
+} else {
 
-            $formulario = Formulario::whereHas(
-                'actividad',
-                function ($q) {
+    $formulario = Formulario::whereHas(
+        'actividad',
+        function ($q) {
 
-                    $q->where(
-                        'empresa_id',
-                        app('tenant_id')
-                    );
-
-                }
-            )->findOrFail($id);
+            $q->where(
+                'empresa_id',
+                app('tenant_id')
+            );
 
         }
+    )->find($id);
+
+}
+
+// Validación de acceso al recurso
+if (! $formulario) {
+
+    return redirect('/formularios')
+        ->with(
+            'error',
+            'No tiene permisos para modificar este formulario.'
+        );
+
+}
 
         $formulario->update([
 
@@ -377,24 +374,34 @@ if ($formulario->estado == 0) {
 
         if (session('rol') == 5) {
 
-            $formulario = Formulario::findOrFail($id);
+    $formulario = Formulario::find($id);
 
-        } else {
+} else {
 
-            $formulario = Formulario::whereHas(
-                'actividad',
-                function ($q) {
+    $formulario = Formulario::whereHas(
+        'actividad',
+        function ($q) {
 
-                    $q->where(
-                        'empresa_id',
-                        app('tenant_id')
-                    );
-
-                }
-            )
-                ->findOrFail($id);
+            $q->where(
+                'empresa_id',
+                app('tenant_id')
+            );
 
         }
+    )->find($id);
+
+}
+
+// Validación de acceso al recurso
+if (! $formulario) {
+
+    return redirect('/formularios')
+        ->with(
+            'error',
+            'No tiene permisos para cambiar el estado de este formulario.'
+        );
+
+}
 
         $formulario->update([
 
@@ -412,9 +419,24 @@ if ($formulario->estado == 0) {
 
     public function responder(Request $request, $id)
     {
-        $formulario = Formulario::with('campos')
-            ->findOrFail($id);
+       $formulario = Formulario::with('campos')
+    ->find($id);
 
+// Formulario inexistente
+if (! $formulario) {
+    abort(404);
+}
+
+// Formulario inactivo
+if ($formulario->estado == 0) {
+
+    return redirect('/formularios')
+        ->with(
+            'warning',
+            'Este formulario ya no está disponible para recibir respuestas.'
+        );
+
+}
         $datos = [];
 
         foreach ($formulario->campos as $campo) {
@@ -431,7 +453,7 @@ if ($formulario->estado == 0) {
 
         FormularioRespuesta::create([
 
-            'id_formulario' => $id,
+            'id_formulario' => $formulario->id_formulario,
 
             'datos' => $datos,
 
@@ -456,69 +478,107 @@ if ($formulario->estado == 0) {
     );
     }
 
-    public function exportar($id)
-    {
-        $formulario = Formulario::findOrFail($id);
+public function exportar($id)
+{
+    // SuperAdmin puede exportar cualquier formulario
+    if (session('rol') == 5) {
 
-        $respuestas = FormularioRespuesta::where(
-            'id_formulario',
-            $id
-        )->get();
+        $formulario = Formulario::find($id);
 
-        $response = new StreamedResponse(function () use ($respuestas) {
+    } else {
 
-            $handle = fopen('php://output', 'w');
+        // Usuarios normales solo pueden exportar formularios de su empresa
+        $formulario = Formulario::whereHas(
+            'actividad',
+            function ($q) {
 
-            fputcsv($handle, [
-                'ID',
-                'Nombres',
-                'Apellidos',
-                'Correo',
-                'Telefono',
-                'Tipo Documento',
-                'Numero Documento',
-                'Fecha',
-                'Datos',
-            ]);
-
-            foreach ($respuestas as $respuesta) {
-
-                fputcsv($handle, [
-
-                    $respuesta->id_respuesta,
-                    $respuesta->nombres,
-                    $respuesta->apellidos,
-                    $respuesta->correo,
-                    $respuesta->telefono,
-                    $respuesta->tipo_documento,
-                    $respuesta->numero_documento,
-                    $respuesta->fecha_respuesta,
-                    json_encode(
-                        $respuesta->datos,
-                        JSON_UNESCAPED_UNICODE
-                    ),
-
-                ]);
+                $q->where(
+                    'empresa_id',
+                    app('tenant_id')
+                );
 
             }
-
-            fclose($handle);
-
-        });
-
-        $nombre = 'respuestas_formulario_'.$formulario->id_formulario.'.csv';
-
-        $response->headers->set(
-            'Content-Type',
-            'text/csv'
-        );
-
-        $response->headers->set(
-            'Content-Disposition',
-            'attachment; filename="'.$nombre.'"'
-        );
-
-        return $response;
+        )->find($id);
 
     }
+
+    // Validación de acceso al recurso
+    if (! $formulario) {
+
+        return redirect('/formularios')
+            ->with(
+                'error',
+                'No tiene permisos para exportar las respuestas de este formulario.'
+            );
+
+    }
+
+    // Obtener respuestas del formulario validado
+    $respuestas = FormularioRespuesta::where(
+        'id_formulario',
+        $formulario->id_formulario
+    )->get();
+
+    // Generar CSV
+    $response = new StreamedResponse(function () use ($respuestas) {
+
+        $handle = fopen('php://output', 'w');
+
+        // Encabezados del archivo
+        fputcsv($handle, [
+            'ID',
+            'Nombres',
+            'Apellidos',
+            'Correo',
+            'Telefono',
+            'Tipo Documento',
+            'Numero Documento',
+            'Fecha',
+            'Datos',
+        ]);
+
+        // Filas de respuestas
+        foreach ($respuestas as $respuesta) {
+
+            fputcsv($handle, [
+
+                $respuesta->id_respuesta,
+                $respuesta->nombres,
+                $respuesta->apellidos,
+                $respuesta->correo,
+                $respuesta->telefono,
+                $respuesta->tipo_documento,
+                $respuesta->numero_documento,
+                $respuesta->fecha_respuesta,
+                json_encode(
+                    $respuesta->datos,
+                    JSON_UNESCAPED_UNICODE
+                ),
+
+            ]);
+
+        }
+
+        fclose($handle);
+
+    });
+
+    // Nombre del archivo
+    $nombre = 'respuestas_formulario_' .
+        $formulario->id_formulario .
+        '.csv';
+
+    // Headers de descarga
+    $response->headers->set(
+        'Content-Type',
+        'text/csv; charset=UTF-8'
+    );
+
+    $response->headers->set(
+        'Content-Disposition',
+        'attachment; filename="' . $nombre . '"'
+    );
+
+    return $response;
+}
 }
