@@ -430,13 +430,14 @@ Route::get(
         'tenant',
     ]);
 
-Route::post(
-    '/asistencias/{id}/confirmar',
-    [AsistenciaController::class, 'confirmar']
-)->middleware([
-    'auth.session',
-    'tenant',
-]);
+// Confirmación manual deshabilitada.
+// La asistencia será confirmada únicamente mediante lectura QR.
+// Route::post('/asistencias/{id}/confirmar', ...);
+//    [AsistenciaController::class, 'confirmar']
+//)->middleware([
+  //  'auth.session',
+    //'tenant',
+//]);
 
 Route::get(
     '/historico',

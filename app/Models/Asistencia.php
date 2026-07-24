@@ -14,13 +14,14 @@ class Asistencia extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [
+   protected $fillable = [
 
-        'id_respuesta',
-        'confirmado_por',
-        'fecha_confirmacion',
+    'id_respuesta',
+    'estado_asistencia',
+    'confirmado_por',
+    'fecha_confirmacion',
 
-    ];
+];
 
     public function respuesta()
     {

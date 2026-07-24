@@ -190,19 +190,19 @@
 
         </a>
 
-        <a
-            href="/asistencias"
-            class="menu-item">
+        @if(in_array(session('rol'), [5, 3, 1]))
+<a
+    href="/asistencias"
+    class="menu-item">
 
-            <i class="fa-solid fa-user-check"></i>
+    <i class="fa-solid fa-user-check"></i>
 
-            <span>
+    <span>
+        Asistencias
+    </span>
 
-                Asistencias
-
-            </span>
-
-        </a>
+</a>
+@endif
 
         @if($menuGestion)
               <a

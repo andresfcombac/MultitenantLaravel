@@ -165,49 +165,40 @@
 
                         <td>
 
-                            @if($respuesta->asistencia)
+                        @php
+    $estado = $respuesta->asistencia->estado_asistencia ?? 'pendiente';
+@endphp
 
-                                <span class="badge bg-success">
+@switch($estado)
 
-                                    Confirmada
+    @case('confirmado')
+        <span class="badge bg-success">
+            <i class="fa-solid fa-circle-check me-1"></i>
+            Confirmado
+        </span>
+        @break
 
-                                </span>
+    @case('no_asistio')
+        <span class="badge bg-danger">
+            <i class="fa-solid fa-circle-xmark me-1"></i>
+            No asistió
+        </span>
+        @break
 
-                            @else
+    @default
+        <span class="badge bg-warning text-dark">
+            <i class="fa-solid fa-clock me-1"></i>
+            Pendiente
+        </span>
 
-                                <span class="badge bg-warning text-dark">
-
-                                    Pendiente
-
-                                </span>
-
-                            @endif
-
+@endswitch
                         </td>
 
                         <td>
 
-                            @if(!$respuesta->asistencia)
-
-                                <form
-                                    method="POST"
-                                    action="/asistencias/{{ $respuesta->id_respuesta }}/confirmar">
-
-                                    @csrf
-
-                                    <button
-                                        class="btn btn-success btn-sm">
-
-                                        <i class="fa-solid fa-check me-1"></i>
-
-                                        Confirmar
-
-                                    </button>
-
-                                </form>
-
-                            @else
-
+                           <span class="text-muted small">
+    Confirmación mediante QR
+</span>
                                 <button
                                     class="btn btn-secondary btn-sm"
                                     disabled>
