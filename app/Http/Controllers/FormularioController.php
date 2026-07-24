@@ -496,7 +496,6 @@ public function exportar($id)
                     'empresa_id',
                     app('tenant_id')
                 );
-
             }
         )->find($id);
 
