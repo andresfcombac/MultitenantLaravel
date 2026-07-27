@@ -42,8 +42,6 @@ required>
 
 </div>
 
-
-
 <div class="mb-3">
 
 <label>
@@ -56,8 +54,6 @@ class="form-control">
 </textarea>
 
 </div>
-
-
 
 <div class="mb-3">
 
@@ -73,8 +69,6 @@ required>
 
 </div>
 
-
-
 <div class="mb-3">
 
 <label>
@@ -88,8 +82,6 @@ class="form-control">
 
 </div>
 
-
-
 <div class="mb-3">
 
 <label>
@@ -102,8 +94,6 @@ name="hora_fin"
 class="form-control">
 
 </div>
-
-
 
 @if(session('rol') == 5)
 
@@ -158,6 +148,34 @@ class="form-control">
         Volver
 
     </a>
+
+</div>
+
+<div class="mb-3">
+
+    <label class="form-label">
+
+        Estado
+
+    </label>
+
+    <select
+        name="estado"
+        class="form-select">
+
+        <option value="0" selected>
+
+            Programada
+
+        </option>
+
+    </select>
+
+    <small class="text-muted">
+
+        Las actividades nuevas siempre se crean como Programadas.
+
+    </small>
 
 </div>
 

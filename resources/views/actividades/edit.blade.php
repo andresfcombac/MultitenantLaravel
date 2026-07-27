@@ -114,7 +114,45 @@ value="{{ $actividad->hora_fin }}">
 
 </div>
 
+<div class="mb-3">
 
+    <label class="form-label">
+
+        Estado
+
+    </label>
+
+    <select
+        name="estado"
+        class="form-select">
+
+        <option
+            value="0"
+            {{ $actividad->estado == 0 ? 'selected' : '' }}>
+
+            Programada
+
+        </option>
+
+        <option
+            value="1"
+            {{ $actividad->estado == 1 ? 'selected' : '' }}>
+
+            Realizada
+
+        </option>
+
+        <option
+            value="2"
+            {{ $actividad->estado == 2 ? 'selected' : '' }}>
+
+            Cancelada
+
+        </option>
+
+    </select>
+
+</div>
 
 @if(session('rol') == 5)
 

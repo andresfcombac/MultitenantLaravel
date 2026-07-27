@@ -90,7 +90,7 @@
                         {{ $actividad->hora_fin }}
 
                     </td>
-
+                    
                     <td>
 
                         <span class="badge bg-primary">
@@ -118,7 +118,6 @@
                             <form
     ...
     class="form-eliminar-actividad">
-
 
     <button
     type="submit"

@@ -208,9 +208,7 @@
                                     Confirmada
 
                                 </button>
-
-                            @endif
-
+                            
                         </td>
 
                         <td>

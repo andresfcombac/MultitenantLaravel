@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Actividad;
+use App\Models\Asistencia;
 use App\Models\Formulario;
 use App\Models\FormularioCampo;
 use App\Models\FormularioRespuesta;
@@ -451,25 +452,33 @@ if ($formulario->estado == 0) {
             $datos[$campo->etiqueta] = $valor;
         }
 
-        FormularioRespuesta::create([
+        $respuesta = FormularioRespuesta::create([
 
-            'id_formulario' => $formulario->id_formulario,
+    'id_formulario' => $formulario->id_formulario,
 
-            'datos' => $datos,
+    'datos' => $datos,
 
-            'nombres' => $request->nombres,
+    'nombres' => $request->nombres,
 
-            'apellidos' => $request->apellidos,
+    'apellidos' => $request->apellidos,
 
-            'correo' => $request->correo,
+    'correo' => $request->correo,
 
-            'telefono' => $request->telefono,
+    'telefono' => $request->telefono,
 
-            'tipo_documento' => $request->tipo_documento,
+    'tipo_documento' => $request->tipo_documento,
 
-            'numero_documento' => $request->numero_documento,
+    'numero_documento' => $request->numero_documento,
 
-        ]);
+]);
+
+Asistencia::create([
+
+    'id_respuesta' => $respuesta->id_respuesta,
+
+    'estado_asistencia' => 'pendiente',
+
+]);
 
        return redirect('/formularios')
     ->with(
