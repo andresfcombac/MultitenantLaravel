@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Actividad;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use App\Models\FormularioRespuesta;
 
 class ActividadController extends Controller
 {
@@ -214,5 +215,60 @@ public function destroy($id)
             'success',
             'Actividad eliminada correctamente'
         );
+}
+
+public function asistencia($id)
+{
+    if (session('rol') == 5) {
+
+        $actividad = Actividad::find($id);
+
+    } else {
+
+        $actividad = Actividad::where(
+            'empresa_id',
+            app('tenant_id')
+        )->find($id);
+
+    }
+
+    // Validación de acceso
+    if (! $actividad) {
+
+        return redirect('/actividades')
+            ->with(
+                'warning',
+                'La actividad no existe o no pertenece a su empresa.'
+            );
+
+    }
+
+    $respuestas = FormularioRespuesta::with([
+    'asistencia',
+    'formulario',
+])
+->whereHas(
+    'formulario',
+    function ($q) use ($id) {
+
+        $q->where(
+            'id_actividad',
+            $id
+        );
+
+    }
+)
+->orderBy(
+    'fecha_respuesta',
+    'asc'
+)
+->get();
+return view(
+    'actividades.asistencia',
+    compact(
+        'actividad',
+        'respuestas'
+    )
+);
 }
 }
