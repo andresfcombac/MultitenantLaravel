@@ -1,58 +1,234 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MultitenantLaravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descripción
 
-## About Laravel
+MultitenantLaravel es una aplicación desarrollada en Laravel 13 para la administración de empresas, actividades, formularios, usuarios y control de asistencias bajo un esquema **multitenant**, donde cada empresa visualiza únicamente su propia información mientras el SuperAdministrador tiene acceso global.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Actualmente el proyecto incluye:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Gestión de empresas.
+* Gestión de usuarios y roles.
+* Gestión de actividades.
+* Gestión de formularios dinámicos.
+* Registro de respuestas.
+* Administración de asistentes.
+* Confirmación manual de asistencia.
+* Base preparada para confirmación mediante código QR.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# Requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Servidor Linux recomendado (Ubuntu 22.04 o superior).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Software requerido:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+* PHP 8.5+
+* Composer 2.x
+* MySQL 8.x
+* Apache o Nginx
+* Git
 
-## Agentic Development
+Extensiones PHP:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+* BCMath
+* Ctype
+* Fileinfo
+* JSON
+* Mbstring
+* OpenSSL
+* PDO
+* PDO_MySQL
+* Tokenizer
+* XML
+* Zip
+* GD
+
+---
+
+# Instalación
+
+## 1. Clonar el proyecto
 
 ```bash
-composer require laravel/boost --dev
+git clone https://github.com/<usuario>/MultitenantLaravel.git
 
-php artisan boost:install
+cd MultitenantLaravel
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 2. Instalar dependencias
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 3. Copiar el archivo de entorno
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 4. Configurar la base de datos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Editar:
+
+```
+.env
+```
+
+Ejemplo:
+
+```env
+DB_CONNECTION=legacy
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=multitenant
+DB_USERNAME=root
+DB_PASSWORD=password
+```
+
+---
+
+## 5. Generar la llave
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## 6. Restaurar la base de datos
+
+Importar el respaldo SQL:
+
+```bash
+mysql -u usuario -p multitenant < multitenant.sql
+```
+
+---
+
+## 7. Limpiar cachés
+
+```bash
+php artisan optimize:clear
+```
+
+---
+
+## 8. Verificar permisos
+
+Linux:
+
+```bash
+sudo chown -R www-data:www-data storage bootstrap/cache
+
+sudo chmod -R 775 storage bootstrap/cache
+```
+
+---
+
+## 9. Ejecutar
+
+Servidor local:
+
+```bash
+php artisan serve
+```
+
+o configurar VirtualHost en Apache/Nginx apuntando a:
+
+```
+public/
+```
+
+---
+
+# Usuarios
+
+El sistema utiliza autenticación propia.
+
+Los usuarios se almacenan en la base de datos.
+
+El SuperAdministrador posee acceso global.
+
+Los Administradores visualizan únicamente la información de su empresa.
+
+Los Supervisores administran actividades y asistencia.
+
+---
+
+# Roles
+
+Actualmente existen los siguientes roles:
+
+* SuperAdministrador
+* Administrador
+* Supervisor
+* Usuario
+
+Próximamente:
+
+* Validador QR
+
+---
+
+# Estructura
+
+```
+app/
+config/
+database/
+public/
+resources/
+routes/
+storage/
+```
+
+---
+
+# Tecnologías
+
+* Laravel 13
+* PHP 8.5
+* MySQL
+* Bootstrap 5
+* SweetAlert2
+* FontAwesome
+
+---
+
+# Versionado
+
+El proyecto utiliza Git Tags.
+
+Ejemplo:
+
+```
+v1.8.1
+```
+
+Cada versión publicada representa un estado estable del sistema.
+
+---
+
+# Próximas funcionalidades
+
+* Validación de asistencia mediante QR.
+* Usuario Validador QR.
+* Confirmación automática de asistencia.
+* Reportes avanzados.
+* Dashboard estadístico.
+
+---
+
+# Autor
+
+Andrés Fernando Comba
+
+Proyecto académico y de desarrollo para la gestión multitenant de actividades y formularios utilizando Laravel.
