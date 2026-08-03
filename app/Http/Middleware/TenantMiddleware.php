@@ -18,13 +18,19 @@ class TenantMiddleware
         );
 
         if (
-            $rol &&
-            $rol->nombre_rol == 'SuperAdmin'
-        ) {
+    $rol &&
+    in_array(
+        $rol->nombre_rol,
+        [
+            'SuperAdmin',
+            'Validador QR',
+        ]
+    )
+) {
 
-            return $next($request);
+    return $next($request);
 
-        }
+}
 
         if (! session()->has('empresa')) {
 

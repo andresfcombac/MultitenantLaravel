@@ -39,16 +39,19 @@ class LoginController extends Controller
         }
 
         if (
-            $usuario->rol_usu != 5
-            && ! $usuario->empresa_usu
-        ) {
+    ! in_array(
+        $usuario->rol_usu,
+        [5, 6]
+    )
+    && ! $usuario->empresa_usu
+) {
 
-            return back()->with(
-                'error',
-                'Usuario sin empresa asignada'
-            );
+    return back()->with(
+        'error',
+        'Usuario sin empresa asignada'
+    );
 
-        }
+}
 
         session([
 
@@ -62,7 +65,13 @@ class LoginController extends Controller
 
         ]);
 
-        return redirect('/dashboard');
+        if ($usuario->rol_usu == 6) {
+
+    return redirect('/validador');
+
+}
+
+return redirect('/dashboard');
     }
 
     public function logout()

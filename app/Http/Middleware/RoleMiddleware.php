@@ -13,6 +13,22 @@ class RoleMiddleware
         Closure $next,
         ...$roles
     ) {
+    
+    if (session('rol') == 6) {
+
+        if (
+            ! $request->is('validador*')
+            && ! $request->is('logout')
+        ) {
+
+            return redirect('/validador')->with(
+                'warning',
+                'El usuario Validador QR únicamente puede acceder al módulo de validación.'
+            );
+
+        }
+
+    }    
 
         $rol = Role::find(
             session('rol')

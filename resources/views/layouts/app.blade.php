@@ -113,39 +113,47 @@
     ]);
 
 @endphp
-        <a
-            href="/dashboard"
-            class="menu-item">
+        @php
+    $esValidadorQr = session('rol') == 6;
+@endphp
 
-            <i class="fa-solid fa-house"></i>
+@if(!$esValidadorQr)
 
-            <span>
+<a
+    href="/dashboard"
+    class="menu-item">
 
-                Dashboard
+    <i class="fa-solid fa-house"></i>
 
-            </span>
+    <span>
 
-        </a>
+        Dashboard
 
-@if($rolNombre === 'SuperAdmin')
+    </span>
 
-        <a
-            href="/empresas"
-            class="menu-item">
+</a>
 
-            <i class="fa-solid fa-building"></i>
+@endif
 
-            <span>
+@if(!$esValidadorQr && $rolNombre === 'SuperAdmin')
 
-                Empresas
+<a
+    href="/empresas"
+    class="menu-item">
 
-            </span>
+    <i class="fa-solid fa-building"></i>
 
-        </a>
+    <span>
 
-        @endif
+        Empresas
 
-     @if($menuGestion)
+    </span>
+
+</a>
+
+@endif
+
+@if(!$esValidadorQr && $menuGestion)
 
 <a
     href="/usuarios"
@@ -154,14 +162,16 @@
     <i class="fa-solid fa-users"></i>
 
     <span>
+
         Usuarios
+
     </span>
 
 </a>
 
 @endif
 
-
+@if(!$esValidadorQr)
 
 <a
     href="/formularios"
@@ -175,7 +185,9 @@
 
 </a>
 
+@endif
 
+@if(!$esValidadorQr)
         <a
             href="/actividades"
             class="menu-item">
@@ -189,8 +201,27 @@
             </span>
 
         </a>
+ @endif
 
-        @if(in_array(session('rol'), [5, 3, 1]))
+
+@if($esValidadorQr)
+
+<a
+    href="{{ route('validador.index') }}"
+    class="menu-item">
+
+    <i class="fa-solid fa-qrcode"></i>
+
+    <span>
+        Validador QR
+    </span>
+
+</a>
+
+@endif
+
+
+       @if(!$esValidadorQr && in_array(session('rol'), [5,3,1]))
 <a
     href="/asistencias"
     class="menu-item">
@@ -204,7 +235,7 @@
 </a>
 @endif
 
-        @if($menuGestion)
+        @if(!$esValidadorQr && $menuGestion)
               <a
                
             href="/historico"
@@ -217,7 +248,9 @@
         @endif
     </nav>
   <div class="sidebar-footer">
-    @if($menuAdministracion)
+
+
+  @if(!$esValidadorQr && $menuAdministracion)
     <a
         href="/configuracion"   class="menu-item">
         <i class="fa-solid fa-gear"></i>
@@ -312,7 +345,8 @@
                     Mi perfil
                 </a>
             </li>
-            @if($menuAdministracion)
+
+            @if(!$esValidadorQr && $menuAdministracion)
 <li>
     <a class="dropdown-item" href="/configuracion">
         <i class="fa-solid fa-gear me-2"></i>

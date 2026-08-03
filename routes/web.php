@@ -14,6 +14,7 @@ use App\Http\Controllers\HistoricoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ValidadorQrController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -26,7 +27,11 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get(
     '/dashboard',
     [DashboardController::class, 'index']
-)->middleware('auth.session', 'tenant');
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador,Supervisor,Usuario'
+]);
 
 Route::get(
     '/empresas',
@@ -225,11 +230,11 @@ Route::get(
     '/formularios',
     [FormularioController::class, 'index']
 )
-    ->middleware([
-        'auth.session',
-        'tenant',
-        
-    ]);
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador,Supervisor,Usuario',
+]);
 
 Route::get(
     '/formularios/create',
@@ -261,6 +266,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
+        'role:SuperAdmin,Administrador,Supervisor,Usuario'
     ]);
 
 Route::get(
@@ -425,19 +431,11 @@ Route::get(
     '/asistencias',
     [AsistenciaController::class, 'index']
 )
-    ->middleware([
-        'auth.session',
-        'tenant',
-    ]);
-
-// Confirmación manual deshabilitada.
-// La asistencia será confirmada únicamente mediante lectura QR.
-// Route::post('/asistencias/{id}/confirmar', ...);
-//    [AsistenciaController::class, 'confirmar']
-//)->middleware([
-  //  'auth.session',
-    //'tenant',
-//]);
+  ->middleware([
+    'auth.session',
+    'tenant',
+    'role:SuperAdmin,Administrador,Supervisor',
+]);
 
 Route::get(
     '/historico',
@@ -452,9 +450,11 @@ Route::get(
 Route::get(
     '/configuracion',
     [ConfiguracionController::class, 'index']
-)->middleware([
+)
+->middleware([
     'auth.session',
     'tenant',
+    'role:SuperAdmin,Administrador',
 ]);
 
 Route::get(
@@ -473,5 +473,15 @@ Route::post(
     'auth.session',
     'tenant',
 ])->name('perfil.actualizar');
+
+Route::get(
+    '/validador',
+    [ValidadorQrController::class,'index']
+)->middleware([
+    'auth.session',
+    'tenant',
+    'role:Validador QR'
+])->name('validador.index');
+
 
 Route::get('/logout', [LoginController::class, 'logout']);
