@@ -16,17 +16,72 @@
 
         <div class="card-body">
 
-            <h5>
+            @if(session('success'))
 
-                Bienvenido al módulo de validación.
+<div class="alert alert-success">
 
-            </h5>
+    {{ session('success') }}
 
-            <p>
+</div>
 
-                Desde aquí se realizará la confirmación de asistentes mediante código QR.
+@endif
 
-            </p>
+@if(session('warning'))
+
+<div class="alert alert-warning">
+
+    {{ session('warning') }}
+
+</div>
+
+@endif
+
+@if(session('error'))
+
+<div class="alert alert-danger">
+
+    {{ session('error') }}
+
+</div>
+
+@endif
+
+<form
+    method="POST"
+    action="{{ route('validador.confirmar') }}"
+>
+
+    @csrf
+
+    <div class="mb-3">
+
+        <label class="form-label">
+
+            Código QR
+
+        </label>
+
+        <input
+            type="text"
+            name="codigo"
+            class="form-control"
+            autofocus
+            required
+        >
+
+    </div>
+
+    <button
+        class="btn btn-success"
+    >
+
+        <i class="fa-solid fa-qrcode me-1"></i>
+
+        Confirmar asistencia
+
+    </button>
+
+</form>
 
         </div>
 

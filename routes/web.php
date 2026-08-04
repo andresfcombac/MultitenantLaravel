@@ -22,7 +22,8 @@ Route::get('/', function () {
 
 Route::get('/login', [LoginController::class, 'index']);
 
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login'])
+    ->middleware('throttle:6,1');
 
 Route::get(
     '/dashboard',
@@ -220,8 +221,7 @@ Route::post(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:SuperAdmin,Administrador,Supervisor
-    ',
+    'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
 /* FORMULARIOS */
@@ -318,7 +318,13 @@ Route::post(
 Route::get(
     '/formularios/{id}/respuestas/exportar',
     [FormularioRespuestaController::class, 'exportar']
-)->name('formularios.respuestas.exportar');
+)
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador,Supervisor',
+    ])
+    ->name('formularios.respuestas.exportar');
 
 // Exportar respuestas a CSV
 
@@ -344,7 +350,13 @@ Route::get(
 Route::post(
     '/formularios/{id}/importar',
     [FormularioRespuestaController::class, 'importar']
-)->name('formularios.importar');
+)
+    ->middleware([
+        'auth.session',
+        'tenant',
+        'role:SuperAdmin,Administrador',
+    ])
+    ->name('formularios.importar');
 
 /* CAMPOS DEL FORMULARIO */
 
@@ -437,6 +449,16 @@ Route::get(
     'role:SuperAdmin,Administrador,Supervisor',
 ]);
 
+Route::post(
+    '/asistencias/{id}/confirmar',
+    [AsistenciaController::class, 'confirmar']
+)
+    ->middleware([
+        'auth.session',
+        'tenant',
+    ])
+    ->name('asistencias.confirmar');
+
 Route::get(
     '/historico',
     [HistoricoController::class, 'index']
@@ -483,5 +505,15 @@ Route::get(
     'role:Validador QR'
 ])->name('validador.index');
 
+Route::post(
+    '/validador/confirmar',
+    [ValidadorQrController::class, 'confirmar']
+)
+->middleware([
+    'auth.session',
+    'tenant',
+    'role:Validador QR',
+])
+->name('validador.confirmar');
 
 Route::get('/logout', [LoginController::class, 'logout']);
