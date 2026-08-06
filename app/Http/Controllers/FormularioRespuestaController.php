@@ -14,7 +14,7 @@ class FormularioRespuestaController extends Controller
 {
     public function index(Request $request, $id)
     {
-        $formulario = Formulario::with('campos')->findOrFail($id);
+        $formulario = $this->formularioDelTenant($id);
 
         $query = FormularioRespuesta::where(
             'id_formulario',
@@ -99,7 +99,7 @@ class FormularioRespuestaController extends Controller
 
     public function exportar($id)
     {
-        $formulario = Formulario::with('campos')->findOrFail($id);
+        $formulario = $this->formularioDelTenant($id);
 
         $respuestas = FormularioRespuesta::where(
             'id_formulario',
@@ -221,13 +221,36 @@ class FormularioRespuestaController extends Controller
         return Coordinate::stringFromColumnIndex($columna).$fila;
     }
 
+    /**
+     * Busca el formulario validando que pertenezca al tenant actual
+     * (mismo criterio que el resto de los controladores). SuperAdmin
+     * puede acceder a formularios de cualquier empresa.
+     */
+    private function formularioDelTenant($id)
+    {
+        $consulta = Formulario::with('campos');
+
+        if (session('rol') != 5) {
+
+            $consulta->whereHas(
+                'actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
+
+        }
+
+        return $consulta->findOrFail($id);
+    }
+
     public function importar(Request $request, $id)
     {
         $request->validate([
             'archivo' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
-        $formulario = Formulario::with('campos')->findOrFail($id);
+        $formulario = $this->formularioDelTenant($id);
 
         $spreadsheet = IOFactory::load(
             $request->file('archivo')->getRealPath()

@@ -25,4 +25,13 @@ class Historico extends Model
         'id_actividad',
 
     ];
+
+    public function actividad()
+    {
+        return $this->belongsTo(
+            Actividad::class,
+            'id_actividad',
+            'id_actividad'
+        );
+    }
 }

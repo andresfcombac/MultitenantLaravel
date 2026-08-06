@@ -10,7 +10,13 @@
 
         <div class="card-header">
 
-            <h4>Validador QR</h4>
+            <h4>
+
+                <i class="fa-solid fa-qrcode me-2"></i>
+
+                Validador QR
+
+            </h4>
 
         </div>
 
@@ -18,75 +24,108 @@
 
             @if(session('success'))
 
-<div class="alert alert-success">
+                <div class="alert alert-success">
 
-    {{ session('success') }}
+                    {{ session('success') }}
 
-</div>
+                </div>
 
-@endif
+            @endif
 
-@if(session('warning'))
+            @if(session('warning'))
 
-<div class="alert alert-warning">
+                <div class="alert alert-warning">
 
-    {{ session('warning') }}
+                    {{ session('warning') }}
 
-</div>
+                </div>
 
-@endif
+            @endif
 
-@if(session('error'))
+            @if(session('error'))
 
-<div class="alert alert-danger">
+                <div class="alert alert-danger">
 
-    {{ session('error') }}
+                    {{ session('error') }}
 
-</div>
+                </div>
 
-@endif
+            @endif
 
-<form
-    method="POST"
-    action="{{ route('validador.confirmar') }}"
->
+            <div class="mb-4">
 
-    @csrf
+                <div
+                    id="reader"
+                    style="width:350px; max-width:100%;">
+                </div>
 
-    <div class="mb-3">
+            </div>
 
-        <label class="form-label">
+            <form
+                method="POST"
+                action="{{ route('validador.confirmar') }}"
+            >
 
-            Código QR
+                @csrf
 
-        </label>
+                <input
+                    type="hidden"
+                    id="codigo"
+                    name="codigo"
+                >
 
-        <input
-            type="text"
-            name="codigo"
-            class="form-control"
-            autofocus
-            required
-        >
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
 
-    </div>
+                    <i class="fa-solid fa-qrcode me-1"></i>
 
-    <button
-        class="btn btn-success"
-    >
+                    Confirmar asistencia
 
-        <i class="fa-solid fa-qrcode me-1"></i>
+                </button>
 
-        Confirmar asistencia
-
-    </button>
-
-</form>
+            </form>
 
         </div>
 
     </div>
 
 </div>
+
+<script src="{{ asset('assets/js/html5-qrcode/html5-qrcode.min.js') }}"></script>
+
+<script>
+
+function onScanSuccess(decodedText)
+{
+
+    document.getElementById('codigo').value = decodedText;
+
+    document.forms[0].submit();
+
+}
+
+const scanner = new Html5QrcodeScanner(
+
+    "reader",
+
+    {
+
+        fps: 10,
+
+        qrbox: 250,
+
+        rememberLastUsedCamera: true
+
+    },
+
+    false
+
+);
+
+scanner.render(onScanSuccess);
+
+</script>
 
 @endsection

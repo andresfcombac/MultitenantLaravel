@@ -1,0 +1,10 @@
+{
+	auto_https disable_redirects
+	local_certs
+}
+
+https://100.79.123.49:8443 {
+	tls internal
+
+	reverse_proxy 127.0.0.1:8002
+}

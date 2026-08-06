@@ -6,6 +6,8 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+use Illuminate\Http\Request;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
 {
+    
     View::composer('layouts.app', function ($view) {
 
         $usuarioActual = null;

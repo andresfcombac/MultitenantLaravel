@@ -16,6 +16,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'correo_usu' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $usuario = Usuario::where(
             'correo_usu',
             $request->correo_usu
@@ -52,6 +57,8 @@ class LoginController extends Controller
     );
 
 }
+
+        $request->session()->regenerate();
 
         session([
 

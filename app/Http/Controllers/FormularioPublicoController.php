@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asistencia;
 use App\Models\Formulario;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
@@ -14,6 +15,12 @@ class FormularioPublicoController extends Controller
         $formulario = Formulario::with('campos')
             ->findOrFail($id);
 
+        if ($formulario->estado == 0) {
+
+            abort(404);
+
+        }
+
         return view(
             'formularios.publico',
             compact('formulario')
@@ -24,7 +31,19 @@ class FormularioPublicoController extends Controller
     public function store(Request $request, $id)
     {
 
-        $formulario = Formulario::findOrFail($id);
+        $formulario = Formulario::with('campos')
+            ->findOrFail($id);
+
+        // No permitir responder formularios inactivos (mismo control
+        // que ya existe en FormularioController::responder).
+        if ($formulario->estado == 0) {
+
+            return back()->with(
+                'warning',
+                'Este formulario ya no está disponible para recibir respuestas.'
+            );
+
+        }
 
         $request->validate([
             'nombres' => 'required|max:100',
@@ -35,19 +54,24 @@ class FormularioPublicoController extends Controller
             'numero_documento' => 'required|max:30',
         ]);
 
-        $datos = $request->except([
+        // Construir "datos" únicamente a partir de los campos reales
+        // del formulario (no de todo lo que llegue en el request), para
+        // no permitir inyectar claves/valores arbitrarios en el JSON.
+        $datos = [];
 
-            '_token',
-            'nombres',
-            'apellidos',
-            'correo',
-            'telefono',
-            'tipo_documento',
-            'numero_documento',
+        foreach ($formulario->campos as $campo) {
 
-        ]);
+            $valor = $request->input($campo->etiqueta);
 
-        FormularioRespuesta::create([
+            if (is_array($valor)) {
+                $valor = implode(', ', $valor);
+            }
+
+            $datos[$campo->etiqueta] = $valor;
+
+        }
+
+        $respuesta = FormularioRespuesta::create([
 
             'id_formulario' => $formulario->id_formulario,
 
@@ -64,6 +88,16 @@ class FormularioPublicoController extends Controller
             'tipo_documento' => $request->tipo_documento,
 
             'numero_documento' => $request->numero_documento,
+
+        ]);
+
+        // Mantener consistencia con FormularioController::responder,
+        // que sí crea el registro de asistencia asociado.
+        Asistencia::create([
+
+            'id_respuesta' => $respuesta->id_respuesta,
+
+            'estado_asistencia' => 'pendiente',
 
         ]);
 

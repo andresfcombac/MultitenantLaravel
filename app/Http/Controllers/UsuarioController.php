@@ -69,6 +69,18 @@ class UsuarioController extends Controller
 
     }
 
+    /**
+     * Roles que el usuario autenticado tiene permitido asignar a otros.
+     * SuperAdmin puede asignar cualquier rol; el resto solo puede crear
+     * usuarios con los roles [1,2] (mismo criterio que la vista create()).
+     */
+    private function rolesAsignables()
+    {
+        return session('rol') == 5
+            ? Role::pluck('id_rol')->all()
+            : [1, 2];
+    }
+
     public function store(Request $request)
     {
 
@@ -77,7 +89,7 @@ class UsuarioController extends Controller
             'apellidos_usu' => 'required|max:50',
             'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu',
             'password' => 'required|min:6',
-            'rol_usu' => 'required',
+            'rol_usu' => 'required|in:'.implode(',', $this->rolesAsignables()),
         ]);
 
         Usuario::create([
@@ -204,8 +216,14 @@ if (! $usuario) {
     'fecha_up' => now(),
 ];
 
-// Solo SuperAdmin y Administrador pueden cambiar rol
-if (in_array(session('rol'), [5, 3])) {
+// Solo SuperAdmin y Administrador pueden cambiar rol, y solo dentro
+// de los roles que tienen permitido asignar (evita que un Administrador
+// se autoasigne o asigne a otros el rol SuperAdmin).
+if (
+    in_array(session('rol'), [5, 3])
+    && $request->filled('rol_usu')
+    && in_array((int) $request->rol_usu, $this->rolesAsignables())
+) {
 
     $datos['rol_usu'] = $request->rol_usu;
 

@@ -104,7 +104,12 @@ class DashboardController extends Controller
                     }
                 )->count(),
 
-                'historico' => 0,
+                'historico' => Historico::whereHas(
+                    'actividad',
+                    function ($q) use ($empresaId) {
+                        $q->where('empresa_id', $empresaId);
+                    }
+                )->count(),
 
             ];
 

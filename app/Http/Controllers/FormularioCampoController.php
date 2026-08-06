@@ -160,12 +160,47 @@ class FormularioCampoController extends Controller
 
     }
 
+    /**
+     * Busca el campo validando que su formulario pertenezca al tenant
+     * actual (mismo criterio que index/store). SuperAdmin no tiene
+     * restricción.
+     */
+    private function campoDelTenant($id)
+    {
+        $campo = FormularioCampo::with('formulario.actividad')
+            ->findOrFail($id);
+
+        if (
+            session('rol') != 5
+            && $campo->formulario->actividad->empresa_id != app('tenant_id')
+        ) {
+
+            abort(403, 'Acceso no autorizado');
+
+        }
+
+        return $campo;
+    }
+
     public function edit($id)
     {
 
-        $campo = FormularioCampo::findOrFail($id);
+        $campo = $this->campoDelTenant($id);
 
-        $formularios = Formulario::all();
+        if (session('rol') == 5) {
+
+            $formularios = Formulario::all();
+
+        } else {
+
+            $formularios = Formulario::whereHas(
+                'actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            )->get();
+
+        }
 
         return view(
             'formulario_campos.edit',
@@ -180,7 +215,7 @@ class FormularioCampoController extends Controller
     public function update(Request $request, $id)
     {
 
-        $campo = FormularioCampo::findOrFail($id);
+        $campo = $this->campoDelTenant($id);
 
         $request->validate([
 
@@ -188,6 +223,22 @@ class FormularioCampoController extends Controller
             'tipo_campo' => 'required',
 
         ]);
+
+        // Si se cambia el formulario del campo, validar que el nuevo
+        // formulario también pertenezca al tenant actual.
+        if (
+            $request->filled('id_formulario')
+            && session('rol') != 5
+        ) {
+
+            Formulario::whereHas(
+                'actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            )->findOrFail($request->id_formulario);
+
+        }
 
         $campo->update([
 
@@ -216,7 +267,7 @@ class FormularioCampoController extends Controller
     public function destroy($id)
     {
 
-        $campo = FormularioCampo::findOrFail($id);
+        $campo = $this->campoDelTenant($id);
 
         $campo->delete();
 
