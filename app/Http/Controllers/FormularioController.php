@@ -9,6 +9,8 @@ use App\Models\FormularioCampo;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FormularioController extends Controller
 {
@@ -471,6 +473,29 @@ if ($formulario->estado == 0) {
     'numero_documento' => $request->numero_documento,
 
 ]);
+
+/*
+|--------------------------------------------------------------------------
+| Generar imagen QR del registro
+|--------------------------------------------------------------------------
+*/
+
+$baseUrl = rtrim(
+    env('QR_BASE_URL', config('app.url')),
+    '/'
+);
+
+$contenidoQr = $baseUrl.'/validador/'.$respuesta->qr_token;
+
+$qr = QrCode::format('svg')
+    ->size(400)
+    ->margin(2)
+    ->generate($contenidoQr);
+
+Storage::disk('public')->put(
+    'qr/'.$respuesta->qr_token.'.svg',
+    $qr
+);
 
 Asistencia::create([
 

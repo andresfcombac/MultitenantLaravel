@@ -100,9 +100,22 @@
 function onScanSuccess(decodedText)
 {
 
-    document.getElementById('codigo').value = decodedText;
+    let partes = decodedText.split('/');
 
-    document.forms[0].submit();
+    let token = partes[partes.length - 1];
+
+
+    fetch('/validador/' + token)
+        .then(response => response.text())
+        .then(html => {
+
+            document.open();
+
+            document.write(html);
+
+            document.close();
+
+        });
 
 }
 

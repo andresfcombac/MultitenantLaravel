@@ -502,7 +502,7 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:Validador QR'
+    'role:Administrador,Supervisor,Validador QR'
 ])->name('validador.index');
 
 Route::post(
@@ -512,8 +512,13 @@ Route::post(
 ->middleware([
     'auth.session',
     'tenant',
-    'role:Validador QR',
+    'role:Administrador,Supervisor,Validador QR'
 ])
 ->name('validador.confirmar');
+
+Route::get(
+    '/validador/{token}',
+    [ValidadorQrController::class, 'validar']
+)->name('validador.token');
 
 Route::get('/logout', [LoginController::class, 'logout']);

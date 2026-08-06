@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class FormularioRespuesta extends Model
 {
@@ -24,6 +25,7 @@ class FormularioRespuesta extends Model
         'telefono',
         'tipo_documento',
         'numero_documento',
+        'qr_token',
 
     ];
 
@@ -31,6 +33,20 @@ class FormularioRespuesta extends Model
         'datos' => 'array',
     ];
 
+    protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($respuesta) {
+
+        if (empty($respuesta->qr_token)) {
+
+            $respuesta->qr_token = (string) Str::uuid();
+
+        }
+
+    });
+}
     public function formulario()
     {
         return $this->belongsTo(
