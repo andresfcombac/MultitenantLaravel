@@ -487,7 +487,6 @@ Route::get(
     'tenant',
 ])->name('perfil');
 
-
 Route::post(
     '/mi-perfil',
     [UsuarioController::class, 'actualizarPerfil']

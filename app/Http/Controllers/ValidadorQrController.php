@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Asistencia;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmacionAsistenciaMail;
 
 class ValidadorQrController extends Controller
 {
@@ -16,11 +17,12 @@ class ValidadorQrController extends Controller
 
 public function validar($token)
 {
-    $respuesta = FormularioRespuesta::where(
-        'qr_token',
-        $token
-    )->first();
-
+   $respuesta = FormularioRespuesta::with([
+    'asistencia.usuario'
+])->where(
+    'qr_token',
+    $token
+)->first();
 
     if (! $respuesta) {
 
@@ -134,6 +136,16 @@ public function validar($token)
 
         ]);
 
+        $respuesta = $asistencia->respuesta;
+        
+if ($respuesta && $respuesta->correo) {
+
+    Mail::to($respuesta->correo)
+        ->send(
+            new ConfirmacionAsistenciaMail($respuesta)
+        );
+
+}
         return back()->with(
             'success',
             'Asistencia confirmada correctamente.'

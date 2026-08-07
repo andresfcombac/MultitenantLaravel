@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistroFormularioMail;
 
 class FormularioController extends Controller
 {
@@ -505,6 +507,26 @@ Asistencia::create([
 
 ]);
 
+if (! empty($respuesta->correo)) {
+
+    try {
+
+        Mail::to($respuesta->correo)
+            ->send(
+                new RegistroFormularioMail($respuesta)
+            );
+        
+    } catch (\Throwable $e) {
+
+        \Log::error('Error enviando correo de registro', [
+            'mensaje' => $e->getMessage(),
+            'archivo' => $e->getFile(),
+            'linea' => $e->getLine(),
+        ]);
+
+    }
+
+}
        return redirect('/formularios')
     ->with(
         'success',

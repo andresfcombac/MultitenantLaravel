@@ -6,6 +6,9 @@ use App\Models\Asistencia;
 use App\Models\Formulario;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistroFormularioMail;
+use Illuminate\Support\Facades\Log;
 
 class FormularioPublicoController extends Controller
 {
@@ -101,6 +104,29 @@ class FormularioPublicoController extends Controller
 
         ]);
 
+if (! empty($respuesta->correo)) {
+ Log::info('RegistroFormularioMail', [
+    'id_respuesta' => $respuesta->id_respuesta,
+    'correo' => $respuesta->correo,
+]);
+    try {
+
+        Mail::to($respuesta->correo)
+            ->send(
+                new RegistroFormularioMail($respuesta)
+            );
+        
+    } catch (\Throwable $e) {
+
+        \Log::error('Error enviando correo de registro', [
+            'mensaje' => $e->getMessage(),
+            'archivo' => $e->getFile(),
+            'linea' => $e->getLine(),
+        ]);
+
+    }
+
+}
         return back()->with(
             'success',
             'Respuesta enviada correctamente'
