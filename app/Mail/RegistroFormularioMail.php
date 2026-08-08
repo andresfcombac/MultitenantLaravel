@@ -19,24 +19,39 @@ class RegistroFormularioMail extends Mailable
         $this->respuesta = $respuesta;
     }
 
-    public function build()
+   public function build()
 {
     $mail = $this
-        ->subject('Registro de formulario')
+        ->subject('Confirmación de registro')
         ->view('emails.registro-formulario');
 
-    $rutaQr = 'qr/'.$this->respuesta->qr_token.'.svg';
+    $rutaQr = 'qr/' . $this->respuesta->qr_token . '.png';
 
     if (Storage::disk('public')->exists($rutaQr)) {
 
+        $rutaCompleta = Storage::disk('public')->path($rutaQr);
+
+        $mail->with([
+            'qrPath' => $rutaCompleta,
+        ]);
+
+        $mail->withSymfonyMessage(function ($message) use ($rutaCompleta) {
+
+            $message->embedFromPath(
+                $rutaCompleta,
+                'qr-code',
+                'image/png'
+            );
+
+        });
+
         $mail->attach(
-            Storage::disk('public')->path($rutaQr),
+            $rutaCompleta,
             [
-                'as' => 'QR-'.$this->respuesta->numero_documento.'.svg',
-                'mime' => 'image/svg+xml',
+                'as' => 'QR-' . $this->respuesta->numero_documento . '.png',
+                'mime' => 'image/png',
             ]
         );
-
     }
 
     return $mail;

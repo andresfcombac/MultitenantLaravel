@@ -489,13 +489,13 @@ $baseUrl = rtrim(
 
 $contenidoQr = $baseUrl.'/validador/'.$respuesta->qr_token;
 
-$qr = QrCode::format('svg')
+$qr = QrCode::format('png')
     ->size(400)
     ->margin(2)
     ->generate($contenidoQr);
 
 Storage::disk('public')->put(
-    'qr/'.$respuesta->qr_token.'.svg',
+    'qr/'.$respuesta->qr_token.'.png',
     $qr
 );
 
