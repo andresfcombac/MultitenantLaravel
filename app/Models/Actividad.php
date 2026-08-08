@@ -21,6 +21,7 @@ class Actividad extends Model
         'hora_inicio',
         'hora_fin',
         'empresa_id',
+        'estado',
     ];
 
     public function empresa()
