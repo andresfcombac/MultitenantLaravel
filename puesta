@@ -1,0 +1,13 @@
+[90m= [39m[34;4mApp\Models\FormularioRespuesta[39;24m {#7937
+    [34mid_respuesta[39m: [35m21[39m,
+    [34mid_formulario[39m: [35m15[39m,
+    [34mdatos[39m: [32m"[39m[32m{[39m\"[32medad[39m\"[32m: [39m\"[32m56[39m\"[32m, [39m\"[32mfecha ingreso[39m\"[32m: null}[39m[32m"[39m,
+    [34mfecha_respuesta[39m: [32m"[39m[32m2026-08-06 14:09:20[39m[32m"[39m,
+    [34mnombres[39m: [32m"[39m[32mhu[39m[32m"[39m,
+    [34mapellidos[39m: [32m"[39m[32mjo[39m[32m"[39m,
+    [34mcorreo[39m: [32m"[39m[32mjoohu@gmail.com[39m[32m"[39m,
+    [34mtelefono[39m: [32m"[39m[32m74889874[39m[32m"[39m,
+    [34mtipo_documento[39m: [32m"[39m[32mCC[39m[32m"[39m,
+    [34mnumero_documento[39m: [32m"[39m[32m789452562[39m[32m"[39m,
+    [34mqr_token[39m: [32m"[39m[32m901b692e-85a0-449c-9378-b8107ba0e7a0[39m[32m"[39m,
+  }

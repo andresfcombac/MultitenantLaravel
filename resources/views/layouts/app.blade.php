@@ -187,6 +187,7 @@
 
 @endif
 
+
 @if(!$esValidadorQr)
         <a
             href="/actividades"
@@ -204,16 +205,18 @@
  @endif
 
 
-@if($esValidadorQr)
+@if(in_array($rolNombre, ['Administrador','Supervisor','Validador QR']))
 
 <a
     href="{{ route('validador.index') }}"
-    class="menu-item">
+    class="menu-item {{ request()->is('validador*') ? 'active' : '' }}">
 
     <i class="fa-solid fa-qrcode"></i>
 
     <span>
+
         Validador QR
+
     </span>
 
 </a>
@@ -247,7 +250,9 @@
         </a>
         @endif
     </nav>
-  <div class="sidebar-footer">
+  
+      
+    <div class="sidebar-footer">
 
 
   @if(!$esValidadorQr && $menuAdministracion)

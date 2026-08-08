@@ -9,6 +9,10 @@ use App\Models\FormularioCampo;
 use App\Models\FormularioRespuesta;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistroFormularioMail;
 
 class FormularioController extends Controller
 {
@@ -472,6 +476,29 @@ if ($formulario->estado == 0) {
 
 ]);
 
+/*
+|--------------------------------------------------------------------------
+| Generar imagen QR del registro
+|--------------------------------------------------------------------------
+*/
+
+$baseUrl = rtrim(
+    env('QR_BASE_URL', config('app.url')),
+    '/'
+);
+
+$contenidoQr = $baseUrl.'/validador/'.$respuesta->qr_token;
+
+$qr = QrCode::format('png')
+    ->size(400)
+    ->margin(2)
+    ->generate($contenidoQr);
+
+Storage::disk('public')->put(
+    'qr/'.$respuesta->qr_token.'.png',
+    $qr
+);
+
 Asistencia::create([
 
     'id_respuesta' => $respuesta->id_respuesta,
@@ -480,6 +507,26 @@ Asistencia::create([
 
 ]);
 
+if (! empty($respuesta->correo)) {
+
+    try {
+
+        Mail::to($respuesta->correo)
+            ->send(
+                new RegistroFormularioMail($respuesta)
+            );
+        
+    } catch (\Throwable $e) {
+
+        \Log::error('Error enviando correo de registro', [
+            'mensaje' => $e->getMessage(),
+            'archivo' => $e->getFile(),
+            'linea' => $e->getLine(),
+        ]);
+
+    }
+
+}
        return redirect('/formularios')
     ->with(
         'success',
