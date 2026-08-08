@@ -1,44 +1,77 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Ingreso confirmado')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <title>Ingreso confirmado</title>
+<div class="container mt-4">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <div class="row justify-content-center">
 
-</head>
+        <div class="col-md-8">
 
-<body class="bg-light">
+            <div class="card shadow">
 
-<div class="container mt-5">
+                <div class="card-header bg-success text-white">
 
-    <div class="alert alert-success">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        Ingreso confirmado
+                    </h4>
 
-        <h3>Ingreso confirmado</h3>
+                </div>
 
-        <p>
+                <div class="card-body text-center">
 
-            La asistencia de
+                    <div class="mb-4">
 
-            <strong>
+                        <i
+                            class="fa-solid fa-circle-check text-success"
+                            style="font-size:70px;">
+                        </i>
 
-                {{ $respuesta->nombres }}
-                {{ $respuesta->apellidos }}
+                    </div>
 
-            </strong>
+                    <h3 class="text-success">
+                        Asistencia confirmada
+                    </h3>
 
-            ya fue confirmada.
+                    <p class="mt-3">
 
-        </p>
+                        La asistencia de
+
+                        <strong>
+                            {{ $respuesta->nombres }}
+                            {{ $respuesta->apellidos }}
+                        </strong>
+
+                        ya fue confirmada.
+
+                    </p>
+
+                    <p class="text-muted">
+                        Este registro ya fue validado y no requiere
+                        una nueva confirmación.
+                    </p>
+
+                    <a
+                        href="{{ url('/validador') }}"
+                        class="btn btn-primary mt-3">
+
+                        <i class="fa-solid fa-qrcode me-2"></i>
+
+                        Volver al validador
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
-</body>
-
-</html>
+@endsection
