@@ -135,15 +135,306 @@ body{
 @media(max-width:992px){
 
     .login-left{
-        display:none;
+        display:flex;
+        width:100%;
+        min-height:auto;
+        padding:20px 15px 10px;
     }
 
     .login-right{
         width:100%;
+        padding:20px 15px 25px;
+        align-items:flex-start;
     }
-.logo-image{
-    max-width:45%;
-    max-height:45%;
-    object-fit:contain;
+
+    .login-container{
+        flex-direction:column;
+        min-height:100vh;
+    }
+
+    .left-content{
+        max-width:100%;
+    }
+
+    .logo-circle{
+        width:90px;
+        height:90px;
+        margin-bottom:12px;
+    }
+
+    .logo-image{
+        max-width:65%;
+        max-height:65%;
+        object-fit:contain;
+    }
+
+    .left-content h1{
+        font-size:28px;
+        margin-bottom:8px;
+    }
+
+    .system-description{
+        font-size:14px;
+        line-height:1.35;
+        margin-bottom:15px;
+    }
+
+    .company-list{
+        gap:6px;
+    }
+
+    .company-badge{
+        padding:6px 10px;
+        font-size:12px;
+    }
+
+    .version-info{
+        margin-top:15px;
+        font-size:11px;
+    }
+
+    .login-card{
+        max-width:430px;
+        margin:0 auto;
+    }
+
+    .login-card h2{
+        font-size:28px;
+        margin-bottom:6px;
+    }
+
+    .login-subtitle{
+        margin-bottom:20px;
+        font-size:14px;
+    }
 }
+
+@media(max-width:575.98px){
+
+    body{
+        min-height:100vh;
+        overflow-x:hidden;
+    }
+
+    .login-left{
+        padding:15px 12px 8px;
+    }
+
+    .login-right{
+        padding:15px 12px 20px;
+    }
+
+    .logo-circle{
+        width:70px;
+        height:70px;
+        margin-bottom:8px;
+    }
+
+    .left-content h1{
+        font-size:24px;
+        margin-bottom:5px;
+    }
+
+    .system-description{
+        font-size:13px;
+        line-height:1.3;
+        margin-bottom:10px;
+    }
+
+    .company-list{
+        gap:5px;
+    }
+
+    .company-badge{
+        padding:5px 8px;
+        font-size:11px;
+    }
+
+    .version-info{
+        margin-top:8px;
+        font-size:10px;
+    }
+
+    .login-card h2{
+        font-size:24px;
+    }
+
+    .login-subtitle{
+        font-size:13px;
+        margin-bottom:15px;
+    }
+
+    .form-control{
+        height:45px;
+    }
+
+    .input-group .btn{
+        width:48px;
+    }
+
+    .btn-warning{
+        height:45px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE LOGIN
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    body {
+        min-height: 100vh;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .login-container {
+        min-height: 100vh;
+        height: auto;
+        flex-direction: column;
+    }
+
+    /*
+     * En móvil no ocultamos la información institucional.
+     * La convertimos en una cabecera compacta.
+     */
+    .login-left {
+        display: flex;
+        width: 100%;
+        min-height: auto;
+        padding: 25px 20px;
+        text-align: center;
+    }
+
+    .left-content {
+        max-width: 600px;
+    }
+
+    .logo-image {
+        max-width: 90px;
+        max-height: 90px;
+        object-fit: contain;
+        margin-bottom: 12px;
+    }
+
+    .left-content h1 {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .system-description {
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 18px;
+    }
+
+    .company-list {
+        gap: 8px;
+    }
+
+    .company-badge {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+
+    .version-info {
+        margin-top: 18px;
+        font-size: 12px;
+    }
+
+    .login-right {
+        width: 100%;
+        min-height: auto;
+        height: auto;
+        padding: 30px 20px 40px;
+        align-items: flex-start;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 430px;
+        margin: 0 auto;
+    }
+
+    .login-card h2 {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+}
+
+
+/* =========================================================
+   MÓVILES PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .login-left {
+        padding: 20px 15px;
+    }
+
+    .logo-image {
+        max-width: 75px;
+        max-height: 75px;
+        margin-bottom: 8px;
+    }
+
+    .left-content h1 {
+        font-size: 26px;
+        margin-bottom: 8px;
+    }
+
+    .system-description {
+        font-size: 14px;
+        line-height: 1.35;
+        margin-bottom: 14px;
+    }
+
+    .company-list {
+        gap: 6px;
+    }
+
+    .company-badge {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .version-info {
+        margin-top: 12px;
+        font-size: 11px;
+    }
+
+    .login-right {
+        padding: 25px 15px 35px;
+    }
+
+    .login-card h2 {
+        font-size: 28px;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        height: 48px;
+    }
+
+    .input-group .btn {
+        width: 50px;
+    }
+
+    .btn-warning {
+        height: 48px;
+    }
+}
+
 }

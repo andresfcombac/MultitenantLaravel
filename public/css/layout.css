@@ -847,33 +847,344 @@ label{
     font-weight:600;
 
 }
-
 /* ==========================================
    ANIMACIONES
 ========================================== */
 
-.fade-card{
-
-    animation:fadeCard .35s ease;
-
+.fade-card {
+    animation: fadeCard .35s ease;
 }
 
-@keyframes fadeCard{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(12px);
-
+@keyframes fadeCard {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
     }
 
-    to{
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        opacity:1;
+/* ==========================================
+   RESPONSIVE GENERAL
+   ========================================== */
 
-        transform:translateY(0);
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
+.wrapper {
+    width: 100%;
+    min-width: 0;
+}
+
+.main-content {
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* ==========================================
+   TABLETS
+   ========================================== */
+
+@media (max-width: 991.98px) {
+
+    .sidebar {
+        width: 220px;
     }
 
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .content-area {
+        padding: 20px;
+    }
+}
+
+
+/* ==========================================
+   MÓVILES
+   ========================================== */
+
+@media (max-width: 767.98px) {
+
+    /*
+     * El contenido principal utiliza todo el ancho.
+     */
+    .wrapper {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .main-content {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0 !important;
+    }
+
+
+    /*
+     * Sidebar móvil tipo menú lateral.
+     * Se oculta fuera de la pantalla y aparece
+     * cuando layout.js agrega .mobile-open.
+     */
+    .sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+
+        height: 100vh;
+        z-index: 1100;
+
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /*
+     * En móvil .collapsed no debe controlar el ancho.
+     */
+    .sidebar.collapsed {
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+
+        transform: translateX(-100%);
+    }
+
+    /*
+     * Estado abierto del sidebar móvil.
+     */
+    .sidebar.mobile-open,
+    .sidebar.collapsed.mobile-open {
+        transform: translateX(0);
+    }
+
+
+    /*
+     * El contenido queda completamente libre
+     * cuando el sidebar está cerrado.
+     */
+    .topbar {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 60px;
+
+        padding: 10px 15px;
+
+        overflow: visible;
+    }
+
+    .topbar-left {
+        min-width: 0;
+        flex: 1;
+        gap: 8px;
+    }
+
+    .topbar-right {
+        flex-shrink: 0;
+        gap: 8px;
+    }
+
+    .page-title {
+        min-width: 0;
+
+        font-size: 18px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .content-area {
+        width: 100%;
+        min-width: 0;
+
+        padding: 15px;
+
+        overflow-x: hidden;
+    }
+
+
+    /*
+     * Tarjetas.
+     */
+    .card {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 14px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .dashboard-card {
+        margin-bottom: 15px;
+    }
+
+    .app-footer {
+        width: 100%;
+        padding: 15px 10px;
+        font-size: 12px;
+    }
+
+
+    /*
+     * Tablas:
+     * solamente la tabla puede desplazarse
+     * horizontalmente.
+     */
+    .table-responsive {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive .table {
+        min-width: 600px;
+    }
+
+
+    /*
+     * Formularios y botones.
+     */
+    .form-control,
+    .form-select {
+        max-width: 100%;
+    }
+
+    .btn {
+        max-width: 100%;
+    }
+
+
+    /*
+     * Menú lateral abierto:
+     * sombra para distinguirlo del contenido.
+     */
+    .sidebar.mobile-open {
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+    }
+
+
+    /*
+     * Fondo oscuro detrás del sidebar.
+     */
+    .sidebar-overlay {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background: rgba(0, 0, 0, 0.35);
+
+        z-index: 1050;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition:
+            opacity 0.25s ease,
+            visibility 0.25s ease;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+   ========================================== */
+
+@media (max-width: 575.98px) {
+
+    .sidebar {
+        width: 270px !important;
+        min-width: 270px !important;
+        max-width: 270px !important;
+    }
+
+    .sidebar.collapsed {
+        width: 270px !important;
+        min-width: 270px !important;
+        max-width: 270px !important;
+    }
+
+    .topbar {
+        padding: 8px 10px;
+    }
+
+    .topbar-left {
+        gap: 6px;
+    }
+
+    .topbar-right {
+        gap: 6px;
+    }
+
+    .page-title {
+        font-size: 16px;
+    }
+
+    .content-area {
+        padding: 10px;
+    }
+
+    .card-body {
+        padding: 12px;
+    }
+
+    .btn {
+        max-width: 100%;
+    }
+
+    .form-control,
+    .form-select {
+        max-width: 100%;
+    }
+
+    .table-responsive {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .table-responsive .table {
+        min-width: 600px;
+    }
+
+    .user-dropdown-menu {
+        max-width: calc(100vw - 20px);
+    }
 }
