@@ -61,6 +61,7 @@ class ActividadController extends Controller
             'fecha' => 'required|date',
             'hora_inicio' => 'nullable',
             'hora_fin' => 'nullable',
+            'estado'=>0,
 
         ]);
 
@@ -158,6 +159,7 @@ public function update(Request $request, $id)
         'nombre_actividad' => 'required|max:100',
         'descripcion' => 'nullable',
         'fecha' => 'required|date',
+        'estado' => 'required|in:0,1,2',
 
     ]);
 
@@ -171,6 +173,7 @@ public function update(Request $request, $id)
         'empresa_id' => session('rol') == 5
             ? $request->empresa_id
             : app('tenant_id'),
+        'estado' => $request->estado,
 
     ]);
 
