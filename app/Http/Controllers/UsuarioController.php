@@ -205,6 +205,7 @@ if (! $usuario) {
     'nombre_usu' => 'required|max:50',
     'apellidos_usu' => 'required|max:50',
     'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu,'.$usuario->id_usuario.',id_usuario',
+    'password' => 'nullable|min:6|confirmed',
 ]);
 
         $datos = [
@@ -215,7 +216,14 @@ if (! $usuario) {
     'cargo' => $request->cargo,
     'fecha_up' => now(),
 ];
-
+if (
+    $request->filled('password') &&
+    in_array(session('rol'), [5, 3])
+) {
+    $datos['pwd'] = Hash::make(
+        $request->password
+    );
+}
 // Solo SuperAdmin y Administrador pueden cambiar rol, y solo dentro
 // de los roles que tienen permitido asignar (evita que un Administrador
 // se autoasigne o asigne a otros el rol SuperAdmin).

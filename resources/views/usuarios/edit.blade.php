@@ -82,6 +82,44 @@
         >
     </div>
 
+    @if(in_array(session('rol'), [5, 3]))
+    <div class="mb-3">
+
+        <label>
+            Nueva contraseña
+        </label>
+
+        <input
+            type="password"
+            name="password"
+            class="form-control"
+            minlength="6"
+            autocomplete="new-password"
+        >
+
+        <small class="text-muted">
+            Dejar vacío mantiene la contraseña actual.
+        </small>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Confirmar nueva contraseña
+        </label>
+
+        <input
+            type="password"
+            name="password_confirmation"
+            class="form-control"
+            minlength="6"
+            autocomplete="new-password"
+        >
+
+    </div>
+@endif
+
     <div class="mb-3">
         <label>Rol</label>
 
