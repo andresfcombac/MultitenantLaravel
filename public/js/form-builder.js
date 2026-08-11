@@ -63,6 +63,32 @@ if (typeof window.camposExistentes !== "undefined") {
 
     let indiceEdicion = -1;
 
+    /*
+     * Antes este listener se registraba dentro de limpiarFormulario(),
+     * por lo que cada vez que se agregaba/eliminaba un campo se sumaba
+     * un listener nuevo sobre el mismo <select>. Se deja registrado
+     * una sola vez aquí.
+     */
+    tipoCampo.addEventListener("change", function () {
+
+        if (
+            this.value === "select" ||
+            this.value === "radio" ||
+            this.value === "checkbox"
+        ) {
+
+            contenedorOpciones.style.display = "block";
+
+        } else {
+
+            contenedorOpciones.style.display = "none";
+
+            opcionesCampo.value = "";
+
+        }
+
+    });
+
     function limpiarFormulario() {
 
         nombreCampo.value = "";
@@ -75,25 +101,6 @@ if (typeof window.camposExistentes !== "undefined") {
 contenedorOpciones.style.display = "none";
 
         indiceEdicion = -1;
-tipoCampo.addEventListener("change", function () {
-
-    if (
-        this.value === "select" ||
-        this.value === "radio" ||
-        this.value === "checkbox"
-    ) {
-
-        contenedorOpciones.style.display = "block";
-
-    } else {
-
-        contenedorOpciones.style.display = "none";
-
-        opcionesCampo.value = "";
-
-    }
-
-});
         btnAgregar.innerHTML =
             '<i class="fa-solid fa-plus me-2"></i>Agregar campo';
 

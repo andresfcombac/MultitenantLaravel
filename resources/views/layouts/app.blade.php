@@ -31,7 +31,7 @@
 
 </head>
 
-<body>
+<body data-session-lifetime="{{ config('session.lifetime') }}">
 
 <div class="wrapper">
 
@@ -363,13 +363,21 @@
 
             <li>
 
-                <a class="dropdown-item text-danger" href="/logout">
+                <form id="formCerrarSesion" method="POST" action="{{ route('logout') }}">
 
-                    <i class="fa-solid fa-right-from-bracket me-2"></i>
+                    @csrf
 
-                    Cerrar sesión
+                    <button
+                        type="submit"
+                        class="dropdown-item text-danger w-100 text-start border-0 bg-transparent">
 
-                </a>
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                        Cerrar sesión
+
+                    </button>
+
+                </form>
 
             </li>
 
@@ -402,6 +410,8 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
 <script src="{{ asset('js/layout.js') }}"></script>
+
+<script src="{{ asset('js/inactivity.js') }}"></script>
 
 @if(session('success'))
 

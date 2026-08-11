@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistroFormularioMail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FormularioPublicoController extends Controller
 {
@@ -103,6 +105,32 @@ class FormularioPublicoController extends Controller
             'estado_asistencia' => 'pendiente',
 
         ]);
+
+        /*
+        |----------------------------------------------------------------
+        | Generar imagen QR del registro
+        | (mismo criterio que FormularioController::responder; antes
+        | esto solo ocurría en el flujo interno autenticado y el
+        | formulario público nunca generaba el QR).
+        |----------------------------------------------------------------
+        */
+
+        $baseUrl = rtrim(
+            env('QR_BASE_URL', config('app.url')),
+            '/'
+        );
+
+        $contenidoQr = $baseUrl.'/validador/'.$respuesta->qr_token;
+
+        $qr = QrCode::format('png')
+            ->size(400)
+            ->margin(2)
+            ->generate($contenidoQr);
+
+        Storage::disk('public')->put(
+            'qr/'.$respuesta->qr_token.'.png',
+            $qr
+        );
 
 if (! empty($respuesta->correo)) {
  Log::info('RegistroFormularioMail', [

@@ -240,6 +240,24 @@ class FormularioCampoController extends Controller
 
         }
 
+        // Convertir opciones a JSON cuando aplique (mismo criterio que store()).
+        // El textarea del formulario envía las opciones separadas por
+        // salto de línea; deben guardarse como JSON para que las vistas
+        // que hacen json_decode($campo->opciones) sigan funcionando.
+
+        $opciones = [];
+
+        if (! empty($request->opciones)) {
+
+            $opciones = array_filter(
+                array_map(
+                    'trim',
+                    explode("\n", $request->opciones)
+                )
+            );
+
+        }
+
         $campo->update([
 
             'id_formulario' => $request->id_formulario,
@@ -248,7 +266,7 @@ class FormularioCampoController extends Controller
 
             'tipo_campo' => $request->tipo_campo,
 
-            'opciones' => $request->opciones,
+            'opciones' => json_encode($opciones),
 
             'obligatorio' => $request->obligatorio ?? 0,
 

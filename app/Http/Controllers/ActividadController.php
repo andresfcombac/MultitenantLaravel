@@ -61,7 +61,6 @@ class ActividadController extends Controller
             'fecha' => 'required|date',
             'hora_inicio' => 'nullable',
             'hora_fin' => 'nullable',
-            'estado'=>0,
 
         ]);
 

@@ -71,7 +71,7 @@
 
         <div class="version-info">
 
-            Versión 1.5
+            Versión 1.7.0
 
         </div>
 

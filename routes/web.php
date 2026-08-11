@@ -335,6 +335,7 @@ Route::get(
     ->middleware([
         'auth.session',
         'tenant',
+        'role:SuperAdmin,Administrador,Supervisor',
     ]);
 
 Route::get(
@@ -519,5 +520,12 @@ Route::get(
     '/validador/{token}',
     [ValidadorQrController::class, 'validar']
 )->name('validador.token');
+
+// Nota: el cierre de sesión cambia estado del servidor, por lo que se
+// expone por POST (protegido por CSRF) en vez de GET. Se conserva la
+// ruta GET como alias por compatibilidad, en caso de que exista algún
+// enlace externo o marcador apuntando a /logout.
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout');
 
 Route::get('/logout', [LoginController::class, 'logout']);

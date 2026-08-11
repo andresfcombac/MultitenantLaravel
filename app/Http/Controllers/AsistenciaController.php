@@ -14,7 +14,7 @@ class AsistenciaController extends Controller
             'asistencia.usuario',
         ]);
 
-        if (session('rol') != 5) {
+        if (! in_array(session('rol'), [5, 6])) {
 
             $consulta->whereHas(
                 'formulario.actividad',
@@ -39,7 +39,7 @@ public function confirmar($id)
 {
     $consulta = FormularioRespuesta::query();
 
-    if (session('rol') != 5) {
+    if (! in_array(session('rol'), [5, 6])) {
 
         $consulta->whereHas(
             'formulario.actividad',

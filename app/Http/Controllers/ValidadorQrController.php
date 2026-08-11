@@ -101,10 +101,27 @@ public function validar($token)
             'codigo' => 'required'
         ]);
 
-        $asistencia = Asistencia::where(
+        $consulta = Asistencia::where(
             'id_respuesta',
             $request->codigo
-        )->first();
+        );
+
+        // Control tenant: un Administrador/Supervisor/Validador QR solo
+        // puede confirmar asistencias de respuestas que pertenezcan a
+        // formularios de su propia empresa (mismo criterio que
+        // AsistenciaController::confirmar). SuperAdmin no tiene restricción.
+        if (! in_array(session('rol'), [5, 6])) {
+
+            $consulta->whereHas(
+                'respuesta.formulario.actividad',
+                function ($q) {
+                    $q->where('empresa_id', app('tenant_id'));
+                }
+            );
+
+        }
+
+        $asistencia = $consulta->first();
 
         if (! $asistencia) {
 

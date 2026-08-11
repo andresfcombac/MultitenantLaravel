@@ -424,8 +424,26 @@ if (! $formulario) {
 
     public function responder(Request $request, $id)
     {
-       $formulario = Formulario::with('campos')
-    ->find($id);
+       if (session('rol') == 5) {
+
+           $formulario = Formulario::with('campos')
+               ->find($id);
+
+       } else {
+
+           // Control tenant: no permitir responder formularios de
+           // actividades que pertenezcan a otra empresa (mismo criterio
+           // que show()/edit()/update()/estado()).
+           $formulario = Formulario::with('campos')
+               ->whereHas(
+                   'actividad',
+                   function ($q) {
+                       $q->where('empresa_id', app('tenant_id'));
+                   }
+               )
+               ->find($id);
+
+       }
 
 // Formulario inexistente
 if (! $formulario) {
