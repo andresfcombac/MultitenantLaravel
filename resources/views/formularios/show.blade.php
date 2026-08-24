@@ -21,6 +21,12 @@
 
     @csrf
 
+    @php
+        // Precarga los datos del usuario autenticado (si hay sesión);
+        // old() mantiene lo digitado si la validación falla.
+        $tipoDoc = old('tipo_documento', $usuario->tipo_doc_usu ?? '');
+    @endphp
+
     <div class="row">
 
     <div class="mb-3 col-md-6">
@@ -35,6 +41,7 @@
             type="text"
             name="nombres"
             class="form-control"
+            value="{{ old('nombres', $usuario->nombre_usu ?? '') }}"
             required>
 
     </div>
@@ -51,6 +58,7 @@
             type="text"
             name="apellidos"
             class="form-control"
+            value="{{ old('apellidos', $usuario->apellidos_usu ?? '') }}"
             required>
 
     </div>
@@ -67,6 +75,7 @@
             type="email"
             name="correo"
             class="form-control"
+            value="{{ old('correo', $usuario->correo_usu ?? '') }}"
             required>
 
     </div>
@@ -83,6 +92,7 @@
             type="text"
             name="telefono"
             class="form-control"
+            value="{{ old('telefono', $usuario->telefono_usu ?? '') }}"
             required>
 
     </div>
@@ -102,17 +112,17 @@
 
             <option value="">Seleccione...</option>
 
-            <option value="CC">Cédula de ciudadanía</option>
+            <option value="CC" @selected($tipoDoc === 'CC')>Cédula de ciudadanía</option>
 
-            <option value="TI">Tarjeta de identidad</option>
+            <option value="TI" @selected($tipoDoc === 'TI')>Tarjeta de identidad</option>
 
-            <option value="CE">Cédula de extranjería</option>
+            <option value="CE" @selected($tipoDoc === 'CE')>Cédula de extranjería</option>
 
-            <option value="PA">Pasaporte</option>
+            <option value="PA" @selected($tipoDoc === 'PA')>Pasaporte</option>
 
-            <option value="RC">Registro Civil</option>
+            <option value="RC" @selected($tipoDoc === 'RC')>Registro Civil</option>
 
-            <option value="NIT">NIT</option>
+            <option value="NIT" @selected($tipoDoc === 'NIT')>NIT</option>
 
         </select>
 
@@ -130,6 +140,7 @@
             type="text"
             name="numero_documento"
             class="form-control"
+            value="{{ old('numero_documento', $usuario->num_doc_usu ?? '') }}"
             required>
 
     </div>

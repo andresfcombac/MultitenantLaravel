@@ -120,7 +120,7 @@ Route::post(
     ->middleware([
         'auth.session',
         'tenant',
-        'role:SuperAdmin,Administrador,Supervisor',
+        'role:SuperAdmin,Administrador',
     ]);
 
 Route::get(
@@ -457,6 +457,7 @@ Route::post(
     ->middleware([
         'auth.session',
         'tenant',
+        'role:SuperAdmin,Administrador,Supervisor',
     ])
     ->name('asistencias.confirmar');
 
@@ -502,7 +503,7 @@ Route::get(
 )->middleware([
     'auth.session',
     'tenant',
-    'role:Administrador,Supervisor,Validador QR'
+    'role:SuperAdmin,Administrador,Supervisor,Validador QR'
 ])->name('validador.index');
 
 Route::post(
@@ -512,7 +513,7 @@ Route::post(
 ->middleware([
     'auth.session',
     'tenant',
-    'role:Administrador,Supervisor,Validador QR'
+    'role:SuperAdmin,Administrador,Supervisor,Validador QR'
 ])
 ->name('validador.confirmar');
 
@@ -521,11 +522,6 @@ Route::get(
     [ValidadorQrController::class, 'validar']
 )->name('validador.token');
 
-// Nota: el cierre de sesión cambia estado del servidor, por lo que se
-// expone por POST (protegido por CSRF) en vez de GET. Se conserva la
-// ruta GET como alias por compatibilidad, en caso de que exista algún
-// enlace externo o marcador apuntando a /logout.
+// El cierre de sesión cambia estado y debe enviarse por POST con CSRF.
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout');
-
-Route::get('/logout', [LoginController::class, 'logout']);

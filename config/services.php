@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | QR
+    |--------------------------------------------------------------------------
+    |
+    | URL base usada para generar el contenido de los códigos QR de
+    | validación de asistencia. Si no se define, se usa APP_URL.
+    |
+    */
+
+    'qr' => [
+        'base_url' => env('QR_BASE_URL'),
+    ],
+
 ];

@@ -34,6 +34,12 @@
 
                 @csrf
 
+                @php
+                    // Precarga los datos del usuario si tiene sesión activa;
+                    // old() mantiene lo digitado si la validación falla.
+                    $tipoDoc = old('tipo_documento', $usuario->tipo_doc_usu ?? '');
+                @endphp
+
                 <h5 class="border-bottom pb-2 mb-3">
                     Datos personales
                 </h5>
@@ -48,6 +54,7 @@
                         type="text"
                         name="nombres"
                         class="form-control"
+                        value="{{ old('nombres', $usuario->nombre_usu ?? '') }}"
                         required>
 
                 </div>
@@ -62,6 +69,7 @@
                         type="text"
                         name="apellidos"
                         class="form-control"
+                        value="{{ old('apellidos', $usuario->apellidos_usu ?? '') }}"
                         required>
 
                 </div>
@@ -76,6 +84,7 @@
                         type="email"
                         name="correo"
                         class="form-control"
+                        value="{{ old('correo', $usuario->correo_usu ?? '') }}"
                         required>
 
                 </div>
@@ -90,6 +99,7 @@
                         type="text"
                         name="telefono"
                         class="form-control"
+                        value="{{ old('telefono', $usuario->telefono_usu ?? '') }}"
                         required>
 
                 </div>
@@ -105,17 +115,18 @@
                         class="form-control"
                         required>
 
-                        <option value="CC">CC</option>
+                        <option value="CC" @selected($tipoDoc === 'CC')>CC</option>
 
-                        <option value="TI">TI</option>
+                        <option value="TI" @selected($tipoDoc === 'TI')>TI</option>
 
-                        <option value="CE">CE</option>
+                        <option value="CE" @selected($tipoDoc === 'CE')>CE</option>
 
-                        <option value="PASAPORTE">PASAPORTE</option>
+                        {{-- El usuario puede tener el tipo guardado como PA o PASAPORTE --}}
+                        <option value="PASAPORTE" @selected(in_array($tipoDoc, ['PASAPORTE', 'PA']))>PASAPORTE</option>
 
-                        <option value="NIT">NIT</option>
+                        <option value="NIT" @selected($tipoDoc === 'NIT')>NIT</option>
 
-                        <option value="PEP">PEP</option>
+                        <option value="PEP" @selected($tipoDoc === 'PEP')>PEP</option>
 
                     </select>
 
@@ -131,6 +142,7 @@
                         type="text"
                         name="numero_documento"
                         class="form-control"
+                        value="{{ old('numero_documento', $usuario->num_doc_usu ?? '') }}"
                         required>
 
                 </div>

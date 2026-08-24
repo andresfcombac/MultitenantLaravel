@@ -34,7 +34,8 @@ services:
     container_name: comba_mysql
     restart: unless-stopped
     ports:
-      - "3309:3306"
+      # Solo localhost: evita exponer MySQL a la red/público.
+      - "127.0.0.1:3310:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD:?Define DOCKER_MYSQL_ROOT_PASSWORD en tu .env}
       MT_DB_USER: ${DOCKER_MYSQL_USER:?Define DOCKER_MYSQL_USER en tu .env}
@@ -62,8 +63,11 @@ services:
     image: phpmyadmin:5.2
     container_name: comba_phpmyadmin
     restart: unless-stopped
+    # Solo se levanta en desarrollo:
+    #   docker compose --profile dev up -d
+    profiles: ["dev"]
     ports:
-      - "8090:80"
+      - "127.0.0.1:8090:80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306

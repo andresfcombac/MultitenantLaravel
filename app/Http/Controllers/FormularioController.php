@@ -7,6 +7,7 @@ use App\Models\Asistencia;
 use App\Models\Formulario;
 use App\Models\FormularioCampo;
 use App\Models\FormularioRespuesta;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Storage;
@@ -200,9 +201,12 @@ if ($formulario->estado == 0) {
         );
 
 }
+        // Datos del usuario autenticado para precargar el formulario
+        $usuario = Usuario::find(session('usuario_id'));
+
         return view(
             'formularios.show',
-            compact('formulario')
+            compact('formulario', 'usuario')
         );
 
     }
@@ -501,7 +505,7 @@ if ($formulario->estado == 0) {
 */
 
 $baseUrl = rtrim(
-    env('QR_BASE_URL', config('app.url')),
+    config('services.qr.base_url', config('app.url')),
     '/'
 );
 
@@ -615,18 +619,18 @@ public function exportar($id)
 
             fputcsv($handle, [
 
-                $respuesta->id_respuesta,
-                $respuesta->nombres,
-                $respuesta->apellidos,
-                $respuesta->correo,
-                $respuesta->telefono,
-                $respuesta->tipo_documento,
-                $respuesta->numero_documento,
-                $respuesta->fecha_respuesta,
-                json_encode(
+                $this->valorSeguroParaCsv($respuesta->id_respuesta),
+                $this->valorSeguroParaCsv($respuesta->nombres),
+                $this->valorSeguroParaCsv($respuesta->apellidos),
+                $this->valorSeguroParaCsv($respuesta->correo),
+                $this->valorSeguroParaCsv($respuesta->telefono),
+                $this->valorSeguroParaCsv($respuesta->tipo_documento),
+                $this->valorSeguroParaCsv($respuesta->numero_documento),
+                $this->valorSeguroParaCsv($respuesta->fecha_respuesta),
+                $this->valorSeguroParaCsv(json_encode(
                     $respuesta->datos,
                     JSON_UNESCAPED_UNICODE
-                ),
+                )),
 
             ]);
 
@@ -653,5 +657,14 @@ public function exportar($id)
     );
 
     return $response;
+}
+
+private function valorSeguroParaCsv($valor): string
+{
+    $valor = (string) $valor;
+
+    return preg_match('/^\s*[=+\-@]/u', $valor)
+        ? "'".$valor
+        : $valor;
 }
 }

@@ -147,46 +147,48 @@ class FormularioRespuestaController extends Controller
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->nombres
+                $this->valorSeguroParaHoja($respuesta->nombres)
             );
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->apellidos
+                $this->valorSeguroParaHoja($respuesta->apellidos)
             );
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->correo
+                $this->valorSeguroParaHoja($respuesta->correo)
             );
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->telefono
+                $this->valorSeguroParaHoja($respuesta->telefono)
             );
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->tipo_documento
+                $this->valorSeguroParaHoja($respuesta->tipo_documento)
             );
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->numero_documento
+                $this->valorSeguroParaHoja($respuesta->numero_documento)
             );
 
             foreach ($formulario->campos->sortBy('orden') as $campo) {
 
                 $sheet->setCellValue(
                     $this->celda($columna++, $fila),
-                    $respuesta->datos[$campo->etiqueta] ?? ''
+                    $this->valorSeguroParaHoja(
+                        $respuesta->datos[$campo->etiqueta] ?? ''
+                    )
                 );
 
             }
 
             $sheet->setCellValue(
                 $this->celda($columna++, $fila),
-                $respuesta->fecha_respuesta
+                $this->valorSeguroParaHoja($respuesta->fecha_respuesta)
             );
 
             $fila++;
@@ -221,6 +223,15 @@ class FormularioRespuestaController extends Controller
         return Coordinate::stringFromColumnIndex($columna).$fila;
     }
 
+    private function valorSeguroParaHoja($valor): string
+    {
+        $valor = (string) $valor;
+
+        return preg_match('/^\s*[=+\-@]/u', $valor)
+            ? "'".$valor
+            : $valor;
+    }
+
     /**
      * Busca el formulario validando que pertenezca al tenant actual
      * (mismo criterio que el resto de los controladores). SuperAdmin
@@ -247,7 +258,7 @@ class FormularioRespuestaController extends Controller
     public function importar(Request $request, $id)
     {
         $request->validate([
-            'archivo' => 'required|file|mimes:xlsx,xls,csv',
+            'archivo' => 'required|file|mimes:xlsx,xls,csv|max:5120',
         ]);
 
         $formulario = $this->formularioDelTenant($id);

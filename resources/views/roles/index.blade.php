@@ -62,6 +62,7 @@
 
             <td>
 
+                @if(!in_array((int) $rol->id_rol, [1, 2, 3, 5, 6], true))
                 <a
                     href="/roles/{{ $rol->id_rol }}/edit"
                     class="btn btn-warning btn-sm">
@@ -88,6 +89,9 @@
                     </button>
 
                 </form>
+                @else
+                    <span class="text-muted">Rol del sistema</span>
+                @endif
 
             </td>
 

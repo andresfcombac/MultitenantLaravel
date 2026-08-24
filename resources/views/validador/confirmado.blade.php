@@ -36,18 +36,7 @@
                         Asistencia confirmada
                     </h3>
 
-                    <p class="mt-3">
-
-                        La asistencia de
-
-                        <strong>
-                            {{ $respuesta->nombres }}
-                            {{ $respuesta->apellidos }}
-                        </strong>
-
-                        ya fue confirmada.
-
-                    </p>
+                    <p class="mt-3">La asistencia ya fue confirmada.</p>
 
                     <p class="text-muted">
                         Este registro ya fue validado y no requiere
