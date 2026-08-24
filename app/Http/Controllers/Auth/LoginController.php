@@ -26,20 +26,18 @@ class LoginController extends Controller
             $request->correo_usu
         )->first();
 
-        if (! $usuario) {
+        // Mensaje genérico para no revelar si el correo existe o no
+        // (evita enumeración de usuarios).
+        if (
+            ! $usuario ||
+            ! Hash::check(
+                $request->password,
+                $usuario->pwd
+            )
+        ) {
             return back()->with(
                 'error',
-                'Usuario no encontrado'
-            );
-        }
-
-        if (! Hash::check(
-            $request->password,
-            $usuario->pwd
-        )) {
-            return back()->with(
-                'error',
-                'Contraseña incorrecta'
+                'Credenciales incorrectas.'
             );
         }
 
@@ -83,7 +81,10 @@ return redirect('/dashboard');
 
     public function logout()
     {
-        session()->flush();
+        // Invalida la sesión (regenera el ID) y el token CSRF para que
+        // la cookie de sesión anterior no pueda reutilizarse.
+        session()->invalidate();
+        session()->regenerateToken();
 
         return redirect('/login');
     }

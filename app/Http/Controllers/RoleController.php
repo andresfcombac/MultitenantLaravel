@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    private const ROLES_SISTEMA = [1, 2, 3, 5, 6];
+
+    private function esRolSistema(Role $rol): bool
+    {
+        return in_array((int) $rol->id_rol, self::ROLES_SISTEMA, true);
+    }
+
     public function index()
     {
         $roles = Role::withCount('usuarios')->get();
@@ -43,6 +50,13 @@ class RoleController extends Controller
     {
         $rol = Role::findOrFail($id);
 
+        if ($this->esRolSistema($rol)) {
+            return redirect('/roles')->with(
+                'error',
+                'Los roles del sistema no pueden modificarse.'
+            );
+        }
+
         return view(
             'roles.edit',
             compact('rol')
@@ -54,6 +68,13 @@ class RoleController extends Controller
         $id
     ) {
         $rol = Role::findOrFail($id);
+
+        if ($this->esRolSistema($rol)) {
+            return redirect('/roles')->with(
+                'error',
+                'Los roles del sistema no pueden modificarse.'
+            );
+        }
 
         $request->validate([
             'nombre_rol' => 'required|max:50',
@@ -74,7 +95,7 @@ class RoleController extends Controller
     {
         $rol = Role::findOrFail($id);
 
-        if (in_array($rol->id_rol, [1, 2, 3, 5])) {
+        if ($this->esRolSistema($rol)) {
 
             return redirect('/roles')
                 ->with(

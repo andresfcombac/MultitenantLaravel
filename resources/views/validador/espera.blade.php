@@ -22,35 +22,14 @@
 
                 <div class="card-body">
 
-                    <table class="table table-bordered">
-
-                        <tr>
-                            <th>Nombre</th>
-                            <td>{{ $respuesta->nombres }} {{ $respuesta->apellidos }}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Documento</th>
-                            <td>{{ $respuesta->tipo_documento }} {{ $respuesta->numero_documento }}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Correo</th>
-                            <td>{{ $respuesta->correo }}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Estado</th>
-                            <td>
-                                Pendiente de validación
-                            </td>
-                        </tr>
-
-                    </table>
+                    <p class="mb-3">
+                        El código es válido y está pendiente de validación.
+                    </p>
 
                     <div class="alert alert-info">
 
                         Espere al personal autorizado para confirmar su ingreso.
+                        Por seguridad, los datos personales solo se muestran al personal autorizado.
 
                     </div>
 

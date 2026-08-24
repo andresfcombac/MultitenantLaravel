@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
@@ -81,6 +82,42 @@ class UsuarioController extends Controller
             : [1, 2];
     }
 
+    /**
+     * Determina si el rol autenticado puede gestionar al usuario indicado.
+     * Los roles no globales nunca pueden salir de su propia empresa.
+     */
+    private function puedeGestionar(Usuario $usuario): bool
+    {
+        $rolActual = (int) session('rol');
+
+        if ($rolActual === 5) {
+            return true;
+        }
+
+        if ($usuario->empresa_usu != app('tenant_id')) {
+            return false;
+        }
+
+        return match ($rolActual) {
+            3 => in_array((int) $usuario->rol_usu, [1, 2], true),
+            1 => (int) $usuario->rol_usu === 2,
+            default => false,
+        };
+    }
+
+    private function usuarioGestionable($id): Usuario
+    {
+        $usuario = Usuario::findOrFail($id);
+
+        abort_unless(
+            $this->puedeGestionar($usuario),
+            403,
+            'No tiene permisos para gestionar este usuario.'
+        );
+
+        return $usuario;
+    }
+
     public function store(Request $request)
     {
 
@@ -88,8 +125,14 @@ class UsuarioController extends Controller
             'nombre_usu' => 'required|max:50',
             'apellidos_usu' => 'required|max:50',
             'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
             'rol_usu' => 'required|in:'.implode(',', $this->rolesAsignables()),
+            // Evita errores de clave foránea si el SuperAdmin envía una
+            // empresa inexistente.
+            'empresa_usu' => [
+                'nullable',
+                Rule::exists('legacy.empresas', 'id_empresa'),
+            ],
         ]);
 
         Usuario::create([
@@ -133,17 +176,7 @@ class UsuarioController extends Controller
 
         } else {
 
-            $usuario = Usuario::where(
-    'empresa_usu',
-    app('tenant_id')
-)->find($id);
-
-if (! $usuario) {
-    return redirect()->back()->with(
-        'error',
-        'No tiene permisos para visualizar este usuario.'
-    );
-}
+            $usuario = $this->usuarioGestionable($id);
 
             $empresas = Empresa::where(
                 'id_empresa',
@@ -187,17 +220,7 @@ if (! $usuario) {
 
         } else {
 
-           $usuario = Usuario::where(
-    'empresa_usu',
-    app('tenant_id')
-)->find($id);
-
-if (! $usuario) {
-    return redirect()->back()->with(
-        'error',
-        'No tiene permisos para visualizar este usuario.'
-    );
-}
+            $usuario = $this->usuarioGestionable($id);
 
         }
 
@@ -205,7 +228,7 @@ if (! $usuario) {
     'nombre_usu' => 'required|max:50',
     'apellidos_usu' => 'required|max:50',
     'correo_usu' => 'required|email|unique:legacy.usuarios,correo_usu,'.$usuario->id_usuario.',id_usuario',
-    'password' => 'nullable|min:6|confirmed',
+    'password' => 'nullable|min:8|confirmed',
 ]);
 
         $datos = [
@@ -257,23 +280,19 @@ $usuario->update($datos);
     public function destroy($id)
     {
 
+        abort_unless(
+            in_array((int) session('rol'), [5, 3], true),
+            403,
+            'No tiene permisos para eliminar usuarios.'
+        );
+
         if (session('rol') == 5) {
 
             $usuario = Usuario::findOrFail($id);
 
         } else {
 
-            $usuario = Usuario::where(
-    'empresa_usu',
-    app('tenant_id')
-)->find($id);
-
-if (! $usuario) {
-    return redirect()->back()->with(
-        'error',
-        'No tiene permisos para visualizar este usuario.'
-    );
-}
+            $usuario = $this->usuarioGestionable($id);
 
         }
 
@@ -316,7 +335,7 @@ public function actualizarPerfil(Request $request)
 
     'telefono_usu' => 'nullable|max:20',
 
-    'password' => 'nullable|min:6|confirmed',
+    'password' => 'nullable|min:8|confirmed',
 ]);
 
 if ($request->filled('password')) {

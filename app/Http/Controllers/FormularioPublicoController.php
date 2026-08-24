@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Asistencia;
 use App\Models\Formulario;
 use App\Models\FormularioRespuesta;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistroFormularioMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FormularioPublicoController extends Controller
@@ -26,9 +28,15 @@ class FormularioPublicoController extends Controller
 
         }
 
+        // Si el visitante tiene sesión activa, se precargan sus datos
+        // personales en el formulario.
+        $usuario = session()->has('usuario_id')
+            ? Usuario::find(session('usuario_id'))
+            : null;
+
         return view(
             'formularios.publico',
-            compact('formulario')
+            compact('formulario', 'usuario')
         );
 
     }
@@ -57,7 +65,7 @@ class FormularioPublicoController extends Controller
             'telefono' => 'nullable|max:20',
             'tipo_documento' => 'required|max:20',
             'numero_documento' => 'required|max:30',
-        ]);
+        ] + $this->reglasCamposDinamicos($formulario));
 
         // Construir "datos" únicamente a partir de los campos reales
         // del formulario (no de todo lo que llegue en el request), para
@@ -115,8 +123,10 @@ class FormularioPublicoController extends Controller
         |----------------------------------------------------------------
         */
 
+        // config() en lugar de env(): env() devuelve null cuando la
+        // configuración está cacheada (php artisan config:cache).
         $baseUrl = rtrim(
-            env('QR_BASE_URL', config('app.url')),
+            config('services.qr.base_url', config('app.url')),
             '/'
         );
 
@@ -160,5 +170,45 @@ if (! empty($respuesta->correo)) {
             'Respuesta enviada correctamente'
         );
 
+    }
+
+    /**
+     * Valida en servidor los campos configurados por cada formulario.
+     * La validación del navegador no es suficiente porque una petición
+     * puede enviarse sin pasar por la interfaz.
+     */
+    private function reglasCamposDinamicos(Formulario $formulario): array
+    {
+        $reglas = [];
+
+        foreach ($formulario->campos as $campo) {
+            $nombre = $campo->etiqueta;
+            $opciones = json_decode($campo->opciones, true) ?: [];
+
+            if ($campo->tipo_campo === 'checkbox') {
+                $reglas[$nombre] = array_filter([
+                    $campo->obligatorio ? 'required' : 'nullable',
+                    'array',
+                    $campo->obligatorio ? 'min:1' : null,
+                ]);
+                $reglas[$nombre.'.*'] = [Rule::in($opciones)];
+
+                continue;
+            }
+
+            $campoReglas = [$campo->obligatorio ? 'required' : 'nullable'];
+
+            $campoReglas = match ($campo->tipo_campo) {
+                'numero' => [...$campoReglas, 'numeric'],
+                'fecha' => [...$campoReglas, 'date'],
+                'email' => [...$campoReglas, 'email', 'max:150'],
+                'select', 'radio' => [...$campoReglas, Rule::in($opciones)],
+                default => [...$campoReglas, 'string', 'max:1000'],
+            };
+
+            $reglas[$nombre] = $campoReglas;
+        }
+
+        return $reglas;
     }
 }

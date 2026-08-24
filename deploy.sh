@@ -47,7 +47,8 @@ echo " -> .env ajustado correctamente."
 # 4. Dar permisos a carpetas de almacenamiento
 echo -e "${YELLOW}[3/7] Ajustando permisos de storage y bootstrap/cache...${NC}"
 mkdir -p storage/framework/{views,cache,sessions,tmp}
-sudo chmod -R 777 storage bootstrap/cache
+# 775: el dueño y el grupo pueden escribir; no "el resto del mundo"
+sudo chmod -R 775 storage bootstrap/cache
 
 # 5. Construir y levantar contenedores
 echo -e "${YELLOW}[4/7] Levantando contenedores Docker...${NC}"
@@ -73,7 +74,12 @@ docker compose exec -T app php artisan cache:clear 2>/dev/null
 ADMIN_TEST_PASSWORD=$(grep -E '^DOCKER_ADMIN_TEST_PASSWORD=' .env | cut -d '=' -f2-)
 if [ -n "${ADMIN_TEST_PASSWORD}" ]; then
     echo -e "${YELLOW}[7/7] Estableciendo contraseña de prueba para el usuario Admin...${NC}"
-    docker compose exec -T app php artisan tinker --execute="DB::connection('legacy')->table('usuarios')->where('id_usuario', 1)->update(['pwd' => bcrypt('${ADMIN_TEST_PASSWORD}')]);" 2>&1
+    # La contraseña viaja como variable de entorno del contenedor (-e) y se
+    # lee con env() dentro de tinker, así nunca aparece en la línea de
+    # comandos (visible en ps) ni sufre interpolación del shell.
+    docker compose exec -T \
+        -e ADMIN_TEST_PASSWORD="${ADMIN_TEST_PASSWORD}" \
+        app php artisan tinker --execute="DB::connection('legacy')->table('usuarios')->where('id_usuario', 1)->update(['pwd' => bcrypt(env('ADMIN_TEST_PASSWORD'))]);" 2>&1
 fi
 
 echo ""

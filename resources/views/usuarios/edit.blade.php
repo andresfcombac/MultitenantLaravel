@@ -120,6 +120,7 @@
     </div>
 @endif
 
+    @if(in_array((int) session('rol'), [5, 3], true))
     <div class="mb-3">
         <label>Rol</label>
 
@@ -142,6 +143,7 @@
         </select>
 
     </div>
+    @endif
 
     <div class="mb-3">
 

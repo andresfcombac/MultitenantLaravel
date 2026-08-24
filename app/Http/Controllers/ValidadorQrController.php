@@ -18,7 +18,8 @@ class ValidadorQrController extends Controller
 public function validar($token)
 {
    $respuesta = FormularioRespuesta::with([
-    'asistencia.usuario'
+    'asistencia.usuario',
+    'formulario.actividad',
 ])->where(
     'qr_token',
     $token
@@ -86,6 +87,20 @@ public function validar($token)
             compact('respuesta')
         );
 
+    }
+
+    // Administrador y Supervisor solo pueden consultar datos de su empresa.
+    // SuperAdmin y Validador QR conservan el alcance global definido para
+    // esos roles en TenantMiddleware.
+    if (
+        ! in_array((int) session('rol'), [5, 6], true)
+        && $respuesta->formulario?->actividad?->empresa_id != app('tenant_id')
+    ) {
+        return response()->view(
+            'validador.no-encontrado',
+            [],
+            404
+        );
     }
 
 

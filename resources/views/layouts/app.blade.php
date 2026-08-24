@@ -40,7 +40,7 @@
     id="sidebar">
 
 <div class="sidebar-header text-white"
-     style="background-color: {{ $usuarioActual->empresa?->color_corporativo ?? '#0B3D91' }} !important;">
+     style="background-color: {{ $usuarioActual?->empresa?->color_corporativo ?? '#0B3D91' }} !important;">
 
     <img
         src="{{ asset('images/logo.png') }}"
@@ -57,7 +57,7 @@
 
         <small class="text-light sidebar-subtitle">
 
-            {{ $usuarioActual->empresa->nombre_empresa ?? 'Empresa' }}
+            {{ $usuarioActual?->empresa?->nombre_empresa ?? 'Empresa' }}
 
         </small>
 
@@ -71,13 +71,13 @@
         class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
         style="width:60px;height:60px;font-size:24px;">
 
-        {{ strtoupper(substr(session('nombre'),0,1)) }}
+        {{ strtoupper(substr((string) session('nombre', ''), 0, 1)) }}
 
     </div>
 
     <div class="mt-2 fw-bold text-truncate px-2"
      style="max-width: 190px;"
-     title="{{ session('nombre') }} {{ $usuarioActual->apellidos_usu ?? '' }}">
+       title="{{ session('nombre') }} {{ $usuarioActual?->apellidos_usu ?? '' }}">
 
     {{ session('nombre') }}
 
@@ -85,9 +85,9 @@
 
 <small class="text-secondary text-truncate d-block"
        style="max-width: 190px;"
-       title="{{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}">
+       title="{{ $usuarioActual?->rol?->nombre_rol ?? 'Usuario' }}">
 
-    {{ $usuarioActual->rol->nombre_rol ?? 'Usuario' }}
+    {{ $usuarioActual?->rol?->nombre_rol ?? 'Usuario' }}
 
 </small>
 
@@ -97,24 +97,18 @@
         
         @php
 
-    $rolNombre = $usuarioActual->rol->nombre_rol ?? null;
+    $rolActual = (int) session('rol');
+    $rolNombre = $usuarioActual?->rol?->nombre_rol;
 
     // Gestión operativa por empresa
-    $menuGestion = in_array($rolNombre, [
-        'SuperAdmin',
-        'Administrador',
-        'Supervisor'
-    ]);
+    $menuGestion = in_array($rolActual, [5, 3, 1], true);
 
     // Administración de empresa / sistema
-    $menuAdministracion = in_array($rolNombre, [
-        'SuperAdmin',
-        'Administrador'
-    ]);
+    $menuAdministracion = in_array($rolActual, [5, 3], true);
 
 @endphp
         @php
-    $esValidadorQr = session('rol') == 6;
+    $esValidadorQr = $rolActual === 6;
 @endphp
 
 @if(!$esValidadorQr)
@@ -135,7 +129,7 @@
 
 @endif
 
-@if(!$esValidadorQr && $rolNombre === 'SuperAdmin')
+@if(!$esValidadorQr && $rolActual === 5)
 
 <a
     href="/empresas"
@@ -205,7 +199,7 @@
  @endif
 
 
-@if(in_array($rolNombre, ['Administrador','Supervisor','Validador QR']))
+@if(in_array($rolActual, [5, 3, 1, 6], true))
 
 <a
     href="{{ route('validador.index') }}"

@@ -13,6 +13,7 @@
 
     </div>
 
+    @if(in_array((int) session('rol'), [5, 3], true))
     <a href="/usuarios/create"
        class="btn btn-primary">
 
@@ -21,6 +22,7 @@
         Nuevo Usuario
 
     </a>
+    @endif
 
 </div>
 
@@ -109,10 +111,17 @@
 
                         <td>
 
-                            @if(
-                                session('rol') == 5 ||
-                                $usuario->empresa_usu == app('tenant_id')
-                            )
+                            @php
+                                $rolActual = (int) session('rol');
+                                $rolObjetivo = (int) $usuario->rol_usu;
+                                $puedeEditar = $rolActual === 5
+                                    || ($rolActual === 3 && in_array($rolObjetivo, [1, 2], true))
+                                    || ($rolActual === 1 && $rolObjetivo === 2);
+                                $puedeEliminar = $rolActual === 5
+                                    || ($rolActual === 3 && in_array($rolObjetivo, [1, 2], true));
+                            @endphp
+
+                            @if($puedeEditar)
 
                             <div class="d-flex gap-2">
 
@@ -124,6 +133,7 @@
 
                                 </a>
 
+                                @if($puedeEliminar)
                                 <form
                                     action="/usuarios/{{ $usuario->id_usuario }}/delete"
                                     method="POST"
@@ -142,6 +152,7 @@
                                     </button>
 
                                 </form>
+                                @endif
 
                             </div>
 

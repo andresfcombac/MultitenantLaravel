@@ -18,9 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
-    $middleware->trustProxies(
-    at: '*'
-);
+        // Solo se confía en proxies de redes privadas (la red interna de
+        // Docker es 172.x/10.x/192.168.x). Confiar en '*' permitiría a
+        // cualquier cliente suplantar su IP vía X-Forwarded-For y burlar
+        // el rate limiting del login.
+        $middleware->trustProxies(
+            at: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.1'
+        );
         $middleware->alias([
 
             'auth.session' => AuthSessionMiddleware::class,
