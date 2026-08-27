@@ -91,6 +91,4 @@ public function confirmar($id)
         'Asistencia confirmada correctamente.'
     );
 }
-
-
 }

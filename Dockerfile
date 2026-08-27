@@ -14,6 +14,11 @@ RUN apk add --no-cache \
     libxml2-dev \
     oniguruma-dev \
     mysql-client \
+    imagemagick \
+    imagemagick-dev \
+    autoconf \
+    g++ \
+    make \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     mysqli \
@@ -25,6 +30,10 @@ RUN apk add --no-cache \
     pcntl \
     gd \
     opcache
+
+ # Instalar Imagick para generación de QR en PNG
+RUN pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
